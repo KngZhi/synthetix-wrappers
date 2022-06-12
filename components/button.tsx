@@ -139,6 +139,18 @@ const WalletSelectorButton = styled(WalletButton)`
   margin-bottom: 8px;
 `
 
+const AddrButton = styled(NetWorkButton)`
+  font-size: 12px;
+  gap: 10px;
+  .dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 100%;
+    background-color: rgb(41, 182, 175);
+  }
+`
+
 const MoreButton = styled(WalletButton)`
   padding: 6.5px 10px;
   span {
@@ -153,4 +165,5 @@ export {
   NetWorkSelectorButton,
   WalletSelectorButton,
   MoreButton,
+  AddrButton,
 }

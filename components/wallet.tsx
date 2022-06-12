@@ -4,13 +4,14 @@ import Web3Modal from 'web3modal'
 import WalletConnectProvider from '@walletconnect/web3-provider'
 import { useState, useEffect } from 'react'
 import styled, { css } from 'styled-components'
-import { useConnect } from 'wagmi'
+import { useConnect, useAccount, useDisconnect } from 'wagmi'
 import { Modal, Button, Text, Input, Row, Checkbox } from '@nextui-org/react'
 
 import {
   Button as BaseButton,
   WalletSelectorButton,
   MoreButton,
+  AddrButton,
 } from './button'
 import styles from './Modal/Modal.module.css'
 import Image from 'next/image'
@@ -19,6 +20,8 @@ import LedgerPic from '../public/images/wallets/ledger.svg'
 import TrezorPic from '../public/images/wallets/trezor.svg'
 import ConnectMobilePic from '../public/images/wallets/connect-mobile.svg'
 
+import { truncateAddress } from "../utils/string";
+
 export default function WalletButton() {
   const [visible, setVisible] = useState(false)
   const handler = () => setVisible(true)
@@ -26,6 +29,8 @@ export default function WalletButton() {
 
   const { connect, connectors, error, isConnecting, pendingConnector } =
     useConnect()
+  const { data: account } = useAccount()
+  const { disconnect } = useDisconnect()
   const imageTable = {
     metamast: MetaMaskPic,
     coinbaseWallet: LedgerPic,
@@ -33,7 +38,14 @@ export default function WalletButton() {
     injected: ConnectMobilePic,
   }
 
+
   async function connectWallet() {}
+  if (account) {
+    return <AddrButton>
+      <span className='dot'></span>
+      {truncateAddress(account.address)}
+    </AddrButton>
+  }
 
   return (
     <>
