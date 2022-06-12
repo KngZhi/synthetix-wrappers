@@ -17,7 +17,7 @@ body {
   background-color: rgba(13, 13, 13);
 
   /* Text color */
-  color: white;
+  color: #fff;
 
   /* Disable text selection */
   user-select: none;
