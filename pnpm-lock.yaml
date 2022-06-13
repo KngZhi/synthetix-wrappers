@@ -15,6 +15,7 @@ specifiers:
   postcss: ^8.4.14
   react: 18.1.0
   react-dom: 18.1.0
+  recoil: ^0.7.3
   sass: ^1.52.3
   styled-components: ^5.3.5
   tailwindcss: ^3.0.24
@@ -29,6 +30,7 @@ dependencies:
   next: 12.1.6_b803a54b102d8cda6f0ac602082a9eab
   react: 18.1.0
   react-dom: 18.1.0_react@18.1.0
+  recoil: 0.7.3_react-dom@18.1.0+react@18.1.0
   styled-components: 5.3.5_react-dom@18.1.0+react@18.1.0
   wagmi: 0.4.11_react-dom@18.1.0+react@18.1.0
   web3modal: 1.9.7
@@ -3141,6 +3143,10 @@ packages:
       slash: 3.0.0
     dev: true
 
+  /hamt_plus/1.0.2:
+    resolution: {integrity: sha1-4hwlKWjH4zsg9qGwlM2FeHomVgE=}
+    dev: false
+
   /har-schema/2.0.0:
     resolution: {integrity: sha512-Oqluz6zhGX8cyRaTQlFMPw80bSJVG2x/cFb8ZPhUILGgHka9SsokCCOQgpveePerqidZOrT14ipqfJb7ILcW5Q==}
     engines: {node: '>=4'}
@@ -4328,6 +4334,23 @@ packages:
     dependencies:
       picomatch: 2.3.1
     dev: true
+
+  /recoil/0.7.3_react-dom@18.1.0+react@18.1.0:
+    resolution: {integrity: sha512-WaPppk3Hz5/V9nOVmu1X/o3cJyf/rLXw/YsEENvMzEDk+LKqMiGfFgZ3Gg51TKWccpCZCyrSBXn2O4L1E2WDPQ==}
+    peerDependencies:
+      react: '>=16.13.1'
+      react-dom: '*'
+      react-native: '*'
+    peerDependenciesMeta:
+      react-dom:
+        optional: true
+      react-native:
+        optional: true
+    dependencies:
+      hamt_plus: 1.0.2
+      react: 18.1.0
+      react-dom: 18.1.0_react@18.1.0
+    dev: false
 
   /regenerator-runtime/0.13.9:
     resolution: {integrity: sha512-p3VT+cOEgxFsRRA9X4lkI1E+k2/CtnKtU4gcxyaCUreilL/vqI6CdZ3wxVUx3UOUg+gnUOQQcRI7BmSI656MYA==}
