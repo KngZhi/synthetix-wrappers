@@ -1,16 +1,21 @@
 import '../styles/globals.css'
 import type { AppProps } from 'next/app'
-import { globalCss } from "@nextui-org/react";
+import { globalCss } from '@nextui-org/react'
+import { RecoilRoot } from 'recoil'
 
 const globalStyle = globalCss({
   body: {
-    color: '#fff'
-  }
+    color: '#fff',
+  },
 })
 
 function MyApp({ Component, pageProps }: AppProps) {
   globalStyle()
-  return <Component {...pageProps} />
+  return (
+    <RecoilRoot>
+      <Component {...pageProps} />
+    </RecoilRoot>
+  )
 }
 
 export default MyApp

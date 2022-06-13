@@ -68,6 +68,7 @@ const SNX_THEME = createTheme({
 })
 
 import Header from '../components/header'
+import Content from "../components/content";
 
 const HomePage: NextPage = () => {
   return (
@@ -83,6 +84,7 @@ const HomePage: NextPage = () => {
       </Head>
       <main>
         <Header></Header>
+        <Content></Content>
       </main>
       {/* </NextUIProvider> */}
     </WagmiConfig>
