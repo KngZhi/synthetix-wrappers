@@ -5,7 +5,7 @@ import WalletConnectProvider from '@walletconnect/web3-provider'
 import { useState, useEffect } from 'react'
 import styled, { css } from 'styled-components'
 import { useConnect, useAccount, useDisconnect } from 'wagmi'
-import { Modal, Button, Text, Input, Row, Checkbox } from '@nextui-org/react'
+import { Modal, Button, Text, Row } from '@nextui-org/react'
 
 import {
   Button as BaseButton,
@@ -20,12 +20,16 @@ import LedgerPic from '../public/images/wallets/ledger.svg'
 import TrezorPic from '../public/images/wallets/trezor.svg'
 import ConnectMobilePic from '../public/images/wallets/connect-mobile.svg'
 
-import { truncateAddress } from "../utils/string";
+import { truncateAddress } from '../utils/string'
+import Profile from '../components/Modal/Profile'
 
 export default function WalletButton() {
-  const [visible, setVisible] = useState(false)
+  const [visible, setVisible] = useState<boolean>(false)
+  const [isWalletConnected, setWalletConnected] = useState<boolean>(false)
   const handler = () => setVisible(true)
   const closeHandle = () => setVisible(false)
+
+  const [profileVisible, setProfileVisible] = useState<boolean>(false)
 
   const { connect, connectors, error, isConnecting, pendingConnector } =
     useConnect()
@@ -38,75 +42,93 @@ export default function WalletButton() {
     injected: ConnectMobilePic,
   }
 
+  useEffect(() => {
+    if (account?.address) {
+      setWalletConnected(true)
+    }
+  }, [account, setWalletConnected])
 
+  const addr = truncateAddress(account?.address || '')
   async function connectWallet() {}
-  if (account) {
-    return <AddrButton>
-      <span className='dot'></span>
-      {truncateAddress(account.address)}
-    </AddrButton>
-  }
 
   return (
     <>
-      <ConnectWalletButton onClick={handler}>
-        <span>Connect Wallet</span>
-      </ConnectWalletButton>
-      <Modal
-        css={{
-          background:
-            'linear-gradient(121.5deg, #101215 55.37%, #22272B 106.67%);',
-          color: '#fff',
-          boxShadow: '0px 14px 14px rgba(0, 0, 0, 0.25)',
-        }}
-        className={styles.wallet_modal}
-        width="370px"
-        closeButton
-        open={visible}
-        onClose={closeHandle}
-      >
-        <Modal.Header css={{ flexDirection: 'column', alignContent: 'center' }}>
-          <div>
-            <Text b id="modal-title" color="#fff" size={18}>
-              Connect To Wallet
-            </Text>
-          </div>
-          <div>
-            <Text color="#828295">
-              Please select a wallet to connect to this dapp
-            </Text>
-          </div>
-        </Modal.Header>
-        <Modal.Body>
-          {connectors.map((connector) => (
-            <WalletSelectorButton
-              disabled={!connector.ready}
-              key={connector.id}
-              onClick={() => connect(connector)}
+      {isWalletConnected ? (
+        <>
+          <AddrButton onClick={() => setProfileVisible(true)}>
+            <span className="dot"></span>
+            {addr}
+          </AddrButton>
+          <Profile
+            open={profileVisible}
+            address={addr}
+            onClose={() => setProfileVisible(false)}
+          ></Profile>
+        </>
+      ) : (
+        <>
+          <ConnectWalletButton onClick={handler}>
+            <span>Connect Wallet</span>
+          </ConnectWalletButton>
+          <Modal
+            css={{
+              background:
+                'linear-gradient(121.5deg, #101215 55.37%, #22272B 106.67%);',
+              color: '#fff',
+              boxShadow: '0px 14px 14px rgba(0, 0, 0, 0.25)',
+            }}
+            className={styles.wallet_modal}
+            width="370px"
+            closeButton
+            open={visible}
+            onClose={closeHandle}
+          >
+            <Modal.Header
+              css={{ flexDirection: 'column', alignContent: 'center' }}
             >
-              <Image src={MetaMaskPic} alt={connector.name} />
-              <span>
-                {connector.name}
-                {!connector.ready && ' (unsupported)'}
-                {isConnecting &&
-                  connector.id === pendingConnector?.id &&
-                  ' (connecting)'}
-              </span>
-            </WalletSelectorButton>
-          ))}
-        </Modal.Body>
-        <Modal.Footer
-          css={{
-            justifyContent: 'center',
-            paddingTop: '$0',
-            paddingBottom: '13px',
-          }}
-        >
-          <MoreButton>
-            <span> See More</span>
-          </MoreButton>
-        </Modal.Footer>
-      </Modal>
+              <div>
+                <Text b id="modal-title" color="#fff" size={18}>
+                  Connect To Wallet
+                </Text>
+              </div>
+              <div>
+                <Text color="#828295">
+                  Please select a wallet to connect to this dapp
+                </Text>
+              </div>
+            </Modal.Header>
+            <Modal.Body>
+              {connectors.map((connector) => (
+                <WalletSelectorButton
+                  disabled={!connector.ready}
+                  key={connector.id}
+                  onClick={() => connect(connector)}
+                >
+                  <Image src={MetaMaskPic} alt={connector.name} />
+                  <span>
+                    {connector.name}
+                    {!connector.ready && ' (unsupported)'}
+                    {isConnecting &&
+                      connector.id === pendingConnector?.id &&
+                      ' (connecting)'}
+                  </span>
+                </WalletSelectorButton>
+              ))}
+            </Modal.Body>
+            <Modal.Footer
+              css={{
+                justifyContent: 'center',
+                paddingTop: '$0',
+                paddingBottom: '13px',
+              }}
+            >
+              <MoreButton>
+                <span> See More</span>
+              </MoreButton>
+            </Modal.Footer>
+          </Modal>
+        </>
+      )}
     </>
   )
 }
