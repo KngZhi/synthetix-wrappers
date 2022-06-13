@@ -1,8 +1,9 @@
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 import Image from 'next/image'
 
 import { Button } from './button'
+import { NetworkDropdown, DefaultDropdownMenu } from '../components/dropdown'
 
 import LinkArrow from '../public/images/utils/link-arrow.svg'
 import Gear from '../public/images/utils/gear.svg'
@@ -19,6 +20,11 @@ type WrapprProps = {
 
 const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
   const [wrap, setWrap] = useState<boolean>(true)
+
+  const COIN_LiST = [
+    { name: 'LUSD', src: sLUSDLogo, key: 'lusd', isActive: true },
+    { name: 'ETH', src: EthereumLogo, key: 'eth', isActive: false },
+  ]
 
   /* Wrappr */
   let balance: string = '129,937'
@@ -64,8 +70,9 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
             {wrap ? (
               <span className="big">Wrapping</span>
             ) : (
-              <span className='big' style={{ color: '#ED1EFF' }}>Burn</span>
-
+              <span className="big" style={{ color: '#ED1EFF' }}>
+                Burn
+              </span>
             )}
             <span>Balance: {balance}</span>
             <MaxButton
@@ -75,42 +82,42 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
             </MaxButton>
           </BlackContainerRow>
           <BlackContainerRow>
-            <CurrencySelectoDropdown>
-              <CurrencySelectorButton
-                onClick={() =>
-                  console.log('You clicked on the first currency selector!')
-                }
-              >
-                <StyledCurrencyContainer>
-                  <Image
-                    className="big"
-                    src={EthereumLogo}
-                    alt="ethereum-logo"
-                    priority={true}
-                  />
-                  <span>ETH</span>
-                  <Image
-                    src={DownArrowSmall}
-                    alt="down-arrow"
-                    priority={true}
-                  />
-                </StyledCurrencyContainer>
-              </CurrencySelectorButton>
-              <CurrencySelectorContainer>
-                <CurrencyContainer>
-                  <Image src={sLUSDLogo} alt="sLUSD-logo" priority={true} />
-                  <span>LUSD</span>
-                </CurrencyContainer>
-                <CurrencyContainer active={true}>
-                  <Image
-                    src={EthereumLogo}
-                    alt="ethereum-logo"
-                    priority={true}
-                  />
-                  <span>ETH</span>
-                </CurrencyContainer>
-              </CurrencySelectorContainer>
-            </CurrencySelectoDropdown>
+            <DefaultDropdownMenu
+              className="coin_drop"
+              offset={40}
+              trigger={
+                <CurrencySelectorButton>
+                  <StyledCurrencyContainer>
+                    <Image
+                      className="big"
+                      src={EthereumLogo}
+                      alt="ethereum-logo"
+                      priority={true}
+                    />
+                    <span>ETH</span>
+                    <Image
+                      src={DownArrowSmall}
+                      alt="down-arrow"
+                      priority={true}
+                    />
+                  </StyledCurrencyContainer>
+                </CurrencySelectorButton>
+              }
+              dropList={
+                <DropdownListContainer>
+                  {COIN_LiST.map((item) => (
+                    <CurrencyContainer
+                      onClick={() => console.log(item.key)}
+                      key={item.key}
+                      active={item.isActive}
+                    >
+                      <Image src={item.src} alt={item.name}></Image>
+                      <span>{item.name}</span>
+                    </CurrencyContainer>
+                  ))}
+                </DropdownListContainer>
+              }
+            />
             <NumericInput type="text" placeholder="0.0" />
           </BlackContainerRow>
           <BlackContainerRow>
@@ -400,6 +407,11 @@ const CurrencySelectorButton = styled(Button)`
   background: none;
 `
 
+const DropdownListContainer = styled.div`
+  width: 140px;
+  padding: 8px;
+`
+
 const CurrencyContainer = styled.div<{ active?: boolean }>`
   display: flex;
   flex-direction: row;
@@ -474,23 +486,16 @@ const CurrencySelectorContainer = styled.div`
   box-shadow: 0px 14px 14px rgba(0, 0, 0, 0.25);
 `
 
-const CurrencySelectoDropdown = styled.div`
+const CurrencySelectoDropdown = styled.div<{ isDrop: boolean }>`
   flex-direction: column;
   gap: 8px;
 
-  /* Reveal the dropdown menu when the button is clicked and then if the dropdown menu is hovered */
-  &:hover,
-  > ${CurrencySelectorContainer}:hover {
-    display: flex;
-
-    > ${CurrencySelectorContainer} {
-      position: absolute;
-      display: flex;
-      margin-top: 44px;
-      flex-direction: column;
-      align-items: flex-start;
-      padding: 4px;
-    }
+  > ${CurrencySelectorContainer} {
+    position: absolute;
+    margin-top: 4px;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 4px;
   }
 `
 
