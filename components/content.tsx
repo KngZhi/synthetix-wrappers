@@ -65,6 +65,7 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
               <span className="big">Wrapping</span>
             ) : (
               <span className='big' style={{ color: '#ED1EFF' }}>Burn</span>
+
             )}
             <span>Balance: {balance}</span>
             <MaxButton
