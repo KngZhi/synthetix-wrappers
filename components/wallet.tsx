@@ -4,7 +4,7 @@ import Web3Modal from 'web3modal'
 import WalletConnectProvider from '@walletconnect/web3-provider'
 import { useState, useEffect } from 'react'
 import styled, { css } from 'styled-components'
-import { useConnect, useAccount, useDisconnect } from 'wagmi'
+import { useConnect, useAccount, useDisconnect, useEnsAvatar } from 'wagmi'
 import { Modal, Button, Text, Row } from '@nextui-org/react'
 
 import {
@@ -34,6 +34,8 @@ export default function WalletButton() {
   const { connect, connectors, error, isConnecting, pendingConnector } =
     useConnect()
   const { data: account } = useAccount()
+  const { data: ensAvatar } = useEnsAvatar({ addressOrName: account?.address })
+  
   const { disconnect } = useDisconnect()
   const imageTable = {
     metamast: MetaMaskPic,
@@ -49,7 +51,10 @@ export default function WalletButton() {
   }, [account, setWalletConnected])
 
   const addr = truncateAddress(account?.address || '')
-  async function connectWallet() {}
+  function handleChangeWallet() {
+    handler()
+    setProfileVisible(false)
+  }
 
   return (
     <>
@@ -62,7 +67,10 @@ export default function WalletButton() {
           <Profile
             open={profileVisible}
             address={addr}
+            avatar={ensAvatar}
+            disconnect={disconnect}
             onClose={() => setProfileVisible(false)}
+            changeWallet={handleChangeWallet}
           ></Profile>
         </>
       ) : (
