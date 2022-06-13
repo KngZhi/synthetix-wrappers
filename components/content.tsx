@@ -1,63 +1,50 @@
-import { FC, useState } from "react";
-import styled, { css } from "styled-components";
-import Image from "next/image";
+import { FC, useState } from 'react'
+import styled, { css } from 'styled-components'
+import Image from 'next/image'
 
-import { Button } from "./button";
+import { Button } from './button'
 
-import LinkArrow from "../public/images/utils/link-arrow.svg";
-import Gear from "../public/images/utils/gear.svg";
-import Arrows from "../public/images/utils/arrows.svg";
-import DownArrowSmall from "../public/images/utils/down-arrow-small.svg";
-import BlueInfo from "../public/images/utils/blue-info.svg";
-import EthereumLogo from "../public/images/logos/ethereum.svg";
-import sLUSDLogo from "../public/images/synths/sLUSD.svg";
-import sETHLogo from "../public/images/synths/sETH.svg"
+import LinkArrow from '../public/images/utils/link-arrow.svg'
+import Gear from '../public/images/utils/gear.svg'
+import Arrows from '../public/images/utils/arrows.svg'
+import DownArrowSmall from '../public/images/utils/down-arrow-small.svg'
+import BlueInfo from '../public/images/utils/blue-info.svg'
+import EthereumLogo from '../public/images/logos/ethereum.svg'
+import sLUSDLogo from '../public/images/synths/sLUSD.svg'
+import sETHLogo from '../public/images/synths/sETH.svg'
 
 type WrapprProps = {
-  onTVLClick: () => void;
-};
+  onTVLClick: () => void
+}
 
 const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
-  const [wrap, setWrap] = useState<boolean>(false);
+  const [wrap, setWrap] = useState<boolean>(true)
 
   /* Wrappr */
-  let balance: string = "129,937";
-  let maxWrappable: number = 80;
-  let wrapUSDValue: string = "2,895.25";
+  let balance: string = '129,937'
+  let maxWrappable: number = 80
+  let wrapUSDValue: string = '2,895.25'
 
   /* Capacity */
-  let capacityUtilised: string = "80,000";
-  let maxCapacity: string = "200,000";
+  let capacityUtilised: string = '80,000'
+  let maxCapacity: string = '200,000'
   let capacityPercentage: number =
-    (parseInt(capacityUtilised, 10) / parseInt(maxCapacity, 10)) * 100;
+    (parseInt(capacityUtilised, 10) / parseInt(maxCapacity, 10)) * 100
 
-  let feeRate: number = 24;
+  let feeRate: number = 24
 
   return (
     <Container>
       <ContainerRow>
         <SelectorContainer>
-          <SelectorButton
-            active={wrap}
-            onClick={() =>
-              setWrap(true)
-            }
-          >
+          <SelectorButton active={wrap} onClick={() => setWrap(true)}>
             <span>Wrap</span>
           </SelectorButton>
-          <SelectorButton
-            active={!wrap}
-            onClick={() =>
-              setWrap(false)
-            }
-          >
+          <SelectorButton active={!wrap} onClick={() => setWrap(false)}>
             <span>Unwrap</span>
           </SelectorButton>
         </SelectorContainer>
-        <TVLButton
-          className="align-right"
-          onClick={onTVLClick}
-        >
+        <TVLButton className="align-right" onClick={onTVLClick}>
           <span>TVL</span>
           <Image src={LinkArrow} alt="link-arrow" priority={true} />
         </TVLButton>
@@ -67,19 +54,21 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
           <span>Wrappr</span>
           <GearButton
             size="sm"
-            onClick={() => console.log("You clicked on the gear button!")}
+            onClick={() => console.log('You clicked on the gear button!')}
           >
-            <Image src={Gear}  alt="gear-icon" priority={true} />
+            <Image src={Gear} alt="gear-icon" priority={true} />
           </GearButton>
         </WrapprContainerRow>
         <BlackContainer>
           <BlackContainerRow>
-            <span className="big">Wrapping</span>
+            {wrap ? (
+              <span className="big">Wrapping</span>
+            ) : (
+              <span className='big' style={{ color: '#ED1EFF' }}>Burn</span>
+            )}
             <span>Balance: {balance}</span>
             <MaxButton
-              onClick={() =>
-                console.log("You clicked on the max button!")
-              }
+              onClick={() => console.log('You clicked on the max button!')}
             >
               <span>MAX</span>
             </MaxButton>
@@ -88,13 +77,22 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
             <CurrencySelectoDropdown>
               <CurrencySelectorButton
                 onClick={() =>
-                  console.log("You clicked on the first currency selector!")
+                  console.log('You clicked on the first currency selector!')
                 }
               >
                 <StyledCurrencyContainer>
-                  <Image className="big" src={EthereumLogo} alt="ethereum-logo" priority={true} />
+                  <Image
+                    className="big"
+                    src={EthereumLogo}
+                    alt="ethereum-logo"
+                    priority={true}
+                  />
                   <span>ETH</span>
-                  <Image src={DownArrowSmall} alt="down-arrow" priority={true} />
+                  <Image
+                    src={DownArrowSmall}
+                    alt="down-arrow"
+                    priority={true}
+                  />
                 </StyledCurrencyContainer>
               </CurrencySelectorButton>
               <CurrencySelectorContainer>
@@ -103,7 +101,11 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
                   <span>LUSD</span>
                 </CurrencyContainer>
                 <CurrencyContainer active={true}>
-                  <Image src={EthereumLogo} alt="ethereum-logo" priority={true} />
+                  <Image
+                    src={EthereumLogo}
+                    alt="ethereum-logo"
+                    priority={true}
+                  />
                   <span>ETH</span>
                 </CurrencyContainer>
               </CurrencySelectorContainer>
@@ -112,36 +114,52 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
           </BlackContainerRow>
           <BlackContainerRow>
             <span>Max wrappable: {maxWrappable}Ξ</span>
-            <span>{wrapUSDValue === "" ? "" : `$${wrapUSDValue}`}</span>
+            <span>{wrapUSDValue === '' ? '' : `$${wrapUSDValue}`}</span>
           </BlackContainerRow>
         </BlackContainer>
         <ArrowButton
           onClick={() =>
-            console.log("You clicked on the double arrows button!")
+            console.log('You clicked on the double arrows button!')
           }
         >
           <Image src={Arrows} alt="trade-arrows" priority={true} />
         </ArrowButton>
         <BlackContainer>
           <BlackContainerRow>
-            <span>Into</span>
+            {wrap ? (
+              <span className="big">Into</span>
+            ) : (
+              <span style={{ color: '#ED1EFF' }}>Receive</span>
+            )}
             <span>Balance: {balance}</span>
           </BlackContainerRow>
           <BlackContainerRow>
             <StyledCurrencyContainer2>
-              <Image className="big" src={sETHLogo} alt="sETH-logo" priority={true} />
+              <Image
+                className="big"
+                src={sETHLogo}
+                alt="sETH-logo"
+                priority={true}
+              />
               <span>sETH</span>
             </StyledCurrencyContainer2>
             <NumericInput type="text" placeholder="0.0" />
           </BlackContainerRow>
           <StyledBlackContainerRow>
             <span>Fee rate: {feeRate}%</span>
-            <Image className="tooltip" src={BlueInfo} alt="info-icon" priority={true}/>
-            <span className="big align-right">{wrapUSDValue === "" ? "" : `$${wrapUSDValue}`}</span>
+            <Image
+              className="tooltip"
+              src={BlueInfo}
+              alt="info-icon"
+              priority={true}
+            />
+            <span className="big align-right">
+              {wrapUSDValue === '' ? '' : `$${wrapUSDValue}`}
+            </span>
           </StyledBlackContainerRow>
         </BlackContainer>
         <ActionButton
-          onClick={() => console.log("You clicked on the action button!")}
+          onClick={() => console.log('You clicked on the action button!')}
         >
           <span>Select amount to wrap</span>
         </ActionButton>
@@ -165,8 +183,8 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
         </CapacityDescriptionContainer>
       </CapacityContainer>
     </Container>
-  );
-};
+  )
+}
 
 const Container = styled.div`
   display: flex;
@@ -174,7 +192,7 @@ const Container = styled.div`
   align-items: center;
   width: 100%;
   margin-top: 108.5px;
-`;
+`
 
 const ContainerRow = styled.div`
   width: 518px;
@@ -188,7 +206,7 @@ const ContainerRow = styled.div`
   .align-right {
     //align-content: flex-end;
   }
-`;
+`
 
 const TVLButton = styled(Button)`
   width: 100%;
@@ -196,11 +214,11 @@ const TVLButton = styled(Button)`
   height: 32px;
   margin-left: 84px;
 
-  background: linear-gradient(121.5deg, #101215 55.37%, #22272B 106.67%);
+  background: linear-gradient(121.5deg, #101215 55.37%, #22272b 106.67%);
   border: 1px solid #000000;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.9);
   border-radius: 40px;
-`;
+`
 
 const SelectorContainer = styled.div`
   display: flex;
@@ -220,14 +238,13 @@ const SelectorContainer = styled.div`
   /* Border */
   border: 1px solid rgba(130, 130, 149, 0.3);
   border-radius: 35px;
-`;
+`
 
-const SelectorButton = styled(Button) <{ active?: boolean }>`
+const SelectorButton = styled(Button)<{ active?: boolean }>`
   width: 95px;
   height: 36px;
   border-radius: 34px;
 
-  /* Text */
   span {
     font-weight: 700;
     font-size: 18px;
@@ -236,12 +253,11 @@ const SelectorButton = styled(Button) <{ active?: boolean }>`
   ${(props) =>
     props.active &&
     css`
-      background:
-        linear-gradient(0deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-        linear-gradient(73.6deg, #85FFC4 2.11%, #5CC6FF 90.45%);
-      
+      background: linear-gradient(0deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+        linear-gradient(73.6deg, #85ffc4 2.11%, #5cc6ff 90.45%);
+
       span {
-        color: #00D1FF;
+        color: #00d1ff;
       }
     `}
 
@@ -252,7 +268,7 @@ const SelectorButton = styled(Button) <{ active?: boolean }>`
       border: none;
       box-shadow: none;
     `}
-`;
+`
 
 const WrapprContainerColumn = styled.div`
   display: flex;
@@ -276,7 +292,7 @@ const WrapprContainerColumn = styled.div`
 
   /* Shadow */
   box-shadow: 0px 14px 14px rgba(0, 0, 0, 0.25);
-`;
+`
 
 const WrapprContainerRow = styled.div`
   display: flex;
@@ -285,12 +301,12 @@ const WrapprContainerRow = styled.div`
   align-items: flex-start;
   width: 100%;
 
-  font-family: "Inter";
+  font-family: 'Inter';
   font-style: normal;
   font-weight: 700;
   font-size: 32px;
   line-height: 35px;
-`;
+`
 
 const BlackContainer = styled.div`
   display: flex;
@@ -308,14 +324,14 @@ const BlackContainer = styled.div`
 
   span {
     /* Text */
-    font-family: "Inter";
+    font-family: 'Inter';
     font-style: normal;
     font-weight: 400;
     font-size: 12px;
     line-height: 150%;
     color: #828295;
   }
-`;
+`
 
 const BlackContainerRow = styled.div`
   display: flex;
@@ -324,7 +340,7 @@ const BlackContainerRow = styled.div`
   align-items: center;
   width: 100%;
 
-  font-family: "Inter";
+  font-family: 'Inter';
   font-style: normal;
   font-weight: 700;
   font-size: 24px;
@@ -337,7 +353,7 @@ const BlackContainerRow = styled.div`
   .align-right {
     text-align: right;
   }
-`;
+`
 
 const StyledBlackContainerRow = styled(BlackContainerRow)`
   justify-content: flex-start;
@@ -346,7 +362,7 @@ const StyledBlackContainerRow = styled(BlackContainerRow)`
   .tooltip:hover {
     // TODO
   }
-`;
+`
 
 const BlueInfoButton = styled.button`
   display: flex;
@@ -364,7 +380,7 @@ const BlueInfoButton = styled.button`
   &:active {
     box-shadow: inset -1px -1px 1px rgba(255, 255, 255, 0.15);
   }
-`;
+`
 
 const CurrencySelectorButton = styled(Button)`
   display: flex;
@@ -381,7 +397,7 @@ const CurrencySelectorButton = styled(Button)`
 
   /* Remove background color */
   background: none;
-`;
+`
 
 const CurrencyContainer = styled.div<{ active?: boolean }>`
   display: flex;
@@ -403,14 +419,14 @@ const CurrencyContainer = styled.div<{ active?: boolean }>`
 
   /* Text */
     span {
-    font-family: "Inter";
+    font-family: 'Inter';
     font-style: normal;
     font-weight: 600;
     font-size: 14px;
     line-height: 20px;
     color: #ffffff;
   }
-`;
+`
 
 const StyledCurrencyContainer = styled(CurrencyContainer)`
   justify-content: space-between;
@@ -421,7 +437,7 @@ const StyledCurrencyContainer = styled(CurrencyContainer)`
     font-size: 24px;
     line-height: 29px;
   }
-`;
+`
 
 const StyledCurrencyContainer2 = styled(CurrencyContainer)`
   padding: 0;
@@ -432,7 +448,7 @@ const StyledCurrencyContainer2 = styled(CurrencyContainer)`
     font-size: 24px;
     line-height: 29px;
   }
-`;
+`
 
 const CurrencySelectorContainer = styled.div`
   /* Hide the dropdown menu by default */
@@ -455,7 +471,7 @@ const CurrencySelectorContainer = styled.div`
 
   /* Shadow */
   box-shadow: 0px 14px 14px rgba(0, 0, 0, 0.25);
-`;
+`
 
 const CurrencySelectoDropdown = styled.div`
   flex-direction: column;
@@ -475,23 +491,23 @@ const CurrencySelectoDropdown = styled.div`
       padding: 4px;
     }
   }
-`;
+`
 
 const MaxButton = styled.button`
   display: flex;
 
   /* Remove button styling */
   background: none;
-	border: none;
-	padding: 0;
-	font: inherit;
-	cursor: pointer;
-	outline: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
 
   padding-left: 10px;
 
   span {
-    color: #00D1FF;
+    color: #00d1ff;
   }
 
   &:hover {
@@ -502,10 +518,10 @@ const MaxButton = styled.button`
 
   &:active {
     span {
-      color: #00D1FF;
+      color: #00d1ff;
     }
   }
-`;
+`
 
 const NumericInput = styled.input`
     /* Remove default styling */
@@ -530,11 +546,11 @@ const NumericInput = styled.input`
     line-height: 26px;
     color: #FFFFFF;
     text-align: right;
-`;
+`
 
 const GearButton = styled(Button)`
   padding: 0px;
-`;
+`
 
 const ArrowButton = styled.button`
   display: flex;
@@ -550,15 +566,14 @@ const ArrowButton = styled.button`
 
   &:hover {
     border: 1px solid rgba(130, 130, 149, 0.3);
-    background:
-      linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
-      linear-gradient(311.52deg, #3D464C -36.37%, #131619 62.81%);
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
+      linear-gradient(311.52deg, #3d464c -36.37%, #131619 62.81%);
   }
 
   &:active {
     box-shadow: inset -1px -1px 1px rgba(255, 255, 255, 0.15);
   }
-`;
+`
 
 const ActionButton = styled(Button)`
   width: 464px;
@@ -570,7 +585,7 @@ const ActionButton = styled(Button)`
   span {
     color: #565663;
   }
-`;
+`
 
 const CapacityContainer = styled.div`
   display: flex;
@@ -593,7 +608,7 @@ const CapacityContainer = styled.div`
 
   /* Shadow */
   box-shadow: 18px 18px 36px rgba(0, 0, 0, 0.25);
-`;
+`
 
 const TitleContainer = styled.div`
   width: 100%;
@@ -601,21 +616,21 @@ const TitleContainer = styled.div`
 
   /* Text */
   span {
-    font-family: "Inter";
+    font-family: 'Inter';
     font-style: normal;
     font-weight: 700;
     font-size: 24px;
     line-height: 26px;
     color: #ffffff;
   }
-`;
+`
 
 const ColumnContainer = styled.div`
   display: flex;
   flex-direction: column;
 
   span {
-    font-family: "Inter";
+    font-family: 'Inter';
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -629,7 +644,7 @@ const ColumnContainer = styled.div`
   .bold {
     font-weight: 700;
   }
-`;
+`
 
 const CapacityDescriptionContainer = styled.div`
   display: flex;
@@ -640,7 +655,7 @@ const CapacityDescriptionContainer = styled.div`
   & ${ColumnContainer}:nth-child(2) {
     text-align: right;
   }
-`;
+`
 
 const GaugeContainer = styled.div`
   width: 100%;
@@ -651,15 +666,15 @@ const GaugeContainer = styled.div`
   background: linear-gradient(#000000 0 0) padding-box,
     linear-gradient(73.6deg, #85ffc4 2.11%, #5cc6ff 90.45%) border-box;
   border-radius: 80px;
-`;
+`
 
 const GaugeProgress = styled.div<{ percentage: number }>`
   width: 0%;
   height: 12px;
   margin: 6px 6px;
 
-  background:
-    linear-gradient(73.6deg, #85ffc4 2.11%, #5cc6ff 90.45%) padding-box,
+  background: linear-gradient(73.6deg, #85ffc4 2.11%, #5cc6ff 90.45%)
+      padding-box,
     linear-gradient(#000000 0 0) border-box;
   border-radius: 50px 0px 0px 50px;
 
@@ -669,13 +684,13 @@ const GaugeProgress = styled.div<{ percentage: number }>`
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    
+
     font-family: 'Inter';
     font-style: normal;
     font-weight: 400;
     font-size: 12px;
     line-height: 150%;
-    color: #FFFFFF;
+    color: #ffffff;
   }
 
   ${(props) =>
@@ -701,6 +716,6 @@ const GaugeProgress = styled.div<{ percentage: number }>`
         width: calc(100% + 6ch);
       }
     `}
-`;
+`
 
-export default Wrappr;
+export default Wrappr
