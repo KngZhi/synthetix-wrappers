@@ -11,20 +11,35 @@ import Arrows from '../public/images/utils/arrows.svg'
 import DownArrowSmall from '../public/images/utils/down-arrow-small.svg'
 import BlueInfo from '../public/images/utils/blue-info.svg'
 import EthereumLogo from '../public/images/logos/ethereum.svg'
-import sLUSDLogo from '../public/images/synths/sLUSD.svg'
+import sLUSDLogo from '../public/images/synths/sLUSD.png'
 import sETHLogo from '../public/images/synths/sETH.svg'
 
 type WrapprProps = {
   onTVLClick: () => void
 }
 
-const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
-  const [wrap, setWrap] = useState<boolean>(true)
+type Token = {
+  name: string
+  src: Image
+  key: string
+  wrapperName: string
+}
 
-  const COIN_LiST = [
-    { name: 'LUSD', src: sLUSDLogo, key: 'lusd', isActive: true },
-    { name: 'ETH', src: EthereumLogo, key: 'eth', isActive: false },
+const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
+  const TOKEN_LIST: Token[] = [
+    { name: 'LUSD', src: sLUSDLogo, key: 'lusd', wrapperName: 'sLUSD' },
+    { name: 'ETH', src: EthereumLogo, key: 'eth', wrapperName: 'sETH' },
   ]
+  const [wrap, setWrap] = useState<boolean>(true)
+  const [currentToken, setCurrentToken] = useState<string>('eth')
+
+  const changeToken = (key) => {
+    setCurrentToken(key)
+  }
+
+  function getCurrentToken() {
+    return TOKEN_LIST.find((token) => token.key === currentToken)
+  }
 
   /* Wrappr */
   let balance: string = '129,937'
@@ -90,11 +105,11 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
                   <StyledCurrencyContainer>
                     <Image
                       className="big"
-                      src={EthereumLogo}
+                      src={getCurrentToken().src}
                       alt="ethereum-logo"
                       priority={true}
                     />
-                    <span>ETH</span>
+                    <span>{getCurrentToken().name}</span>
                     <Image
                       src={DownArrowSmall}
                       alt="down-arrow"
@@ -105,11 +120,11 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
               }
               dropList={
                 <DropdownListContainer>
-                  {COIN_LiST.map((item) => (
+                  {TOKEN_LIST.map((item) => (
                     <CurrencyContainer
-                      onClick={() => console.log(item.key)}
+                      onClick={() => changeToken(item.key)}
                       key={item.key}
-                      active={item.isActive}
+                      active={item.key === currentToken}
                     >
                       <Image src={item.src} alt={item.name}></Image>
                       <span>{item.name}</span>
@@ -145,11 +160,11 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
             <StyledCurrencyContainer2>
               <Image
                 className="big"
-                src={sETHLogo}
-                alt="sETH-logo"
+                src={getCurrentToken()?.src}
+                alt={getCurrentToken()?.name}
                 priority={true}
               />
-              <span>sETH</span>
+              <span>{getCurrentToken()?.wrapperName}</span>
             </StyledCurrencyContainer2>
             <NumericInput type="text" placeholder="0.0" />
           </BlackContainerRow>
@@ -393,7 +408,7 @@ const CurrencySelectorButton = styled(Button)`
   align-items: center;
 
   padding: 0;
-  width: 120px;
+  max-width: 130px;
   height: 37px;
 
   /* Border */

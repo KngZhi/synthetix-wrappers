@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components'
 import Image from 'next/image'
 
 import { Button, NetWorkButton, NetWorkSelectorButton } from './button.tsx'
-import DropdownContainer from './dropdown'
+import { DropdownContainer } from './dropdown'
 import WalletButton from "./wallet";
 
 import SynthetixLogo from '../public/images/logos/synthetix.svg'
