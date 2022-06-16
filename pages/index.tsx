@@ -3,6 +3,8 @@ import {
   createClient,
   defaultChains,
   configureChains,
+  chain,
+  useNetwork
 } from 'wagmi'
 
 import { infuraProvider } from 'wagmi/providers/infura'
@@ -20,7 +22,8 @@ import Image from 'next/image'
 
 const INFURA_ID = process.env.INFURA_ID
 
-const { chains, provider, webSocketProvider } = configureChains(defaultChains, [
+const { chains, provider, webSocketProvider } = configureChains(
+  [chain.mainnet, chain.optimism], [
   infuraProvider({ infuraId: INFURA_ID }),
   publicProvider(),
 ])
@@ -68,7 +71,8 @@ const SNX_THEME = createTheme({
 })
 
 import Header from '../components/header'
-import Content from "../components/content";
+import Content from '../components/content'
+import { useEffect } from 'react'
 
 const HomePage: NextPage = () => {
   return (

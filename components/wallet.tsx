@@ -4,7 +4,7 @@ import Web3Modal from 'web3modal'
 import WalletConnectProvider from '@walletconnect/web3-provider'
 import { useState, useEffect } from 'react'
 import styled, { css } from 'styled-components'
-import { useConnect, useAccount, useDisconnect, useEnsAvatar } from 'wagmi'
+import { useConnect, useAccount, useDisconnect, useBalance, chain } from 'wagmi'
 import { Modal, Button, Text, Row } from '@nextui-org/react'
 
 import {
@@ -14,7 +14,7 @@ import {
   AddrButton,
 } from './button'
 
-import { isWalletConnectedState, walletAddressState } from '../store/index'
+import { isWalletConnectedState, walletAddressState, networkState } from '../store/index'
 
 import styles from './Modal/Modal.module.css'
 import Image from 'next/image'
@@ -31,17 +31,23 @@ export default function WalletButton() {
   const [visible, setVisible] = useState<boolean>(false)
   const [walletAddress, setWalletAddress] = useRecoilState(walletAddressState)
   const isWalletConnected = useRecoilValue(isWalletConnectedState)
+  const [activeNetwork] = useRecoilState(networkState)
   const handler = () => setVisible(true)
   const closeHandle = () => setVisible(false)
 
   const [profileVisible, setProfileVisible] = useState<boolean>(false)
 
   const { connect, connectors, error, isConnecting, pendingConnector } =
-    useConnect()
+    useConnect({
+      chainId: activeNetwork.id
+    })
   const { data: account } = useAccount()
-  const { data: ensAvatar } = useEnsAvatar({ addressOrName: account?.address })
+  const { data: balance } = useBalance({
+    addressOrName: account?.address,
+  })
 
   const { disconnect } = useDisconnect()
+
   const imageTable = {
     metamast: MetaMaskPic,
     coinbaseWallet: LedgerPic,
@@ -83,7 +89,6 @@ export default function WalletButton() {
         <Profile
           open={profileVisible}
           address={addr}
-          avatar={ensAvatar}
           disconnect={handleDisconnect}
           onClose={() => setProfileVisible(false)}
           changeWallet={handleChangeWallet}
