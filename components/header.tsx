@@ -35,14 +35,19 @@ function NetworkButton({ id, name, src, onClick, isActive }) {
 }
 
 const Header = () => {
-  const { activeChain, switchNetwork } = useNetwork()
+  const { activeChain, switchNetworkAsync } = useNetwork()
   const [activeNetwork, setActiveNetwork] = useRecoilState(networkState)
   const [isWalletConnected] = useRecoilState(isWalletConnectedState)
 
-  const onSwitchChain = (chain) => {
+  const onSwitchChain = async (chain) => {
     const { id, name } = chain
-    if (isWalletConnected && switchNetwork) {
-      switchNetwork(id)
+    if (isWalletConnected) {
+      try {
+        await switchNetworkAsync(id)
+      } catch (error) {
+        return error
+      }
+      
     }
     setActiveNetwork({ id: id, name: name })
   }
