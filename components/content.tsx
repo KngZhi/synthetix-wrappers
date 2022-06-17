@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components'
 import Image from 'next/image'
 
 import { Button } from './button'
-import { NetworkDropdown, DefaultDropdownMenu } from '../components/dropdown'
+import { DefaultDropdownMenu } from '../components/dropdown'
 
 import LinkArrow from '../public/images/utils/link-arrow.svg'
 import Gear from '../public/images/utils/gear.svg'
@@ -13,6 +13,10 @@ import BlueInfo from '../public/images/utils/blue-info.svg'
 import EthereumLogo from '../public/images/logos/ethereum.svg'
 import sLUSDLogo from '../public/images/synths/sLUSD.png'
 import sETHLogo from '../public/images/synths/sETH.svg'
+
+import { useAccount, useBalance } from 'wagmi'
+import { walletAddressState } from '../store/index'
+import { useRecoilState } from 'recoil'
 
 type WrapprProps = {
   onTVLClick: () => void
@@ -32,6 +36,8 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
   ]
   const [wrap, setWrap] = useState<boolean>(true)
   const [currentToken, setCurrentToken] = useState<string>('eth')
+  const [walletAddress] = useRecoilState(walletAddressState)
+  const { data: account } = useAccount();
 
   const changeToken = (key) => {
     setCurrentToken(key)
@@ -41,8 +47,13 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
     return TOKEN_LIST.find((token) => token.key === currentToken)
   }
 
+  const { data, } = useBalance({
+    addressOrName: walletAddress,
+    watch: true,
+  })
+
   /* Wrappr */
-  let balance: string = '129,937'
+  let balance: string =  data?.formatted || '0'
   let maxWrappable: number = 80
   let wrapUSDValue: string = '2,895.25'
 

@@ -23,7 +23,7 @@ import Image from 'next/image'
 const INFURA_ID = process.env.INFURA_ID
 
 const { chains, provider, webSocketProvider } = configureChains(
-  [chain.mainnet, chain.optimism], [
+  [...defaultChains], [
   infuraProvider({ infuraId: INFURA_ID }),
   publicProvider(),
 ])

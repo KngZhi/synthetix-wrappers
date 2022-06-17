@@ -3,7 +3,7 @@ import { chain } from "wagmi";
 
 export const walletAddressState = atom<string | null>({
   key: 'walletAddress',
-  default: null,
+  default: undefined,
 })
 
 export const isWalletConnectedState = selector<boolean>({
@@ -19,7 +19,6 @@ export const balance = atom<string | null>({
 export type Network = {
   id: number,
   name: string,
-  useOvm: boolean,
 }
 
 export const networkState = atom<Network | null>({

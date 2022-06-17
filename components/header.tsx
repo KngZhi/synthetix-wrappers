@@ -12,17 +12,21 @@ import EthereumLogo from '../public/images/logos/ethereum.svg'
 import OptimismLogo from '../public/images/logos/optimism.svg'
 import DownArrow from '../public/images/utils/down-arrow.svg'
 
-import { useNetwork, chain, defaultChains } from 'wagmi'
+import { useNetwork, chain, } from 'wagmi'
 import { Network, networkState, isWalletConnectedState } from '../store/index'
 
 const NETWORK_ICON = {
   [chain.mainnet.id]: EthereumLogo,
   [chain.optimism.id]: OptimismLogo,
+  [chain.optimismKovan.id]: OptimismLogo,
+  [chain.kovan.id]: EthereumLogo,
 }
 
 const SUPPORTED_CHAIN: Network[] = [
   { id: chain.mainnet.id, name: chain.mainnet.name, src: EthereumLogo },
+  { id: chain.kovan.id, name: chain.kovan.name, src: EthereumLogo },
   { id: chain.optimism.id, name: chain.optimism.name, src: OptimismLogo },
+  { id: chain.optimismKovan, name: chain.optimismKovan.name, src: OptimismLogo },
 ]
 
 function NetworkButton({ id, name, src, onClick, isActive }) {
@@ -37,20 +41,21 @@ function NetworkButton({ id, name, src, onClick, isActive }) {
 const Header = () => {
   const { activeChain, switchNetworkAsync } = useNetwork()
   const [activeNetwork, setActiveNetwork] = useRecoilState(networkState)
-  const [isWalletConnected] = useRecoilState(isWalletConnectedState)
+  const isWalletConnected = useRecoilValue(isWalletConnectedState)
 
-  const onSwitchChain = async (chain) => {
+  const onSwitchChain = async (chain: Network) => {
     const { id, name } = chain
-    if (isWalletConnected) {
+    if (isWalletConnected && switchNetworkAsync) {
       try {
         await switchNetworkAsync(id)
+        setActiveNetwork({ id: id, name: name })
       } catch (error) {
         return error
       }
       
     }
-    setActiveNetwork({ id: id, name: name })
   }
+  console.log('active', activeChain)
 
   return (
     <HeaderContainer>
@@ -74,6 +79,7 @@ const Header = () => {
             <NetworkSelectorContainer>
               {SUPPORTED_CHAIN.map((chain) => (
                 <NetworkButton
+                  src={NETWORK_ICON[chain.id]}
                   onClick={() => onSwitchChain(chain)}
                   isActive={chain.id === activeNetwork?.id}
                   key={chain.id}
