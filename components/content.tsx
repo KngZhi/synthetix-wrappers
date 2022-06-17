@@ -509,6 +509,7 @@ const CurrencySelectorContainer = styled.div`
 `
 
 const CurrencySelectoDropdown = styled.div<{ isDrop: boolean }>`
+
   flex-direction: column;
   gap: 8px;
 
