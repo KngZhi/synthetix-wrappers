@@ -26,7 +26,7 @@ const SUPPORTED_CHAIN: Network[] = [
   { id: chain.mainnet.id, name: chain.mainnet.name, src: EthereumLogo },
   { id: chain.kovan.id, name: chain.kovan.name, src: EthereumLogo },
   { id: chain.optimism.id, name: chain.optimism.name, src: OptimismLogo },
-  { id: chain.optimismKovan, name: chain.optimismKovan.name, src: OptimismLogo },
+  { id: chain.optimismKovan.id, name: chain.optimismKovan.name, src: OptimismLogo },
 ]
 
 function NetworkButton({ id, name, src, onClick, isActive }) {
