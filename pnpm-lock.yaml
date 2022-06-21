@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@metamask/jazzicon': ^2.0.0
   '@nextui-org/react': ^1.0.0-beta.9
   '@types/node': 17.0.41
   '@types/react': 18.0.12
@@ -18,6 +19,7 @@ specifiers:
   react-dom: 18.1.0
   react-feather: ^2.0.10
   react-ga4: ^1.4.1
+  react-jazzicon: ^1.0.4
   recoil: ^0.7.3
   sass: ^1.52.3
   styled-components: ^5.3.5
@@ -27,6 +29,7 @@ specifiers:
   web3modal: ^1.9.7
 
 dependencies:
+  '@metamask/jazzicon': 2.0.0
   '@nextui-org/react': 1.0.0-beta.9_ef5jwxihqo6n7gxfmzogljlgcm
   '@walletconnect/web3-provider': 1.7.8
   copy-to-clipboard: 3.3.1
@@ -36,6 +39,7 @@ dependencies:
   react-dom: 18.1.0_react@18.1.0
   react-feather: 2.0.10_react@18.1.0
   react-ga4: 1.4.1
+  react-jazzicon: 1.0.4_ef5jwxihqo6n7gxfmzogljlgcm
   recoil: 0.7.3_ef5jwxihqo6n7gxfmzogljlgcm
   styled-components: 5.3.5_ef5jwxihqo6n7gxfmzogljlgcm
   wagmi: 0.4.11_ef5jwxihqo6n7gxfmzogljlgcm
@@ -449,6 +453,13 @@ packages:
     dependencies:
       '@json-rpc-tools/types': 1.7.6
       '@pedrouid/environment': 1.0.1
+    dev: false
+
+  /@metamask/jazzicon/2.0.0:
+    resolution: {integrity: sha512-7M+WSZWKcQAo0LEhErKf1z+D3YX0tEDAcGvcKbDyvDg34uvgeKR00mFNIYwAhdAS9t8YXxhxZgsrRBBg6X8UQg==}
+    dependencies:
+      color: 0.11.4
+      mersenne-twister: 1.1.0
     dev: false
 
   /@metamask/safe-event-emitter/2.0.0:
@@ -2026,6 +2037,11 @@ packages:
       wrap-ansi: 5.1.0
     dev: false
 
+  /clone/1.0.4:
+    resolution: {integrity: sha512-JQHZ2QMW6l3aH/j6xCqQThY/9OH4D/9ls34cgkUBiEeocRTU04tHfKPBsUK1PqZCUQM7GiA0IIXJSuXHI64Kbg==}
+    engines: {node: '>=0.8'}
+    dev: false
+
   /clone/2.1.2:
     resolution: {integrity: sha512-3Pe/CF1Nn94hyhIYpjtiLhdCoEoz0DqQ+988E9gmeEdQZlojxnOb74wctFyuwWQHzqyf9X7C7MG8juUpqBJT8w==}
     engines: {node: '>=0.8'}
@@ -2055,7 +2071,20 @@ packages:
 
   /color-name/1.1.4:
     resolution: {integrity: sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==}
-    dev: true
+
+  /color-string/0.3.0:
+    resolution: {integrity: sha512-sz29j1bmSDfoAxKIEU6zwoIZXN6BrFbAMIhfYCNyiZXBDuU/aiHlN84lp/xDzL2ubyFhLDobHIlU1X70XRrMDA==}
+    dependencies:
+      color-name: 1.1.4
+    dev: false
+
+  /color/0.11.4:
+    resolution: {integrity: sha512-Ajpjd8asqZ6EdxQeqGzU5WBhhTfJ/0cA4Wlbre7e5vXfmDSmda7Ov6jeKoru+b0vHcb1CqvuroTHp5zIWzhVMA==}
+    dependencies:
+      clone: 1.0.4
+      color-convert: 1.9.3
+      color-string: 0.3.0
+    dev: false
 
   /combined-stream/1.0.8:
     resolution: {integrity: sha512-FQN4MRfuJeHf7cBbBMJFXhKSDq+2kAArBlmRBvcvFE5BB1HZKXtSFASDhdlz9zOYwxh8lDdnvmMOe/+5cdoEdg==}
@@ -3729,6 +3758,10 @@ packages:
       semaphore: 1.1.0
     dev: false
 
+  /mersenne-twister/1.1.0:
+    resolution: {integrity: sha512-mUYWsMKNrm4lfygPkL3OfGzOPTR2DBlTkBNHM//F6hGp8cLThY897crAlk3/Jo17LEOOjQUrNAx6DvgO77QJkA==}
+    dev: false
+
   /micromatch/4.0.5:
     resolution: {integrity: sha512-DMy+ERcEW2q8Z2Po+WNXuw3c5YaUSFjAO5GsJqfEl7UjvtIuFKO6ZrKvcItdy98dwFI2N1tg3zNIdKaQT+aNdA==}
     engines: {node: '>=8.6'}
@@ -4279,6 +4312,17 @@ packages:
 
   /react-is/16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
+
+  /react-jazzicon/1.0.4_ef5jwxihqo6n7gxfmzogljlgcm:
+    resolution: {integrity: sha512-/3kWv5vtAhI18GBFoqjpxRTtL+EImuB73PAC02r/zJQ6E+PAUmoBx8edYvTCIYHwS01uFf6N3elTDqSrVPwg4w==}
+    peerDependencies:
+      react: '>=17.0.0'
+      react-dom: '>=17.0.0'
+    dependencies:
+      mersenne-twister: 1.1.0
+      react: 18.1.0
+      react-dom: 18.1.0_react@18.1.0
+    dev: false
 
   /react-query/4.0.0-beta.23_ef5jwxihqo6n7gxfmzogljlgcm:
     resolution: {integrity: sha512-e6mNBVAYGy0M1OwX0mhRB/lCkOedKeqTUrbPjNCqvm8hQGUsJJobqfHVvTv8o6JJaOO2MFcxKF4vZM+PEKbHZA==}
@@ -5238,7 +5282,7 @@ packages:
     dev: false
 
   github.com/ethereumjs/ethereumjs-abi/ee3994657fa7a427238e6ba92a84d0b529bbcde0:
-    resolution: {tarball: https://codeload.github.com/ethereumjs/ethereumjs-abi/tar.gz/ee3994657fa7a427238e6ba92a84d0b529bbcde0}
+    resolution: {commit: ee3994657fa7a427238e6ba92a84d0b529bbcde0, repo: git+ssh://git@github.com/ethereumjs/ethereumjs-abi.git, type: git}
     name: ethereumjs-abi
     version: 0.6.8
     dependencies:

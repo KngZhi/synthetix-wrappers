@@ -1,6 +1,7 @@
-import { FC } from 'react'
+import { FC, useMemo } from 'react'
+import Jazzicon, { jsNumberForAddress } from 'react-jazzicon'
 import { Modal, Text, Container, Row, Col } from '@nextui-org/react'
-import styled  from 'styled-components'
+import styled from 'styled-components'
 import CopyHelper from '../CopyHelper'
 import { Explorer } from '../Explorer'
 
@@ -66,15 +67,19 @@ const Profile: FC<ProfileProps> = ({
               Connected with MetaMast
             </Text>
           </Row>
-          <Row>
+            <Row css={{ gap: '4px', alignItems: 'center', marginBottom: '2px' }}>
+            <Jazzicon diameter={18} seed={jsNumberForAddress(address || '')} />
             <Text color="white" size={18}>
               {shortAddr}
             </Text>
           </Row>
-          <Row>
-            <CopyHelper iconSize={16} toCopy={address} color="#828295">
-            </CopyHelper>
-      <Explorer chainId={chainId} account={address} ENSName={address} />
+          <Row css={{ alignItem: 'center'}}>
+            <CopyHelper
+              iconSize={16}
+              toCopy={address}
+              color="#828295"
+            ></CopyHelper>
+            <Explorer chainId={chainId} account={address} ENSName={address} />
           </Row>
           <ChangeButton onClick={changeWallet}>
             <span>Change</span>
