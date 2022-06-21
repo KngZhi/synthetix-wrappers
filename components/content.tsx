@@ -1,6 +1,8 @@
 import { FC, useEffect, useState } from 'react'
+import { useRecoilState } from 'recoil'
 import styled, { css } from 'styled-components'
 import Image from 'next/image'
+import { useAccount, useBalance } from 'wagmi'
 
 import { Button } from './button'
 import { DefaultDropdownMenu } from '../components/dropdown'
@@ -14,9 +16,7 @@ import EthereumLogo from '../public/images/logos/ethereum.svg'
 import sLUSDLogo from '../public/images/synths/sLUSD.png'
 import sETHLogo from '../public/images/synths/sETH.svg'
 
-import { useAccount, useBalance } from 'wagmi'
 import { walletAddressState } from '../store/index'
-import { useRecoilState } from 'recoil'
 
 type WrapprProps = {
   onTVLClick: () => void
@@ -29,12 +29,48 @@ type Token = {
   wrapperName: string
 }
 
+type NumberInputProps = {
+  max: number,
+  value: string,
+  onChage: () => void,
+  decimal: string,
+}
+
+const NumericInput: FC<NumberInputProps> = ({ max=60, value, onChange, decimal="0.01" })=> {
+
+  function validate(e) {
+    var theEvent = e || window.event;
+
+    // Handle paste
+    if (theEvent.type === 'paste') {
+        key = event.clipboardData.getData('Text');
+    } else {
+    // Handle key press
+        var key = theEvent.keyCode || theEvent.which;
+        key = String.fromCharCode(key);
+    }
+    var regex = /[0-9]|\./;
+    if( !regex.test(key) ) {
+      theEvent.returnValue = false;
+      if(theEvent.preventDefault) theEvent.preventDefault();
+    }
+  }
+
+  return (<BaseInput
+          value={value}
+          onChange={onChange}
+          placeholder="0.0"
+          max={max}
+          onKeyPress={validate} />)
+}
+
 const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
   const TOKEN_LIST: Token[] = [
     { name: 'LUSD', src: sLUSDLogo, key: 'lusd', wrapperName: 'sLUSD' },
     { name: 'ETH', src: EthereumLogo, key: 'eth', wrapperName: 'sETH' },
   ]
   const [wrap, setWrap] = useState<boolean>(true)
+  const [inputValue, setInputValue] = useState<string>('0.0')
   const [currentToken, setCurrentToken] = useState<string>('eth')
   const [walletAddress] = useRecoilState(walletAddressState)
   const { data: account } = useAccount();
@@ -42,6 +78,11 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
   const changeToken = (key) => {
     setCurrentToken(key)
   }
+
+  const onInputChange = (e) => {
+    setInputValue(e.target.value)
+  }
+
 
   function getCurrentToken() {
     return TOKEN_LIST.find((token) => token.key === currentToken)
@@ -64,6 +105,10 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
     (parseInt(capacityUtilised, 10) / parseInt(maxCapacity, 10)) * 100
 
   let feeRate: number = 24
+
+  const onMaxClick = () => {
+    setInputValue(balance)
+  }
 
   return (
     <Container>
@@ -102,7 +147,7 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
             )}
             <span>Balance: {balance}</span>
             <MaxButton
-              onClick={() => console.log('You clicked on the max button!')}
+              onClick={onMaxClick}
             >
               <span>MAX</span>
             </MaxButton>
@@ -144,7 +189,7 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
                 </DropdownListContainer>
               }
             />
-            <NumericInput type="text" placeholder="0.0" />
+      <NumericInput value={inputValue} onChange={onInputChange}/>
           </BlackContainerRow>
           <BlackContainerRow>
             <span>Max wrappable: {maxWrappable}Ξ</span>
@@ -552,7 +597,7 @@ const MaxButton = styled.button`
   }
 `
 
-const NumericInput = styled.input`
+const BaseInput = styled.input`
     /* Remove default styling */
     width: 50%;
     height: 100%;

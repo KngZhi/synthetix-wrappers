@@ -1,11 +1,7 @@
-import Web3 from 'web3'
-import { ethers, providers } from 'ethers'
-import Web3Modal from 'web3modal'
-import WalletConnectProvider from '@walletconnect/web3-provider'
 import { useState, useEffect } from 'react'
-import styled, { css } from 'styled-components'
-import { useConnect, useAccount, useDisconnect, useBalance, chain } from 'wagmi'
-import { Modal, Button, Text, Row } from '@nextui-org/react'
+import styled  from 'styled-components'
+import { useConnect, useAccount, useDisconnect, useEnsAvatar } from 'wagmi'
+import { Modal, Text } from '@nextui-org/react'
 
 import {
   Button as BaseButton,
@@ -38,9 +34,7 @@ export default function WalletButton() {
   const [profileVisible, setProfileVisible] = useState<boolean>(false)
 
   const { connect, connectors, error, isConnecting, pendingConnector } =
-    useConnect({
-      chainId: activeNetwork.id
-    })
+    useConnect()
   const { data: account } = useAccount()
 
   const { disconnect } = useDisconnect()

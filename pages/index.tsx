@@ -2,6 +2,7 @@ import {
   WagmiConfig,
   createClient,
   defaultChains,
+  defaultL2Chains,
   configureChains,
   chain,
   useNetwork
@@ -23,10 +24,11 @@ import Image from 'next/image'
 const INFURA_ID = process.env.INFURA_ID
 
 const { chains, provider, webSocketProvider } = configureChains(
-  [...defaultChains], [
+  [...defaultChains, ...defaultL2Chains], [
   infuraProvider({ infuraId: INFURA_ID }),
   publicProvider(),
 ])
+
 
 const client = createClient({
   autoConnect: true,
