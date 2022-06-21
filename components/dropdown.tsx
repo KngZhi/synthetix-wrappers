@@ -1,10 +1,22 @@
+import { ReactElement } from 'react'
 import { FC, useRef, useState, useEffect } from 'react'
 import styled, { css } from 'styled-components'
 
-const DefaultDropdownMenu = ({
+type DefaultDropdownMenuProps = {
+  trigger: ReactElement,
+  dropList: ReactElement,
+  className?: string,
+  triggerCls?: string,
+  dropdownCls?: string,
+  offset?: number ,
+}
+
+const DefaultDropdownMenu: FC<DefaultDropdownMenuProps> = ({
   trigger,
   dropList,
-  containerCls,
+  className,
+  triggerCls,
+  dropdownCls,
   offset = 0,
 }) => {
   const dropdownRef = useRef(null)
@@ -34,9 +46,9 @@ const DefaultDropdownMenu = ({
   }, [isActive, dropdownRef])
 
   return (
-    <DropdownContainer ref={dropdownRef}>
-      <DropdownTrigger onClick={handleOpen}>{trigger}</DropdownTrigger>
-      <DropdownList offset={offset} active={isActive} onClick={handleClose}>
+    <DropdownContainer ref={dropdownRef} className={className}>
+      <DropdownTrigger className={triggerCls} onClick={handleOpen}>{trigger}</DropdownTrigger>
+      <DropdownList className={dropdownCls} offset={offset} active={isActive} onClick={handleClose}>
         {dropList}
       </DropdownList>
     </DropdownContainer>

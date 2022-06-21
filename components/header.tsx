@@ -38,6 +38,7 @@ function NetworkButton({ id, name, src, onClick, isActive }) {
   )
 }
 
+// TODO: should also watch network change
 const Header = () => {
   const { activeChain, switchNetworkAsync } = useNetwork()
   const [activeNetwork, setActiveNetwork] = useRecoilState(networkState)
@@ -55,7 +56,6 @@ const Header = () => {
       
     }
   }
-  console.log('active', activeChain)
 
   return (
     <HeaderContainer>

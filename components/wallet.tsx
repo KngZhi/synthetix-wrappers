@@ -42,9 +42,6 @@ export default function WalletButton() {
       chainId: activeNetwork.id
     })
   const { data: account } = useAccount()
-  const { data: balance } = useBalance({
-    addressOrName: account?.address,
-  })
 
   const { disconnect } = useDisconnect()
 
@@ -59,9 +56,9 @@ export default function WalletButton() {
     if (account?.address) {
       setWalletAddress(account.address)
     }
-  }, [account, setWalletAddress])
+  }, [account])
 
-  const addr = truncateAddress(account?.address || '')
+  const addr = truncateAddress(walletAddress || '')
   function handleChangeWallet() {
     handler()
     setProfileVisible(false)
@@ -88,7 +85,9 @@ export default function WalletButton() {
       <>
         <Profile
           open={profileVisible}
-          address={addr}
+          address={walletAddress}
+          shortAddr={addr}
+          chainId={activeNetwork?.id}
           disconnect={handleDisconnect}
           onClose={() => setProfileVisible(false)}
           changeWallet={handleChangeWallet}

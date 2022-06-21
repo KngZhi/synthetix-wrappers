@@ -32,10 +32,11 @@ const NetWorkButton = styled(BaseButton)`
 
 const NetWorkSelectorButton = styled(BaseButton)<{ active?: boolean }>`
   border: 0;
-  width: 144px;
+  width: 100%;
   height: 40px;
   padding: 8px;
   justify-content: flex-start;
+  position: relative;
   ${({ active }) =>
     active &&
     css`
@@ -49,8 +50,9 @@ const NetWorkSelectorButton = styled(BaseButton)<{ active?: boolean }>`
         width: 8px;
         border: 2px solid #31d8a4;
         border-radius: 50%;
-        margin-left: 20px;
         box-shadow: 0px 0px 15px rgba(68, 239, 193, 0.6);
+        position: absolute;
+        right: 11%;
       }
     `}
 `

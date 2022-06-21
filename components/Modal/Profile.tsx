@@ -1,10 +1,8 @@
 import { FC } from 'react'
-import { Modal, Button, Text, Container, Row, Col } from '@nextui-org/react'
-import styled, { css } from 'styled-components'
-import Image from 'next/image'
-
-import ExplorerImage from '../../public/images/utils/explorer.svg'
-import CopyImage from '../../public/images/utils/copy.svg'
+import { Modal, Text, Container, Row, Col } from '@nextui-org/react'
+import styled  from 'styled-components'
+import CopyHelper from '../CopyHelper'
+import { Explorer } from '../Explorer'
 
 import { MoreButton } from '../button'
 import { NetworkSelector } from '../NetworkSelector'
@@ -12,20 +10,24 @@ import { NetworkSelector } from '../NetworkSelector'
 type ProfileProps = {
   disconnect: () => void
   address: string
+  shortAddr: string
   changeAccount: () => void
   open: boolean
   onClose: () => void
   avatar
   changeWallet: () => void
+  chainId: number
 }
 
 const Profile: FC<ProfileProps> = ({
   address = '',
+  shortAddr,
   open = false,
   onClose = () => {},
   disconnect = () => {},
   avatar,
   changeWallet = () => {},
+  chainId,
 }) => {
   function handleDisconnect() {
     disconnect()
@@ -66,31 +68,13 @@ const Profile: FC<ProfileProps> = ({
           </Row>
           <Row>
             <Text color="white" size={18}>
-              {address}
+              {shortAddr}
             </Text>
           </Row>
-          <Row css={{ flexFlow: 'row nowrap' }}>
-            <Image
-              style={{ background: '#fff' }}
-              src={CopyImage}
-              alt="copy address"
-            ></Image>
-            <Text
-              color="#828295"
-              size={12}
-              style={{ marginLeft: '6px', marginRight: '21.75px' }}
-            >
-              Copy Address
-            </Text>
-            <Image
-              style={{ background: '#fff' }}
-              color="#828295"
-              src={ExplorerImage}
-              alt="View on Explorer"
-            ></Image>
-            <Text color="#828295" size={12} css={{ marginLeft: '5.75px' }}>
-              View On Explorer
-            </Text>
+          <Row>
+            <CopyHelper iconSize={16} toCopy={address} color="#828295">
+            </CopyHelper>
+      <Explorer chainId={chainId} account={address} ENSName={address} />
           </Row>
           <ChangeButton onClick={changeWallet}>
             <span>Change</span>
@@ -141,7 +125,7 @@ const NetworkSlot = styled(BaseSlot)`
   .drop-container div {
     background: #000;
     width: 195px;
-}
+  }
 `
 
 const ChangeButton = styled(MoreButton)`
