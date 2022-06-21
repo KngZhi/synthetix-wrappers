@@ -64,8 +64,8 @@ export const NetworkSelector: FC<NetworkSelectorProps> = ({
   dropdownCls,
   containerCls,
 }) => {
-  const [defaultNetwork, setActiveNetwork] = useRecoilState(networkState)
-    const { switchNetworkAsync, activeChain } = useNetwork()
+  const [ activeNetwork, setActiveNetwork] = useRecoilState(networkState)
+  const { switchNetworkAsync, activeChain } = useNetwork()
   const isWalletConnected = useRecoilValue(isWalletConnectedState)
 
   const onSwitchChain = async (chain: Network) => {
@@ -80,6 +80,13 @@ export const NetworkSelector: FC<NetworkSelectorProps> = ({
     }
   }
 
+    useEffect(() => {
+        if (activeChain) {
+            setActiveNetwork({ id: activeChain.id, name: activeChain.name })
+        }
+
+    }, [activeChain])
+
   return (
     <DefaultDropdownMenu
       className={containerCls}
@@ -88,11 +95,11 @@ export const NetworkSelector: FC<NetworkSelectorProps> = ({
       trigger={
         <NetWorkButton >
           <Image
-            src={NETWORK_ICON[activeChain?.id || defaultNetwork?.id]}
-            alt={activeChain?.name}
+            src={NETWORK_ICON[activeNetwork?.id]}
+            alt={activeNetwork.name}
             priority={true}
           />
-          <span className="ml-1.25">{activeChain?.name || defaultNetwork?.name}</span>
+          <span className="ml-1.25">{activeNetwork.name}</span>
           <Image src={DownArrow} alt="down-arrow" priority={true} />
         </NetWorkButton>
       }
@@ -102,7 +109,7 @@ export const NetworkSelector: FC<NetworkSelectorProps> = ({
             <NetworkButton
               src={NETWORK_ICON[chain.id]}
               onClick={() => onSwitchChain(chain)}
-              isActive={chain.id === activeChain?.id}
+              isActive={chain.id === activeNetwork.id}
               key={chain.id}
               {...chain}
             />
