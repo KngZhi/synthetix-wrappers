@@ -1,3 +1,4 @@
+import { FC } from 'react'
 import { Modal, Button, Text, Container, Row, Col } from '@nextui-org/react'
 import styled, { css } from 'styled-components'
 import Image from 'next/image'
@@ -6,6 +7,7 @@ import ExplorerImage from '../../public/images/utils/explorer.svg'
 import CopyImage from '../../public/images/utils/copy.svg'
 
 import { MoreButton } from '../button'
+import { NetworkSelector } from '../NetworkSelector'
 
 type ProfileProps = {
   disconnect: () => void
@@ -18,12 +20,12 @@ type ProfileProps = {
 }
 
 const Profile: FC<ProfileProps> = ({
-  address,
-  open,
-  onClose,
-  disconnect,
+  address = '',
+  open = false,
+  onClose = () => {},
+  disconnect = () => {},
   avatar,
-  changeWallet,
+  changeWallet = () => {},
 }) => {
   function handleDisconnect() {
     disconnect()
@@ -39,6 +41,7 @@ const Profile: FC<ProfileProps> = ({
         color: '#fff',
         boxShadow: '0px 14px 14px rgba(0, 0, 0, 0.25)',
         cursor: 'default',
+        overflow: 'unset',
       }}
       open={open}
       onClose={onClose}
@@ -102,7 +105,12 @@ const Profile: FC<ProfileProps> = ({
             </DisconnectButton>
           </Col>
           <Col>
-            <BaseSlot>Ethereum</BaseSlot>
+            <NetworkSlot>
+              <NetworkSelector
+                menuCls="menu-selector"
+                dropdownCls="drop-container"
+              />
+            </NetworkSlot>
           </Col>
         </Row>
       </Container>
@@ -118,6 +126,22 @@ const BaseSlot = styled.div`
   border: 1px solid rgba(130, 130, 149, 0.3);
   border-radius: 5px;
   color: #828295;
+`
+
+const NetworkSlot = styled(BaseSlot)`
+  .menu-selector {
+    width: 100%;
+    button {
+      background: #000;
+      border: unset;
+      width: 100%;
+      box-shadow: unset;
+    }
+  }
+  .drop-container div {
+    background: #000;
+    width: 195px;
+}
 `
 
 const ChangeButton = styled(MoreButton)`
