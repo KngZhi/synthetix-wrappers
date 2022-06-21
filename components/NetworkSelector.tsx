@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
 import styled from 'styled-components'
 import Image from 'next/image'
 import { chain, useNetwork } from 'wagmi'
@@ -54,9 +54,9 @@ const NetworkButton: FC<NetworkButtonProps> = ({
 }
 
 type NetworkSelectorProps = {
-  menuCls: string
-  dropdownCls: string
-  containerCls: string
+  menuCls?: string
+  dropdownCls?: string
+  containerCls?: string
 }
 
 export const NetworkSelector: FC<NetworkSelectorProps> = ({
@@ -64,8 +64,8 @@ export const NetworkSelector: FC<NetworkSelectorProps> = ({
   dropdownCls,
   containerCls,
 }) => {
-  const { switchNetworkAsync } = useNetwork()
-  const [activeNetwork, setActiveNetwork] = useRecoilState(networkState)
+  const [defaultNetwork, setActiveNetwork] = useRecoilState(networkState)
+    const { switchNetworkAsync, activeChain } = useNetwork()
   const isWalletConnected = useRecoilValue(isWalletConnectedState)
 
   const onSwitchChain = async (chain: Network) => {
@@ -88,11 +88,11 @@ export const NetworkSelector: FC<NetworkSelectorProps> = ({
       trigger={
         <NetWorkButton >
           <Image
-            src={NETWORK_ICON[activeNetwork?.id]}
-            alt={activeNetwork?.name}
+            src={NETWORK_ICON[activeChain?.id || defaultNetwork?.id]}
+            alt={activeChain?.name}
             priority={true}
           />
-          <span className="ml-1.25">{activeNetwork?.name}</span>
+          <span className="ml-1.25">{activeChain?.name || defaultNetwork?.name}</span>
           <Image src={DownArrow} alt="down-arrow" priority={true} />
         </NetWorkButton>
       }
@@ -102,7 +102,7 @@ export const NetworkSelector: FC<NetworkSelectorProps> = ({
             <NetworkButton
               src={NETWORK_ICON[chain.id]}
               onClick={() => onSwitchChain(chain)}
-              isActive={chain.id === activeNetwork?.id}
+              isActive={chain.id === activeChain?.id}
               key={chain.id}
               {...chain}
             />

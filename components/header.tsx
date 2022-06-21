@@ -5,6 +5,7 @@ import Image from 'next/image'
 
 import { Button, NetWorkButton, NetWorkSelectorButton } from './button'
 import { DropdownContainer, DefaultDropdownMenu } from './dropdown'
+import { NetworkSelector } from './NetworkSelector'
 import WalletButton from './wallet'
 
 import SynthetixLogo from '../public/images/logos/synthetix.svg'
@@ -38,9 +39,8 @@ function NetworkButton({ id, name, src, onClick, isActive }) {
   )
 }
 
-// TODO: should also watch network change
 const Header = () => {
-  const { activeChain, switchNetworkAsync } = useNetwork()
+  const { switchNetworkAsync } = useNetwork()
   const [activeNetwork, setActiveNetwork] = useRecoilState(networkState)
   const isWalletConnected = useRecoilValue(isWalletConnectedState)
 
@@ -63,33 +63,7 @@ const Header = () => {
         <Image src={SynthetixLogo} alt="synthetix-logo" priority={true} />
       </div>
       <MenuContainer>
-        <DefaultDropdownMenu
-          trigger={
-            <NetWorkButton>
-              <Image
-                src={NETWORK_ICON[activeNetwork?.id]}
-                alt={activeNetwork?.name}
-                priority={true}
-              />
-              <span className="ml-1.25">{activeNetwork?.name}</span>
-              <Image src={DownArrow} alt="down-arrow" priority={true} />
-            </NetWorkButton>
-          }
-          dropList={
-            <NetworkSelectorContainer>
-              {SUPPORTED_CHAIN.map((chain) => (
-                <NetworkButton
-                  src={NETWORK_ICON[chain.id]}
-                  onClick={() => onSwitchChain(chain)}
-                  isActive={chain.id === activeNetwork?.id}
-                  key={chain.id}
-                  {...chain}
-                />
-              ))}
-            </NetworkSelectorContainer>
-          }
-        />
-        <NetworkContainerDropdown></NetworkContainerDropdown>
+        <NetworkSelector />
         <WalletButton />
         <DotButton
           size="sm"
