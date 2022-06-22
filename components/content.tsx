@@ -25,44 +25,9 @@ type WrapprProps = {
 
 type Token = {
   name: string
-  src: Image
+  src: typeof Image
   key: string
   wrapperName: string
-}
-
-type NumberInputProps = {
-  max: number,
-  value: string,
-  onChage: () => void,
-  decimal: string,
-}
-
-const NumericInput: FC<NumberInputProps> = ({ max=60, value, onChange, decimal="0.01" })=> {
-
-  function validate(e) {
-    var theEvent = e || window.event;
-
-    // Handle paste
-    if (theEvent.type === 'paste') {
-        key = event.clipboardData.getData('Text');
-    } else {
-    // Handle key press
-        var key = theEvent.keyCode || theEvent.which;
-        key = String.fromCharCode(key);
-    }
-    var regex = /[0-9]|\./;
-    if( !regex.test(key) ) {
-      theEvent.returnValue = false;
-      if(theEvent.preventDefault) theEvent.preventDefault();
-    }
-  }
-
-  return (<BaseInput
-          value={value}
-          onChange={onChange}
-          placeholder="0.0"
-          max={max}
-          onKeyPress={validate} />)
 }
 
 const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
@@ -84,7 +49,6 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
     setInputValue(e.target.value)
   }
 
-
   function getCurrentToken() {
     return TOKEN_LIST.find((token) => token.key === currentToken)
   }
@@ -95,7 +59,7 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
   })
 
   /* Wrappr */
-  let balance: string =  data?.formatted || '0'
+  let balance: string = data?.formatted || '0'
   let maxWrappable: number = 80
   let wrapUSDValue: string = '2,895.25'
 
@@ -105,7 +69,7 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
   let capacityPercentage: number =
     (parseInt(capacityUtilised, 10) / parseInt(maxCapacity, 10)) * 100
 
-  let feeRate: number = 24
+  let feeRate: number = 0 * 100
 
   const onMaxClick = () => {
     setInputValue(balance)
@@ -147,9 +111,7 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
               </span>
             )}
             <span>Balance: {balance}</span>
-            <MaxButton
-              onClick={onMaxClick}
-            >
+            <MaxButton onClick={onMaxClick}>
               <span>MAX</span>
             </MaxButton>
           </BlackContainerRow>
@@ -190,7 +152,7 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
                 </DropdownListContainer>
               }
             />
-      <NumericInput value={inputValue} onChange={onInputChange}/>
+            <NumericInput value={inputValue} onChange={onInputChange} />
           </BlackContainerRow>
           <BlackContainerRow>
             <span>Max wrappable: {maxWrappable}Ξ</span>
@@ -555,7 +517,6 @@ const CurrencySelectorContainer = styled.div`
 `
 
 const CurrencySelectoDropdown = styled.div<{ isDrop: boolean }>`
-
   flex-direction: column;
   gap: 8px;
 
@@ -596,30 +557,6 @@ const MaxButton = styled.button`
       color: #00d1ff;
     }
   }
-`
-
-const BaseInput = styled.input`
-    /* Remove default styling */
-    width: 50%;
-    height: 100%;
-
-    / * Remove default styling */
-    padding: 0;
-	background: none;
-	border: none;
-	border-radius: 0;
-	outline: none;
-	-webkit-appearance: none;
-	-moz-appearance: none;
-	appearance: none;
-
-    /* Text */
-    font-style: normal;
-    font-weight: 700;
-    font-size: 24px;
-    line-height: 26px;
-    color: #FFFFFF;
-    text-align: right;
 `
 
 const GearButton = styled(Button)`
