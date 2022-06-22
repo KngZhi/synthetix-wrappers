@@ -1,8 +1,9 @@
+import web3 from 'web3'
 import { FC, useEffect, useMemo, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import styled, { css } from 'styled-components'
 import Image from 'next/image'
-import { useAccount, useBalance } from 'wagmi'
+import { useAccount, useBalance, useSigner } from 'wagmi'
 
 import { Button } from './button'
 import { DefaultDropdownMenu } from '../components/dropdown'
@@ -31,6 +32,9 @@ import {
   Token,
 } from '../constants/token'
 
+import { useEthWrapperL1, useEthWrapperL1Contract } from '../hooks/useContracts'
+import Web3 from 'web3'
+
 type Tokens = Token[]
 
 function getTokenPairs(isWrap: boolean, isL1: boolean): [Tokens, Tokens] {
@@ -51,24 +55,28 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
   const [isL1] = useRecoilState(isL1State)
   const tokenPairs = getTokenPairs(isWrap, isL1)
   const [srcTokenIdx, setSrcTokenIdx] = useState<number>(0)
-  
+
   const srcTokens = useMemo(() => {
     return tokenPairs[0]
   }, [tokenPairs])
 
-  const targetTokens= useMemo(() => {
+  const targetTokens = useMemo(() => {
     return tokenPairs[1]
   }, [tokenPairs])
 
   const [srcToken, setSrcToken] = useState<Token>(srcTokens[srcTokenIdx])
-  const [targetToken, setTargetToken] = useState<Token>(targetTokens[srcTokenIdx])
-  
+  const [targetToken, setTargetToken] = useState<Token>(
+    targetTokens[srcTokenIdx]
+  )
+
   useEffect(() => {
-    setSrcToken(srcTokens[srcTokenIdx]) 
+    setSrcToken(srcTokens[srcTokenIdx])
     setTargetToken(targetTokens[srcTokenIdx])
   }, [srcTokenIdx, srcTokens, targetTokens])
 
-  const [inputValue, setInputValue] = useState<string>('0.0')
+  const { mintFeeRate, capacity, maxETH, reserves } = useEthWrapperL1()
+
+  const [inputValue, setInputValue] = useState<string>('')
   const [walletAddress] = useRecoilState(walletAddressState)
   const { data: account } = useAccount()
 
@@ -84,7 +92,7 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
   }
 
   const onWrapChange = (isWrap) => {
-    setIsWrap(isWrap) 
+    setIsWrap(isWrap)
     setSrcTokenIdx(0)
     resetMax()
   }
@@ -112,10 +120,21 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
   let capacityPercentage: number =
     (parseInt(capacityUtilised, 10) / parseInt(maxCapacity, 10)) * 100
 
-  let feeRate: number = 0 * 100
+  let feeRate: mintFee = 0
 
   const onMaxClick = () => {
     setInputValue(srcBalanceValue)
+  }
+
+  const { data: signer } = useSigner()
+  const contract = useEthWrapperL1Contract(signer)
+
+  const handleWrapClick: void = async () => {
+    const res = await contract.mint(web3.utils.toWei('0.01', 'ether'), {
+      gasPrice: web3.utils.toWei('2', 'Gwei'),
+      gasLimit: 500e3,
+    })
+    console.log(res.hash)
   }
 
   return (
@@ -190,7 +209,12 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
                       key={token.key}
                       active={token.key === srcToken.key}
                     >
-                      <Image width={24} height={24} src={token.src} alt={token.name}></Image>
+                      <Image
+                        width={24}
+                        height={24}
+                        src={token.src}
+                        alt={token.name}
+                      ></Image>
                       <span>{token.name}</span>
                     </CurrencyContainer>
                   ))}
@@ -247,9 +271,7 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
             </span>
           </StyledBlackContainerRow>
         </BlackContainer>
-        <ActionButton
-          onClick={() => console.log('You clicked on the action button!')}
-        >
+        <ActionButton onClick={handleWrapClick}>
           <span>Select amount to wrap</span>
         </ActionButton>
       </WrapprContainerColumn>
