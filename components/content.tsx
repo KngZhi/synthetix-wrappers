@@ -89,14 +89,20 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
     resetMax()
   }
 
-  const { data } = useBalance({
+  const { data: srcBalance } = useBalance({
     addressOrName: walletAddress,
     watch: true,
     token: srcToken.address,
   })
 
+  const { data: targetBalance } = useBalance({
+    addressOrName: walletAddress,
+    token: targetToken.address,
+  })
+
   /* Wrappr */
-  let balance: string = data?.formatted || '0'
+  let srcBalanceValue: string = srcBalance?.formatted || '0'
+  let targetBalanceValue: string = targetBalance?.formatted || '0'
   let maxWrappable: number = 80
   let wrapUSDValue: string = '2,895.25'
 
@@ -109,7 +115,7 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
   let feeRate: number = 0 * 100
 
   const onMaxClick = () => {
-    setInputValue(balance)
+    setInputValue(srcBalanceValue)
   }
 
   return (
@@ -147,7 +153,7 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
                 Burn
               </span>
             )}
-            <span>Balance: {balance}</span>
+            <span>Balance: {srcBalanceValue}</span>
             <MaxButton onClick={onMaxClick}>
               <span>MAX</span>
             </MaxButton>
@@ -212,7 +218,7 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
             ) : (
               <span style={{ color: '#ED1EFF' }}>Receive</span>
             )}
-            <span>Balance: {balance}</span>
+            <span>Balance: {targetBalanceValue}</span>
           </BlackContainerRow>
           <BlackContainerRow>
             <StyledCurrencyContainer2>
