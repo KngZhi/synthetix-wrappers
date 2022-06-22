@@ -1,4 +1,8 @@
 import { ReactElement } from "react";
+import ETHLogo from '../public/images/logos/ethereum.svg'
+import LUSDLogo from '../public/images/synths/sLUSD.png'
+import sETHLogo from '../public/images/synths/sETH.svg'
+import sUSDLogo from '../public/images/synths/sUSD.png'
 
 export type CurrencyKey = string;
 export type TokenAddress = string;
@@ -34,24 +38,28 @@ export const LUSD = {
 	name: 'LUSD',
 	key: 'lusd',
 	address: LUSD_ADDRESS,
+	src: LUSDLogo,
 }
 
 export const sETH = {
 	name: 'sETH',
 	key: 'seth',
 	address: sETH_ADDRESS,
+	src: ETHLogo,
 }
 
 export const ETH = {
 	name: 'ETH',
 	key: 'eth',
 	address: '',
+	src: ETHLogo,
 }
 
 export const sUSD = {
 	name: 'sUSD',
 	key: 'susd',
 	address: sUSD_ADDRESS,
+	src: sUSDLogo,
 }
 
 export type PairToken = [Token, Token]

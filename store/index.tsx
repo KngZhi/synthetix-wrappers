@@ -28,3 +28,8 @@ export const networkState = atom<Network | null>({
     name: chain.mainnet.name,
   },
 })
+
+export const isL1State = selector<boolean>({
+  key: 'isL1',
+  get: ({ get }) => [chain.kovan.name, chain.mainnet.name].includes(get(networkState)?.name)
+})

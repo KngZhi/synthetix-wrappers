@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react'
+import { FC, useEffect, useMemo, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import styled, { css } from 'styled-components'
 import Image from 'next/image'
@@ -6,7 +6,7 @@ import { useAccount, useBalance } from 'wagmi'
 
 import { Button } from './button'
 import { DefaultDropdownMenu } from '../components/dropdown'
-import NumericInput from "../components/NumericInput";
+import NumericInput from '../components/NumericInput'
 
 import LinkArrow from '../public/images/utils/link-arrow.svg'
 import Gear from '../public/images/utils/gear.svg'
@@ -17,43 +17,75 @@ import EthereumLogo from '../public/images/logos/ethereum.svg'
 import sLUSDLogo from '../public/images/synths/sLUSD.png'
 import sETHLogo from '../public/images/synths/sETH.svg'
 
-import { walletAddressState } from '../store/index'
+import { isL1State, walletAddressState } from '../store/index'
 
 type WrapprProps = {
   onTVLClick: () => void
 }
 
-type Token = {
-  name: string
-  src: typeof Image
-  key: string
-  wrapperName: string
+import {
+  L1_Wrap,
+  L1_Unwrap,
+  L2_WRAP,
+  L2_Unwrap,
+  Token,
+} from '../constants/token'
+
+type Tokens = Token[]
+
+function getTokenPairs(isWrap: boolean, isL1: boolean): [Tokens, Tokens] {
+  let tokenPairs
+  if (isWrap) {
+    tokenPairs = isL1 ? L1_Wrap : L2_WRAP
+  } else {
+    tokenPairs = isL1 ? L1_Unwrap : L2_Unwrap
+  }
+
+  const getTokens = (idx) => tokenPairs.map((pair) => pair[idx])
+
+  return [getTokens(0), getTokens(1)]
 }
 
 const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
-  const TOKEN_LIST: Token[] = [
-    { name: 'LUSD', src: sLUSDLogo, key: 'lusd', wrapperName: 'sLUSD' },
-    { name: 'ETH', src: EthereumLogo, key: 'eth', wrapperName: 'sETH' },
-  ]
-  const [wrap, setWrap] = useState<boolean>(true)
-  const [inputValue, setInputValue] = useState<string>('0.0')
-  const [currentToken, setCurrentToken] = useState<string>('eth')
-  const [walletAddress] = useRecoilState(walletAddressState)
-  const { data: account } = useAccount();
+  const [isWrap, setIsWrap] = useState<boolean>(true)
+  const [isL1] = useRecoilState(isL1State)
+  const tokenPairs = getTokenPairs(isWrap, isL1)
+  const [srcTokenIdx, setSrcTokenIdx] = useState<number>(0)
+  
+  const srcTokens = useMemo(() => {
+    return tokenPairs[0]
+  }, [tokenPairs])
 
-  const changeToken = (key) => {
-    setCurrentToken(key)
+  const targetTokens= useMemo(() => {
+    return tokenPairs[1]
+  }, [tokenPairs])
+
+  const [srcToken, setSrcToken] = useState<Token>(srcTokens[srcTokenIdx])
+  const [targetToken, setTargetToken] = useState<Token>(targetTokens[srcTokenIdx])
+  
+  useEffect(() => {
+    setSrcToken(srcTokens[srcTokenIdx]) 
+    setTargetToken(targetTokens[srcTokenIdx])
+  }, [srcTokenIdx, srcTokens, targetTokens])
+
+  const [inputValue, setInputValue] = useState<string>('0.0')
+  const [walletAddress] = useRecoilState(walletAddressState)
+  const { data: account } = useAccount()
+
+  const changeToken = (idx: number) => {
+    setSrcTokenIdx(idx)
   }
 
   const onInputChange = (e) => {
     setInputValue(e.target.value)
   }
 
-  function getCurrentToken() {
-    return TOKEN_LIST.find((token) => token.key === currentToken)
+  const onWrapChange = (isWrap) => {
+    setIsWrap(isWrap) 
+    setSrcTokenIdx(0)
   }
 
-  const { data, } = useBalance({
+  const { data } = useBalance({
     addressOrName: walletAddress,
     watch: true,
   })
@@ -79,10 +111,10 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
     <Container>
       <ContainerRow>
         <SelectorContainer>
-          <SelectorButton active={wrap} onClick={() => setWrap(true)}>
+          <SelectorButton active={isWrap} onClick={() => onWrapChange(true)}>
             <span>Wrap</span>
           </SelectorButton>
-          <SelectorButton active={!wrap} onClick={() => setWrap(false)}>
+          <SelectorButton active={!isWrap} onClick={() => onWrapChange(false)}>
             <span>Unwrap</span>
           </SelectorButton>
         </SelectorContainer>
@@ -103,7 +135,7 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
         </WrapprContainerRow>
         <BlackContainer>
           <BlackContainerRow>
-            {wrap ? (
+            {isWrap ? (
               <span className="big">Wrapping</span>
             ) : (
               <span className="big" style={{ color: '#ED1EFF' }}>
@@ -123,12 +155,14 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
                 <CurrencySelectorButton>
                   <StyledCurrencyContainer>
                     <Image
+                      width={24}
+                      height={24}
                       className="big"
-                      src={getCurrentToken().src}
-                      alt="ethereum-logo"
+                      src={srcToken.src}
+                      alt={srcToken.name}
                       priority={true}
                     />
-                    <span>{getCurrentToken().name}</span>
+                    <span>{srcToken.name}</span>
                     <Image
                       src={DownArrowSmall}
                       alt="down-arrow"
@@ -139,14 +173,14 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
               }
               dropList={
                 <DropdownListContainer>
-                  {TOKEN_LIST.map((item) => (
+                  {srcTokens.map((token, idx) => (
                     <CurrencyContainer
-                      onClick={() => changeToken(item.key)}
-                      key={item.key}
-                      active={item.key === currentToken}
+                      onClick={() => changeToken(idx)}
+                      key={token.key}
+                      active={token.key === srcToken.key}
                     >
-                      <Image src={item.src} alt={item.name}></Image>
-                      <span>{item.name}</span>
+                      <Image width={24} height={24} src={token.src} alt={token.name}></Image>
+                      <span>{token.name}</span>
                     </CurrencyContainer>
                   ))}
                 </DropdownListContainer>
@@ -168,7 +202,7 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
         </ArrowButton>
         <BlackContainer>
           <BlackContainerRow>
-            {wrap ? (
+            {isWrap ? (
               <span className="big">Into</span>
             ) : (
               <span style={{ color: '#ED1EFF' }}>Receive</span>
@@ -179,11 +213,13 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
             <StyledCurrencyContainer2>
               <Image
                 className="big"
-                src={getCurrentToken()?.src}
-                alt={getCurrentToken()?.name}
+                width={16}
+                height={16}
+                src={targetToken.src}
+                alt={targetToken.name}
                 priority={true}
               />
-              <span>{getCurrentToken()?.wrapperName}</span>
+              <span>{targetToken.name}</span>
             </StyledCurrencyContainer2>
             <NumericInput type="text" placeholder="0.0" />
           </BlackContainerRow>
