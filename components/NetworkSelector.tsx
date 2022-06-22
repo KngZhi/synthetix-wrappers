@@ -73,7 +73,6 @@ export const NetworkSelector: FC<NetworkSelectorProps> = ({
     if (isWalletConnected && switchNetworkAsync) {
       try {
         await switchNetworkAsync(id)
-        setActiveNetwork({ id: id, name: name })
       } catch (error) {
         return error
       }
