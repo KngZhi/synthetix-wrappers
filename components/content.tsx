@@ -6,6 +6,7 @@ import { useAccount, useBalance } from 'wagmi'
 
 import { Button } from './button'
 import { DefaultDropdownMenu } from '../components/dropdown'
+import NumericInput from "../components/NumericInput";
 
 import LinkArrow from '../public/images/utils/link-arrow.svg'
 import Gear from '../public/images/utils/gear.svg'
