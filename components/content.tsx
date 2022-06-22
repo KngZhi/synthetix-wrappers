@@ -74,7 +74,10 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
 
   const changeToken = (idx: number) => {
     setSrcTokenIdx(idx)
+    resetMax()
   }
+
+  const resetMax = () => setInputValue('')
 
   const onInputChange = (e) => {
     setInputValue(e.target.value)
@@ -83,11 +86,13 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
   const onWrapChange = (isWrap) => {
     setIsWrap(isWrap) 
     setSrcTokenIdx(0)
+    resetMax()
   }
 
   const { data } = useBalance({
     addressOrName: walletAddress,
     watch: true,
+    token: srcToken.address,
   })
 
   /* Wrappr */
