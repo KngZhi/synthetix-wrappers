@@ -12,10 +12,10 @@ import {
 } from '../constants/contracts'
 
 
-import EthWrapperL1 from '../abis/eth-wrapper-l1.json'
-import EthWrapperL2 from '../abis/eth-wrapper-l2.json'
-import LUSDWrapperL1 from '../abis/lusd-wrapper-l1.json'
-import LUSDWrapperL2 from '../abis/lusd-wrapper-l2.json'
+import EthWrapperL1ABI from '../abis/eth-wrapper-l1.json'
+import EthWrapperL2ABI from '../abis/eth-wrapper-l2.json'
+import LUSDWrapperL1ABI from '../abis/lusd-wrapper-l1.json'
+import LUSDWrapperL2ABI from '../abis/lusd-wrapper-l2.json'
 
 const bigNumberToEth = (val = 0) => web3.utils.fromWei(web3.utils.toBN(val), 'ether')
 
@@ -32,12 +32,12 @@ function getContractSetup(token: Token, chainId: number): ContractSetup {
             if (['eth', 'seth'].includes(token.key)) {
                 contractSetup = {
                     addressOrName: ETH_WRAPPER_L1,
-                    contractInterface: EthWrapperL1,
+                    contractInterface: EthWrapperL1ABI,
                 }
             } else {
                 contractSetup = {
                     addressOrName: LUSD_WRAPPER_L1,
-                    contractInterface: LUSDWrapperL1,
+                    contractInterface: LUSDWrapperL1ABI,
                 }
             }
             break;
@@ -46,12 +46,12 @@ function getContractSetup(token: Token, chainId: number): ContractSetup {
             if (['eth', 'seth'].includes(token.key)) {
                 contractSetup = {
                     addressOrName: ETH_WRAPPER_L2,
-                    contractInterface: EthWrapperL2,
+                    contractInterface: EthWrapperL2ABI,
                 }
             } else {
                 contractSetup = {
                     addressOrName: LUSD_WRAPPER_L2,
-                    contractInterface: LUSDWrapperL2,
+                    contractInterface: LUSDWrapperL2ABI,
                 }
             }
             break
