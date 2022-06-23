@@ -40,8 +40,6 @@ function NetworkButton({ id, name, src, onClick, isActive }) {
 }
 
 const Header = () => {
-  const { switchNetworkAsync } = useNetwork()
-
   return (
     <HeaderContainer>
       <div className="mt-[12px]">
