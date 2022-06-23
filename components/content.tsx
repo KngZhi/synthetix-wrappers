@@ -14,7 +14,7 @@ import Gear from '../public/images/utils/gear.svg'
 import Arrows from '../public/images/utils/arrows.svg'
 import DownArrowSmall from '../public/images/utils/down-arrow-small.svg'
 import BlueInfo from '../public/images/utils/blue-info.svg'
-import { isL1State, walletAddressState } from '../store/index'
+import { isL1State, isWalletConnectedState, walletAddressState } from '../store/index'
 
 type WrapprProps = {
   onTVLClick: () => void
@@ -51,6 +51,7 @@ function getTokenPairs(isWrap: boolean, isL1: boolean): [Tokens, Tokens] {
 const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
   const [isWrap, setIsWrap] = useState<boolean>(true)
   const isL1 = useRecoilValue(isL1State)
+  const isWalletConnected = useRecoilValue(isWalletConnectedState)
   const tokenPairs = getTokenPairs(isWrap, isL1)
   const [srcTokenIdx, setSrcTokenIdx] = useState<number>(0)
 
@@ -80,7 +81,7 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
   )
   
 
-  const [inputValue, setInputValue] = useState<string>('')
+  const [tokenValue, setTokenValue] = useState<string>('')
   const [walletAddress] = useRecoilState(walletAddressState)
   const { data: account } = useAccount()
 
@@ -89,10 +90,10 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
     resetMax()
   }
 
-  const resetMax = () => setInputValue('')
+  const resetMax = () => setTokenValue('')
 
   const onInputChange = (e) => {
-    setInputValue(e.target.value)
+    setTokenValue(e.target.value)
   }
 
   const onWrapChange = (isWrap: boolean) => {
@@ -127,16 +128,23 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
   let feeRate: number = 0
 
   const onMaxClick = () => {
-    setInputValue(srcBalanceValue)
+    setTokenValue(srcBalanceValue)
   }
 
   const handleWrapClick: Promise<void> = async () => {
     const action = isWrap ? mint : burn
-    const res = action(web3.utils.toWei('0.01', 'ether'), {
+    const res = action('10000', {
       gasPrice: web3.utils.toWei('2', 'Gwei'),
       gasLimit: 500e3,
     })
     console.log(res.hash)
+  }
+
+  const isActionAllowed: boolean = () => {
+    if (isWalletConnected === false) return false
+    if (tokenValue <= 0) return false
+    
+    return true
   }
 
   return (
@@ -223,7 +231,7 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
                 </DropdownListContainer>
               }
             />
-            <NumericInput value={inputValue} onChange={onInputChange} />
+            <NumericInput value={tokenValue} onChange={onInputChange} />
           </BlackContainerRow>
           <BlackContainerRow>
             <span>Max wrappable: {maxWrappable}Ξ</span>
@@ -273,8 +281,16 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
             </span>
           </StyledBlackContainerRow>
         </BlackContainer>
-        <ActionButton onClick={handleWrapClick}>
-          <span>Select amount to wrap</span>
+        <ActionButton 
+        disabled={!isActionAllowed()}
+        onClick={handleWrapClick}>
+          <span>
+          {
+            isActionAllowed()
+            ? 'Wrap'
+            : 'Select amount to wrap'
+          }
+          </span>
         </ActionButton>
       </WrapprContainerColumn>
       <CapacityContainer>
@@ -657,16 +673,15 @@ const ArrowButton = styled.button`
   }
 `
 
-const ActionButton = styled(Button)`
+const ActionButton = styled(Button)<{ disabled: boolean }>`
   width: 464px;
   height: 40px;
 
-  background: rgba(86, 86, 99, 0.6);
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.9);
-
-  span {
-    color: #565663;
+  ${({ disabled }) => disabled 
+    ? css`background: rgba(86, 86, 99, 0.6); color: #565663;`
+    : css`background: linear-gradient(90deg, #85FFC4, #5CC6FF); color: #000;`
   }
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.9);
 `
 
 const CapacityContainer = styled.div`
