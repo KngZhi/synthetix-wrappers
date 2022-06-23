@@ -1,5 +1,5 @@
 import web3 from 'web3'
-import { ContractInterface, Signer } from "ethers";
+import { ContractInterface, Signer, providers } from "ethers";
 import { useContract, useContractRead, useContractWrite } from 'wagmi'
 import { SupportedChainId, Token } from '../constants/token'
 import { useRecoilState } from 'recoil'
@@ -77,10 +77,19 @@ interface BaseContractInterface {
     burn: () => string
 }
 
-export function useTokenContract(token: Token, signer: Signer): BaseContractInterface {
-    const [activeNetwork]  = useRecoilState(networkState)
-    const contractSetup = getContractSetup(token, activeNetwork?.id, signer) 
-    const contract = useContract({
+export function useTokenContract(
+    token: Token,
+    signer: Signer,
+    provider: providers.Provider
+): BaseContractInterface {
+    
+    const [activeNetwork] = useRecoilState(networkState)
+    const contractSetup = getContractSetup(token, activeNetwork?.id)
+    const readContract = useContract({
+        ...contractSetup,
+        signerOrProvider: provider,
+    })
+    const writeContract = useContract({
         ...contractSetup,
         signerOrProvider: signer,
     })
@@ -101,12 +110,12 @@ export function useTokenContract(token: Token, signer: Signer): BaseContractInte
         capacity,
         mintFeeRate,
         maxTokenAmount,
-        calculateBurnFee: (val) => contract[Read.CALCULATE_BURN_FEE](val, gas),
+        calculateBurnFee: (val) => readContract[Read.CALCULATE_BURN_FEE](val, gas),
         calculateMintFee(val) {
-           return contract[Read.CALCULATE_MINT_FEE](val, gas)
+           return readContract[Read.CALCULATE_MINT_FEE](val, gas)
         },
-        mint: async (val) => await contract[Write.MINT](val, gas),
-        burn: (val) => contract[Write.BURN](val, gas),
+        mint: async (val) => await writeContract[Write.MINT](val, gas),
+        burn: (val) => writeContract[Write.BURN](val, gas),
     }
 }
 

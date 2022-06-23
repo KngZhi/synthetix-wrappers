@@ -3,7 +3,7 @@ import { FC, useEffect, useMemo, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import styled, { css } from 'styled-components'
 import Image from 'next/image'
-import { useAccount, useBalance, useSigner } from 'wagmi'
+import { useAccount, useBalance, useSigner, useProvider } from 'wagmi'
 
 import { Button } from './button'
 import { DefaultDropdownMenu } from '../components/dropdown'
@@ -14,7 +14,11 @@ import Gear from '../public/images/utils/gear.svg'
 import Arrows from '../public/images/utils/arrows.svg'
 import DownArrowSmall from '../public/images/utils/down-arrow-small.svg'
 import BlueInfo from '../public/images/utils/blue-info.svg'
-import { isL1State, isWalletConnectedState, walletAddressState } from '../store/index'
+import {
+  isL1State,
+  isWalletConnectedState,
+  walletAddressState,
+} from '../store/index'
 
 type WrapprProps = {
   onTVLClick: () => void
@@ -29,9 +33,7 @@ import {
   PairToken,
 } from '../constants/token'
 
-import {
-  useTokenContract,
-} from '../hooks/useContracts'
+import { useTokenContract } from '../hooks/useContracts'
 
 type Tokens = Token[]
 
@@ -69,17 +71,15 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
   )
 
   const { data: signer } = useSigner()
+  const provider = useProvider()
 
   useEffect(() => {
     setSrcToken(srcTokens[srcTokenIdx])
     setTargetToken(targetTokens[srcTokenIdx])
   }, [srcTokenIdx, srcTokens, targetTokens])
 
-  const { burnFeeRate, mintFeeRate, capacity, maxTokenAmount, mint, burn } = useTokenContract(
-    srcToken,
-    signer
-  )
-  
+  const { burnFeeRate, mintFeeRate, capacity, maxTokenAmount, mint, burn } =
+    useTokenContract(srcToken, signer, provider)
 
   const [tokenValue, setTokenValue] = useState<string>('')
   const [walletAddress] = useRecoilState(walletAddressState)
@@ -143,7 +143,7 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
   const isActionAllowed: boolean = () => {
     if (isWalletConnected === false) return false
     if (tokenValue <= 0) return false
-    
+
     return true
   }
 
@@ -281,16 +281,8 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
             </span>
           </StyledBlackContainerRow>
         </BlackContainer>
-        <ActionButton 
-        disabled={!isActionAllowed()}
-        onClick={handleWrapClick}>
-          <span>
-          {
-            isActionAllowed()
-            ? 'Wrap'
-            : 'Select amount to wrap'
-          }
-          </span>
+        <ActionButton disabled={!isActionAllowed()} onClick={handleWrapClick}>
+          <span>{isActionAllowed() ? 'Wrap' : 'Select amount to wrap'}</span>
         </ActionButton>
       </WrapprContainerColumn>
       <CapacityContainer>
@@ -677,10 +669,16 @@ const ActionButton = styled(Button)<{ disabled: boolean }>`
   width: 464px;
   height: 40px;
 
-  ${({ disabled }) => disabled 
-    ? css`background: rgba(86, 86, 99, 0.6); color: #565663;`
-    : css`background: linear-gradient(90deg, #85FFC4, #5CC6FF); color: #000;`
-  }
+  ${({ disabled }) =>
+    disabled
+      ? css`
+          background: rgba(86, 86, 99, 0.6);
+          color: #565663;
+        `
+      : css`
+          background: linear-gradient(90deg, #85ffc4, #5cc6ff);
+          color: #000;
+        `}
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.9);
 `
 
