@@ -4,7 +4,7 @@ import styled from 'styled-components'
 type NumberInputProps = {
   max: number
   value: string
-  onChage: () => void
+  onChange: () => void
   decimal: string
 }
 

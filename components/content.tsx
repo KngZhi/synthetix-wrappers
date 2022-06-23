@@ -30,6 +30,7 @@ import {
   L2_WRAP,
   L2_Unwrap,
   Token,
+  PairToken,
 } from '../constants/token'
 
 import { useEthWrapperL1, useEthWrapperL1Contract } from '../hooks/useContracts'
@@ -38,14 +39,14 @@ import Web3 from 'web3'
 type Tokens = Token[]
 
 function getTokenPairs(isWrap: boolean, isL1: boolean): [Tokens, Tokens] {
-  let tokenPairs
+  let tokenPairs: PairToken[]
   if (isWrap) {
     tokenPairs = isL1 ? L1_Wrap : L2_WRAP
   } else {
     tokenPairs = isL1 ? L1_Unwrap : L2_Unwrap
   }
 
-  const getTokens = (idx) => tokenPairs.map((pair) => pair[idx])
+  const getTokens = (idx: number) => tokenPairs.map((pair) => pair[idx])
 
   return [getTokens(0), getTokens(1)]
 }
