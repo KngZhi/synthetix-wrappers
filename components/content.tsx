@@ -1,6 +1,6 @@
 import web3 from 'web3'
 import { FC, useEffect, useMemo, useState } from 'react'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import styled, { css } from 'styled-components'
 import Image from 'next/image'
 import { useAccount, useBalance, useSigner } from 'wagmi'
@@ -14,10 +14,6 @@ import Gear from '../public/images/utils/gear.svg'
 import Arrows from '../public/images/utils/arrows.svg'
 import DownArrowSmall from '../public/images/utils/down-arrow-small.svg'
 import BlueInfo from '../public/images/utils/blue-info.svg'
-import EthereumLogo from '../public/images/logos/ethereum.svg'
-import sLUSDLogo from '../public/images/synths/sLUSD.png'
-import sETHLogo from '../public/images/synths/sETH.svg'
-
 import { isL1State, walletAddressState } from '../store/index'
 
 type WrapprProps = {
@@ -33,8 +29,9 @@ import {
   PairToken,
 } from '../constants/token'
 
-import { useEthWrapperL1, useEthWrapperL1Contract } from '../hooks/useContracts'
-import Web3 from 'web3'
+import {
+  useTokenContract,
+} from '../hooks/useContracts'
 
 type Tokens = Token[]
 
@@ -53,7 +50,7 @@ function getTokenPairs(isWrap: boolean, isL1: boolean): [Tokens, Tokens] {
 
 const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
   const [isWrap, setIsWrap] = useState<boolean>(true)
-  const [isL1] = useRecoilState(isL1State)
+  const isL1 = useRecoilValue(isL1State)
   const tokenPairs = getTokenPairs(isWrap, isL1)
   const [srcTokenIdx, setSrcTokenIdx] = useState<number>(0)
 
@@ -70,12 +67,18 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
     targetTokens[srcTokenIdx]
   )
 
+  const { data: signer } = useSigner()
+
   useEffect(() => {
     setSrcToken(srcTokens[srcTokenIdx])
     setTargetToken(targetTokens[srcTokenIdx])
   }, [srcTokenIdx, srcTokens, targetTokens])
 
-  const { mintFeeRate, capacity, maxETH, reserves } = useEthWrapperL1()
+  const { burnFeeRate, mintFeeRate, capacity, maxTokenAmount, mint, burn } = useTokenContract(
+    srcToken,
+    signer
+  )
+  
 
   const [inputValue, setInputValue] = useState<string>('')
   const [walletAddress] = useRecoilState(walletAddressState)
@@ -92,7 +95,7 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
     setInputValue(e.target.value)
   }
 
-  const onWrapChange = (isWrap) => {
+  const onWrapChange = (isWrap: boolean) => {
     setIsWrap(isWrap)
     setSrcTokenIdx(0)
     resetMax()
@@ -121,17 +124,15 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
   let capacityPercentage: number =
     (parseInt(capacityUtilised, 10) / parseInt(maxCapacity, 10)) * 100
 
-  let feeRate: mintFee = 0
+  let feeRate: number = 0
 
   const onMaxClick = () => {
     setInputValue(srcBalanceValue)
   }
 
-  const { data: signer } = useSigner()
-  const contract = useEthWrapperL1Contract(signer)
-
-  const handleWrapClick: void = async () => {
-    const res = await contract.mint(web3.utils.toWei('0.01', 'ether'), {
+  const handleWrapClick: Promise<void> = async () => {
+    const action = isWrap ? mint : burn
+    const res = action(web3.utils.toWei('0.01', 'ether'), {
       gasPrice: web3.utils.toWei('2', 'Gwei'),
       gasLimit: 500e3,
     })

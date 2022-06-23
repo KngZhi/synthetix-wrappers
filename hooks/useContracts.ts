@@ -1,7 +1,9 @@
 import web3 from 'web3'
-import { synthetix } from '@synthetixio/contracts-interface';
-import { useContract, useProvider, useContractRead } from 'wagmi'
-import { SupportedChainId } from '../constants/token'
+import { ContractInterface, Signer } from "ethers";
+import { useContract, useContractRead, useContractWrite } from 'wagmi'
+import { SupportedChainId, Token } from '../constants/token'
+import { useRecoilState } from 'recoil'
+import { networkState } from '../store/index'
 import {
     ETH_WRAPPER_L1,
     ETH_WRAPPER_L2,
@@ -15,58 +17,111 @@ import EthWrapperL2 from '../abis/eth-wrapper-l2.json'
 import LUSDWrapperL1 from '../abis/lusd-wrapper-l1.json'
 import LUSDWrapperL2 from '../abis/lusd-wrapper-l2.json'
 
+const bigNumberToEth = (val = 0) => web3.utils.fromWei(web3.utils.toBN(val), 'ether')
 
-export function useEthWrapperL1Contract(signerOrProvider) {
-    return useContract({
-        addressOrName: ETH_WRAPPER_L1,
-        contractInterface: EthWrapperL1,
-        signerOrProvider: signerOrProvider,
-    })
+type ContractSetup = {
+    addressOrName: string;
+    contractInterface: ContractInterface;
 }
 
-export function useLUSDWrapperL1Contract(signerOrProvider) {
-    return useContract({
-        addressOrName: LUSD_WRAPPER_L1,
-        contractInterface: LUSDWrapperL2,
-        signerOrProvider: signerOrProvider,
-    })
+function getContractSetup(token: Token, chainId: number): ContractSetup {
+    let contractSetup: ContractSetup
+    switch (chainId) {
+        case SupportedChainId.KOVAN:
+        case SupportedChainId.MAINNET:
+            if (['eth', 'seth'].includes(token.key)) {
+                contractSetup = {
+                    addressOrName: ETH_WRAPPER_L1,
+                    contractInterface: EthWrapperL1,
+                }
+            } else {
+                contractSetup = {
+                    addressOrName: LUSD_WRAPPER_L1,
+                    contractInterface: LUSDWrapperL1,
+                }
+            }
+            break;
+        case SupportedChainId.OPTIMISM:
+        case SupportedChainId.OPTIMISTIC_KOVAN:
+            if (['eth', 'seth'].includes(token.key)) {
+                contractSetup = {
+                    addressOrName: ETH_WRAPPER_L2,
+                    contractInterface: EthWrapperL2,
+                }
+            } else {
+                contractSetup = {
+                    addressOrName: LUSD_WRAPPER_L2,
+                    contractInterface: LUSDWrapperL2,
+                }
+            }
+            break
+        default:
+            console.log(
+                '[ERR]: can not find ideal contract for current token',
+                token,
+                chainId,
+            )
+            break;
+    }
+    return contractSetup
 }
 
-export function useEthWrapperL1ContractRead(name: string, params?) {
-    const { data, isError, isLoading } = useContractRead(
-        { addressOrName: ETH_WRAPPER_L1, contractInterface: EthWrapperL1, },
-        name,
-        params,
-    )
+interface BaseContractInterface {
+    burnFeeRate: string
+    mintFeeRate: string
+    capacity: string
+    maxTokenAmount: string
+    calculateBurnFee: () => Promise<string>
+    calculateMintFee: () => Promise<string>
+    mint: () => string
+    burn: () => string
+}
 
-    return { data, isError, isLoading }
+export function useTokenContract(token: Token, signer: Signer): BaseContractInterface {
+    const [activeNetwork]  = useRecoilState(networkState)
+    const contractSetup = getContractSetup(token, activeNetwork?.id, signer) 
+    const contract = useContract({
+        ...contractSetup,
+        signerOrProvider: signer,
+    })
+    const useRead = (field: string) => useContractRead(contractSetup, field)
+    const { data: burnFeeRate } = useRead(Read.BURN_FEE_RATE)
+    const { data: capacity } = useRead(Read.CAPACITY)
+    const { data: mintFeeRate } = useRead(Read.MINT_FEE_RATE)
+    const maxToken = token.name === 'eth' ? Read.MAX_ETH : Read.MAX_TOKEN_AMOUNT
+    const { data: maxTokenAmount } = useRead(maxToken)
+
+    const gas = {
+        gasPrice: web3.utils.toWei('2', 'Gwei'),
+        gasLimit: 500e3,
+    }
+
+    return {
+        burnFeeRate,
+        capacity,
+        mintFeeRate,
+        maxTokenAmount,
+        calculateBurnFee: (val) => contract[Read.CALCULATE_BURN_FEE](val, gas),
+        calculateMintFee(val) {
+           return contract[Read.CALCULATE_MINT_FEE](val, gas)
+        },
+        mint: async (val) => await contract[Write.MINT](val, gas),
+        burn: (val) => contract[Write.BURN](val, gas),
+    }
 }
 
 enum Read {
+    CALCULATE_BURN_FEE = 'calculateBurnFee',
+    CALCULATE_MINT_FEE = 'calculateMintFee',
     MINT_FEE_RATE = 'mintFeeRate',
     BURN_FEE_RATE = 'burnFeeRate',
     MAX_ETH = 'maxETH',
     CAPACITY = 'capacity',
     GET_RESERVES = 'getReserves',
+    MAX_TOKEN_AMOUNT = 'maxTokenAmount'
 }
 
 enum Write {
     BURN = 'burn',
     MINT = 'mint',
-}
-
-const bigNumberToEth = (val = 0) => web3.utils.fromWei(web3.utils.toBN(val))
-
-export function useEthWrapperL1() {
-    const { data: mintFeeRate } = useEthWrapperL1ContractRead(Read.MINT_FEE_RATE)
-    const { data: capacity } = useEthWrapperL1ContractRead(Read.CAPACITY)
-    const { data: maxETH } = useEthWrapperL1ContractRead(Read.MAX_ETH)
-    const { data: reserves } = useEthWrapperL1ContractRead(Read.GET_RESERVES)
-
-    return { 
-        mintFeeRate: bigNumberToEth(mintFeeRate), 
-        capacity: bigNumberToEth(capacity), 
-        maxETH: bigNumberToEth(maxETH),
-        reserves: bigNumberToEth(reserves),
-    }
 }
