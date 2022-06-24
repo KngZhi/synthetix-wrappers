@@ -52,10 +52,11 @@ function getTokenPairs(isWrap: boolean, isL1: boolean): [Tokens, Tokens] {
 }
 
 const TooltipContent = () => {
-  return (<TooltipStyled>
-    <p>The fee rate is decided by the Grants Council</p>
-    <a>Learn More</a>
-  </TooltipStyled>
+  return (
+    <TooltipStyled>
+      <p>The fee rate is decided by the Grants Council</p>
+      <a>Learn More</a>
+    </TooltipStyled>
   )
 }
 
@@ -279,21 +280,18 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
             <NumericInput disabled type="text" placeholder="0.0" />
           </BlackContainerRow>
           <StyledBlackContainerRow>
-              <span>Fee rate: {feeRate}%</span>
+            <span>Fee rate: {feeRate}%</span>
             <Tooltip
               color="invert"
-              content={<TooltipContent/>}
+              content={<TooltipContent />}
               css={{
                 color: '#fff',
                 background: 'rgba(86, 86, 99, 0.9)',
                 width: '225px',
                 textAlign: 'center',
-              }}>
-              <Image
-                src={BlueInfo}
-                alt="info-icon"
-                priority={true}
-              />
+              }}
+            >
+              <Image src={BlueInfo} alt="info-icon" priority={true} />
             </Tooltip>
             <span className="big align-right">
               {wrapUSDValue === '' ? '' : `$${wrapUSDValue}`}
@@ -777,8 +775,7 @@ const GaugeContainer = styled.div`
 `
 
 const TooltipStyled = styled.div`
-  // background: rgba(86, 86, 99, 0.9);
-margin-top: 12px;
+  margin-top: 12px;
   height: 88px;
   display: flex;
   justify-center: center;
@@ -786,7 +783,7 @@ margin-top: 12px;
   flex-direction: column;
   gap: 10px;
   a {
-    color: #00D1FF
+    color: #00d1ff;
   }
 `
 
