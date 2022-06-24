@@ -76,6 +76,8 @@ export const NetworkSelector: FC<NetworkSelectorProps> = ({
       } catch (error) {
         return error
       }
+    } else {
+      setActiveNetwork({ id, name })
     }
   }
 
