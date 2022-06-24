@@ -1,10 +1,20 @@
+import { BigNumber } from '@ethersproject/bignumber'
+import { ethers, utils } from 'ethers'
 import web3 from 'web3'
 import { FC, useEffect, useMemo, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import styled, { css } from 'styled-components'
 import Image from 'next/image'
-import { useAccount, useBalance, useSigner, useProvider } from 'wagmi'
-import { Tooltip } from "@nextui-org/react";
+import {
+  useAccount,
+  useBalance,
+  useSigner,
+  useProvider,
+  useContractWrite,
+  useContractRead,
+} from 'wagmi'
+
+import { Tooltip } from '@nextui-org/react'
 
 import { Button } from './button'
 import { DefaultDropdownMenu } from '../components/dropdown'
@@ -20,6 +30,11 @@ import {
   isWalletConnectedState,
   walletAddressState,
 } from '../store/index'
+
+import {
+  EthWrapperL1Contract,
+  EthWrapperL1KovanContract,
+} from '../constants/contracts'
 
 type WrapprProps = {
   onTVLClick: () => void
@@ -94,7 +109,6 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
   const [tokenValue, setTokenValue] = useState<string>('')
   const [walletAddress] = useRecoilState(walletAddressState)
   const { data: account } = useAccount()
-  const price = useEthPrice()
 
   const changeToken = (idx: number) => {
     setSrcTokenIdx(idx)

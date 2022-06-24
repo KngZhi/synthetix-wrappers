@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@ethersproject/bignumber': ^5.6.2
   '@metamask/jazzicon': ^2.0.0
   '@nextui-org/react': ^1.0.0-beta.9
   '@synthetixio/contracts-interface': ^2.73.1
@@ -33,6 +34,7 @@ specifiers:
   web3modal: ^1.9.7
 
 dependencies:
+  '@ethersproject/bignumber': 5.6.2
   '@metamask/jazzicon': 2.0.0
   '@nextui-org/react': 1.0.0-beta.9_ef5jwxihqo6n7gxfmzogljlgcm
   '@synthetixio/contracts-interface': 2.73.1
@@ -7727,7 +7729,7 @@ packages:
     dev: false
 
   github.com/ethereumjs/ethereumjs-abi/ee3994657fa7a427238e6ba92a84d0b529bbcde0:
-    resolution: {tarball: https://codeload.github.com/ethereumjs/ethereumjs-abi/tar.gz/ee3994657fa7a427238e6ba92a84d0b529bbcde0}
+    resolution: {commit: ee3994657fa7a427238e6ba92a84d0b529bbcde0, repo: git+ssh://git@github.com/ethereumjs/ethereumjs-abi.git, type: git}
     name: ethereumjs-abi
     version: 0.6.8
     dependencies:
