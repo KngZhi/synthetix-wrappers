@@ -33,7 +33,7 @@ import {
   PairToken,
 } from '../constants/token'
 
-import { useTokenContract } from '../hooks/useContracts'
+import { useTokenContract, useEthPrice } from '../hooks/useContracts'
 
 type Tokens = Token[]
 
@@ -84,6 +84,7 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
   const [tokenValue, setTokenValue] = useState<string>('')
   const [walletAddress] = useRecoilState(walletAddressState)
   const { data: account } = useAccount()
+  const price = useEthPrice()
 
   const changeToken = (idx: number) => {
     setSrcTokenIdx(idx)
