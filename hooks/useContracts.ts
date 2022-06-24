@@ -9,7 +9,8 @@ import {
     ETH_WRAPPER_L2,
     LUSD_WRAPPER_L1,
     LUSD_WRAPPER_L2,
-    EthUsdContract
+    EthUsdContract,
+    EthWrapperL1KovanContract,
 } from '../constants/contracts'
 
 
@@ -97,7 +98,7 @@ export function useTokenContract(
 
     const writeContract = useContract({
         ...contractSetup,
-        signerOrProvider: provider,
+        signerOrProvider: signer || provider,
     })
     const useRead = (field: string) => useContractRead(contractSetup, field)
     const { data: burnFeeRate } = useRead(Read.BURN_FEE_RATE)
@@ -126,12 +127,9 @@ export function useTokenContract(
 }
 
 export function useEthPrice() {
-    const { data, isLoading } = useContractRead(EthUsdContract, 'latestAnswer')
+    const { data, isLoading, } = useContractRead(EthUsdContract, 'latestAnswer')
 
-    if (!isLoading) {
-        console.log('contract', utils.formatUnits(data, 8));
-    }
-    return data
+    return { data, isLoading, uint: 8 }
 }
 
 enum Read {
