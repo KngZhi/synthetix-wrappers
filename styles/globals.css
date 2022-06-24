@@ -26,3 +26,7 @@ body {
 * {
   box-sizing: border-box;
 }
+
+.nextui-tooltip-arrow {
+  background-color: rgba(86, 86, 99, 0.9) !important;
+}

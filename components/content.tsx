@@ -4,6 +4,7 @@ import { useRecoilState, useRecoilValue } from 'recoil'
 import styled, { css } from 'styled-components'
 import Image from 'next/image'
 import { useAccount, useBalance, useSigner, useProvider } from 'wagmi'
+import { Tooltip } from "@nextui-org/react";
 
 import { Button } from './button'
 import { DefaultDropdownMenu } from '../components/dropdown'
@@ -48,6 +49,14 @@ function getTokenPairs(isWrap: boolean, isL1: boolean): [Tokens, Tokens] {
   const getTokens = (idx: number) => tokenPairs.map((pair) => pair[idx])
 
   return [getTokens(0), getTokens(1)]
+}
+
+const TooltipContent = () => {
+  return (<TooltipStyled>
+    <p>The fee rate is decided by the Grants Council</p>
+    <a>Learn More</a>
+  </TooltipStyled>
+  )
 }
 
 const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
@@ -267,16 +276,25 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
               />
               <span>{targetToken.name}</span>
             </StyledCurrencyContainer2>
-            <NumericInput type="text" placeholder="0.0" />
+            <NumericInput disabled type="text" placeholder="0.0" />
           </BlackContainerRow>
           <StyledBlackContainerRow>
-            <span>Fee rate: {feeRate}%</span>
-            <Image
-              className="tooltip"
-              src={BlueInfo}
-              alt="info-icon"
-              priority={true}
-            />
+              <span>Fee rate: {feeRate}%</span>
+            <Tooltip
+              color="invert"
+              content={<TooltipContent/>}
+              css={{
+                color: '#fff',
+                background: 'rgba(86, 86, 99, 0.9)',
+                width: '225px',
+                textAlign: 'center',
+              }}>
+              <Image
+                src={BlueInfo}
+                alt="info-icon"
+                priority={true}
+              />
+            </Tooltip>
             <span className="big align-right">
               {wrapUSDValue === '' ? '' : `$${wrapUSDValue}`}
             </span>
@@ -477,10 +495,6 @@ const BlackContainerRow = styled.div`
 const StyledBlackContainerRow = styled(BlackContainerRow)`
   justify-content: flex-start;
   gap: 4px;
-
-  .tooltip:hover {
-    // TODO
-  }
 `
 
 const BlueInfoButton = styled.button`
@@ -760,6 +774,20 @@ const GaugeContainer = styled.div`
   background: linear-gradient(#000000 0 0) padding-box,
     linear-gradient(73.6deg, #85ffc4 2.11%, #5cc6ff 90.45%) border-box;
   border-radius: 80px;
+`
+
+const TooltipStyled = styled.div`
+  // background: rgba(86, 86, 99, 0.9);
+margin-top: 12px;
+  height: 88px;
+  display: flex;
+  justify-center: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+  a {
+    color: #00D1FF
+  }
 `
 
 const GaugeProgress = styled.div<{ percentage: number }>`
