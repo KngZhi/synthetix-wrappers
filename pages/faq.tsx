@@ -1,9 +1,13 @@
 import Head from 'next/head'
+import Link from 'next/link'
 import styled from 'styled-components'
 import Image from 'next/image'
 import SynthetixLogo from '../public/images/logos/synthetix.svg'
 import LinkArrow from '../public/images/utils/link-arrow.svg'
 import { XButton } from '../components/button'
+import FaqItem from '../components/FaqItem'
+import RocketImage from '../public/images/utils/rocket.png'
+import ImageImage from '../public/images/utils/Image.png'
 
 const Faq = () => {
   return (
@@ -24,11 +28,27 @@ const Faq = () => {
             <p>SYNTHETIX</p>
             <h1>Wrapper Help Center</h1>
           </div>
-          <GotoButton>
-            <span>GO TO WRAPPER</span>
-            <Image src={LinkArrow} alt="link-arrow"/>
-          </GotoButton>
+          <Link href="/">
+            <GotoButton>
+              <span>GO TO WRAPPER</span>
+              <Image src={LinkArrow} alt="link-arrow" />
+            </GotoButton>
+          </Link>
         </Header>
+        <FaqItems>
+          <FaqItem
+            category="GETTING STARTED"
+            title="What is Wrapper"
+            content="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras at iaculis odio diam pretium risus. Ornare id eu ut sed. Sit convallis purus suspendisse purus praesent nec massa, pellentesque purus. Integer molestie tempus volutpat eget risus, in pellentesque dolor."
+            image={RocketImage}
+          />
+          <FaqItem
+            category="WRAP"
+            image={ImageImage}
+            title="Lorem lpsum"
+            content="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras at iaculis odio diam pretium risus. Ornare id eu ut sed. Sit convallis purus suspendisse purus praesent nec massa, pellentesque purus. Integer molestie tempus volutpat eget risus, in pellentesque dolor."
+          ></FaqItem>
+        </FaqItems>
       </DefaultLayout>
     </>
   )
@@ -58,8 +78,6 @@ const Header = styled.div`
 
 const GotoButton = styled(XButton)`
   padding: 9px 12px;
-  font-family: 'GT America';
-  font-style: normal;
   width: 150px;
   height: 36px;
   font-size: 12px;
@@ -67,6 +85,12 @@ const GotoButton = styled(XButton)`
   font-weight: 700;
   align-items: center;
   justify-content: space-between;
+`
+
+const FaqItems = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 `
 
 export default Faq
