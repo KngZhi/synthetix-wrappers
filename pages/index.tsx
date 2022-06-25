@@ -3,6 +3,7 @@ import Head from 'next/head'
 
 import Header from '../components/header'
 import Content from '../components/content'
+import Footer from "../components/Footer";
 import { useEffect } from 'react'
 
 const HomePage: NextPage = () => {
@@ -19,6 +20,7 @@ const HomePage: NextPage = () => {
       <main>
         <Header></Header>
         <Content></Content>
+        <Footer />
       </main>
     </>
   )

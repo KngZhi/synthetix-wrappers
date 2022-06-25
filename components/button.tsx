@@ -157,6 +157,20 @@ const MoreButton = styled(WalletButton)`
   }
 `
 
+const XButton = styled.div`
+  display: flex;
+  /* Brand/Gradient001 */
+
+  background: linear-gradient(121.5deg, #101215 55.37%, #22272b 106.67%);
+  /* Brand/BlackV2 */
+
+  border: 1px solid #000000;
+  /* Button New */
+
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.9);
+  border-radius: 40px;
+`
+
 export {
   Button,
   NetWorkButton,
@@ -164,4 +178,5 @@ export {
   WalletSelectorButton,
   MoreButton,
   AddrButton,
+  XButton,
 }

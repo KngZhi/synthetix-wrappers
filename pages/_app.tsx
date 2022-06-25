@@ -44,7 +44,7 @@ const globalStyle = globalCss({
 })
 
 function MyApp({ Component, pageProps }: AppProps) {
-  globalStyle()
+  // globalStyle()
   return (
     <WagmiConfig client={client}>
       <RecoilRoot>
