@@ -49,7 +49,7 @@ import {
   PairToken,
 } from '../constants/token'
 
-import { useTokenContract, useEthPrice } from '../hooks/useContracts'
+import { useTokenContract, useTokenPrice } from '../hooks/useContracts'
 
 type Tokens = Token[]
 

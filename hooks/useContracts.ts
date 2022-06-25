@@ -9,8 +9,11 @@ import {
     ETH_WRAPPER_L2,
     LUSD_WRAPPER_L1,
     LUSD_WRAPPER_L2,
-    EthUsdContract,
+    ETH_USD_L2_CONTRACT,
     EthWrapperL1KovanContract,
+    ETH_USD_L2_Contract,
+    ETH_USD_L1_CONTRACT,
+    SUSD_USD_L2_Contract,
 } from '../constants/contracts'
 
 
@@ -72,6 +75,22 @@ function getContractSetup(token: Token, chainId: number): ContractSetup {
     return contractSetup
 }
 
+function getPriceContractSetup(token: Token, chainId: number): ContractSetup {
+    const chainTokenContract = {
+        [SupportedChainId.MAINNET]: {
+            'eth': ETH_USD_L1_CONTRACT
+        },
+        [SupportedChainId.OPTIMISM]: {
+            'eth': ETH_USD_L2_Contract,
+            'susd': SUSD_USD_L2_Contract,
+        }
+    }
+
+    // TODO: make it more robust
+    return chainTokenContract[chainId][token.key]
+
+}
+
 interface BaseContractInterface {
     burnFeeRate: string
     mintFeeRate: string
@@ -126,8 +145,9 @@ export function useTokenContract(
     }
 }
 
-export function useEthPrice() {
-    const { data, isLoading, } = useContractRead(EthUsdContract, 'latestAnswer')
+export function useTokenPrice(token: Token, chainId: number) {
+    const contract = getPriceContractSetup(token, chainId);
+    const { data, isLoading, } = useContractRead(contract, 'latestAnswer')
 
     return { data, isLoading, uint: 8 }
 }
