@@ -1,11 +1,11 @@
 import { FC, useEffect } from 'react'
 import styled from 'styled-components'
-import Image from 'next/image'
+import Image, { StaticImageData } from 'next/image'
 import { chain, useNetwork } from 'wagmi'
 import { useRecoilValue, useRecoilState } from 'recoil'
 
-import { DefaultDropdownMenu } from './dropdown'
-import { NetWorkButton, NetWorkSelectorButton } from './button'
+import { DefaultDropdownMenu } from './Dropdown'
+import { NetWorkButton, NetWorkSelectorButton } from './Button'
 
 import { Network, networkState, isWalletConnectedState } from '../store/index'
 
@@ -16,7 +16,7 @@ import DownArrow from '../public/images/utils/down-arrow.svg'
 type NetworkButtonProps = {
   id: string
   name: string
-  src: any
+  src: StaticImageData
   onClick: () => void
   isActive: boolean
 }

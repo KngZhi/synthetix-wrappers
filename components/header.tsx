@@ -1,9 +1,9 @@
 import styled from 'styled-components'
 import Image from 'next/image'
 
-import { Button } from './button'
+import { Button } from './Button'
 import { NetworkSelector } from './NetworkSelector'
-import WalletButton from './wallet'
+import WalletButton from './Wallet'
 
 import SynthetixLogo from '../public/images/logos/synthetix.svg'
 

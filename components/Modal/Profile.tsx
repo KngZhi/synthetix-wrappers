@@ -5,17 +5,15 @@ import styled from 'styled-components'
 import CopyHelper from '../CopyHelper'
 import { Explorer } from '../Explorer'
 
-import { MoreButton } from '../button'
+import { MoreButton } from '../Button'
 import { NetworkSelector } from '../NetworkSelector'
 
 type ProfileProps = {
   disconnect: () => void
   address: string
   shortAddr: string
-  changeAccount: () => void
   open: boolean
   onClose: () => void
-  avatar
   changeWallet: () => void
   chainId: number
 }
@@ -24,10 +22,9 @@ const Profile: FC<ProfileProps> = ({
   address = '',
   shortAddr,
   open = false,
-  onClose = () => {},
-  disconnect = () => {},
-  avatar,
-  changeWallet = () => {},
+  onClose,
+  disconnect,
+  changeWallet,
   chainId,
 }) => {
   function handleDisconnect() {

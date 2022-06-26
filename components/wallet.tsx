@@ -8,7 +8,7 @@ import {
   WalletSelectorButton,
   MoreButton,
   AddrButton,
-} from './button'
+} from './Button'
 
 import {
   isWalletConnectedState,
@@ -21,7 +21,7 @@ import Image from 'next/image'
 import MetaMaskPic from '../public/images/wallets/metamask.svg'
 
 import { truncateAddress } from '../utils/string'
-import Profile from '../components/Modal/Profile'
+import Profile from './Modal/Profile'
 import { useRecoilValue, useRecoilState } from 'recoil'
 
 export default function WalletButton() {
@@ -72,7 +72,7 @@ export default function WalletButton() {
       <>
         <Profile
           open={profileVisible}
-          address={walletAddress}
+          address={walletAddress || ''}
           shortAddr={addr}
           chainId={activeNetwork?.id}
           disconnect={handleDisconnect}
@@ -109,7 +109,6 @@ export default function WalletButton() {
           <Modal.Body>
             {connectors.map((connector) => (
               <WalletSelectorButton
-                disabled={!connector.ready}
                 key={connector.id}
                 onClick={() => {
                   connect(connector)

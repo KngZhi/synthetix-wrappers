@@ -1,13 +1,13 @@
-import { FC, ReactDOM, useState } from 'react'
+import { FC, useState, ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 import Image from 'next/image'
 import { ChevronDown } from 'react-feather'
 
 type FaqItemProps = {
-  category: string | ReactDOM
+  category: string | ReactNode
   image: any
-  content: string | ReactDOM
-  title: string | ReactDOM
+  content: string | ReactNode
+  title: string | ReactNode
 }
 
 const FaqItem: FC<FaqItemProps> = ({ category, image, content, title }) => {

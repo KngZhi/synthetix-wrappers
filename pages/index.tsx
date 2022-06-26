@@ -17,8 +17,8 @@ const HomePage: NextPage = () => {
         <link rel="icon" href="/images/logos/synthetix.svg" />
       </Head>
       <main>
-        <Header></Header>
-        <Content></Content>
+        <Header />
+        <Content onTVLClick={() => { console.log('TVL Click')}} />
         <Footer />
       </main>
     </>

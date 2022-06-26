@@ -1,15 +1,17 @@
-import { ReactElement } from 'react'
+import React, { ReactElement, MouseEvent } from 'react'
 import { FC, useRef, useState, useEffect } from 'react'
 import styled, { css } from 'styled-components'
 
 type DefaultDropdownMenuProps = {
-  trigger: ReactElement,
-  dropList: ReactElement,
-  className?: string,
-  triggerCls?: string,
-  dropdownCls?: string,
-  offset?: number ,
+  trigger: ReactElement
+  dropList: ReactElement
+  className?: string
+  triggerCls?: string
+  dropdownCls?: string
+  offset?: number
 }
+
+// TODO: rewrite this as flyout component
 
 const DefaultDropdownMenu: FC<DefaultDropdownMenuProps> = ({
   trigger,
@@ -19,17 +21,17 @@ const DefaultDropdownMenu: FC<DefaultDropdownMenuProps> = ({
   dropdownCls,
   offset = 0,
 }) => {
-  const dropdownRef = useRef(null)
+  const dropdownRef = useRef<HTMLDivElement>(null)
   const [isActive, setIsActive] = useState(false)
   const handleClose = () => setIsActive(false)
   const handleOpen = () => setIsActive(true)
 
   useEffect(() => {
-    const pageClickEvent = (e) => {
+    const pageClickEvent = (e: MouseEvent) => {
       // If the active element exists and is clicked outside of
       if (
         dropdownRef.current !== null &&
-        !dropdownRef.current.contains(e.target)
+        !dropdownRef.current.contains(e.target as Node)
       ) {
         handleClose()
       }
@@ -47,8 +49,15 @@ const DefaultDropdownMenu: FC<DefaultDropdownMenuProps> = ({
 
   return (
     <DropdownContainer ref={dropdownRef} className={className}>
-      <DropdownTrigger className={triggerCls} onClick={handleOpen}>{trigger}</DropdownTrigger>
-      <DropdownList className={dropdownCls} offset={offset} active={isActive} onClick={handleClose}>
+      <DropdownTrigger className={triggerCls} onClick={handleOpen}>
+        {trigger}
+      </DropdownTrigger>
+      <DropdownList
+        className={dropdownCls}
+        offset={offset}
+        active={isActive}
+        onClick={handleClose}
+      >
         {dropList}
       </DropdownList>
     </DropdownContainer>

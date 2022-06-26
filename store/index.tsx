@@ -1,5 +1,5 @@
 import { atom, selector } from 'recoil'
-import { chain } from "wagmi";
+import { chain } from 'wagmi'
 
 export const walletAddressState = atom<string | null>({
   key: 'walletAddress',
@@ -17,11 +17,11 @@ export const balance = atom<string | null>({
 })
 
 export type Network = {
-  id: number,
-  name: string,
+  id: number
+  name: string
 }
 
-export const networkState = atom<Network | null>({
+export const networkState = atom<Network>({
   key: 'network',
   default: {
     id: chain.mainnet.id,
@@ -31,5 +31,6 @@ export const networkState = atom<Network | null>({
 
 export const isL1State = selector<boolean>({
   key: 'isL1',
-  get: ({ get }) => [chain.kovan.name, chain.mainnet.name].includes(get(networkState)?.name)
+  get: ({ get }) =>
+    [chain.kovan.name, chain.mainnet.name].includes(get(networkState)?.name),
 })

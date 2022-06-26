@@ -1,13 +1,12 @@
-import { ReactElement } from "react";
+import { StaticImageData } from 'next/image'
 import ETHLogo from '../public/images/logos/ethereum.svg'
 import LUSDLogo from '../public/images/synths/sLUSD.png'
-import sETHLogo from '../public/images/synths/sETH.svg'
 import sUSDLogo from '../public/images/synths/sUSD.png'
 
 export type CurrencyKey = string;
 export type TokenAddress = string;
 
-export const sETH_ADDRESS = '0x5e74c9036fb86bd7ecdcb084a0673efc32ea31cb';
+export const sETH_ADDRESS = '0x5e74c9036fb86bd7ecdcb084a0673efc32ea31cb'
 export const LUSD_ADDRESS = '0x5f98805a4e8be255a32880fdec7f6728c6568ba0'
 export const sUSD_ADDRESS = '0x57ab1ec28d129707052df4df418d58a2d46d5f51'
 
@@ -31,7 +30,7 @@ export interface Token {
   name: string;
   key: string;
   address: TokenAddress;
-  src?: ReactElement;
+  src?: StaticImageData;
 }
 
 export const LUSD = {

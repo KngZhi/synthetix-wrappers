@@ -8,8 +8,8 @@ import { useBalance, useSigner, useProvider } from 'wagmi'
 
 import { Tooltip } from '@nextui-org/react'
 
-import { Button } from './button'
-import { DefaultDropdownMenu } from '../components/dropdown'
+import { Button } from './Button'
+import { DefaultDropdownMenu } from './Dropdown'
 import NumericInput from '../components/NumericInput'
 
 import LinkArrow from '../public/images/utils/link-arrow.svg'
@@ -126,20 +126,20 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
   })
 
   /* Wrappr */
-  let srcBalanceValue: string = srcBalance?.formatted || '0'
-  let targetBalanceValue: string = targetBalance?.formatted || '0'
-  let maxWrappable: number = 80
-  let wrapUSDValue: string = srcTokenPrice
+  const srcBalanceValue: string = srcBalance?.formatted || '0'
+  const targetBalanceValue: string = targetBalance?.formatted || '0'
+  const maxWrappable = 80
+  const wrapUSDValue: string = srcTokenPrice
     ? (srcTokenPrice * tokenValue).toFixed(2)
     : '...'
 
   /* Capacity */
-  let capacityUtilised: string = '80,000'
-  let maxCapacity: string = '200,000'
-  let capacityPercentage: number =
+  const capacityUtilised = '80,000'
+  const maxCapacity = '200,000'
+  const capacityPercentage: number =
     (parseInt(capacityUtilised, 10) / parseInt(maxCapacity, 10)) * 100
 
-  let feeRate: number = 0
+  const feeRate = 0
 
   const onMaxClick = () => {
     setTokenValue(srcBalanceValue)
