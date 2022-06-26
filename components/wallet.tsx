@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-import styled  from 'styled-components'
-import { useConnect, useAccount, useDisconnect, useEnsAvatar } from 'wagmi'
+import styled from 'styled-components'
+import { useConnect, useAccount, useDisconnect } from 'wagmi'
 import { Modal, Text } from '@nextui-org/react'
 
 import {
@@ -10,14 +10,15 @@ import {
   AddrButton,
 } from './button'
 
-import { isWalletConnectedState, walletAddressState, networkState } from '../store/index'
+import {
+  isWalletConnectedState,
+  walletAddressState,
+  networkState,
+} from '../store/index'
 
 import styles from './Modal/Modal.module.css'
 import Image from 'next/image'
 import MetaMaskPic from '../public/images/wallets/metamask.svg'
-import LedgerPic from '../public/images/wallets/ledger.svg'
-import TrezorPic from '../public/images/wallets/trezor.svg'
-import ConnectMobilePic from '../public/images/wallets/connect-mobile.svg'
 
 import { truncateAddress } from '../utils/string'
 import Profile from '../components/Modal/Profile'
@@ -33,24 +34,16 @@ export default function WalletButton() {
 
   const [profileVisible, setProfileVisible] = useState<boolean>(false)
 
-  const { connect, connectors, error, isConnecting, pendingConnector } =
-    useConnect()
+  const { connect, connectors, isConnecting, pendingConnector } = useConnect()
   const { data: account } = useAccount()
 
   const { disconnect } = useDisconnect()
-
-  const imageTable = {
-    metamast: MetaMaskPic,
-    coinbaseWallet: LedgerPic,
-    walletConnect: TrezorPic,
-    injected: ConnectMobilePic,
-  }
 
   useEffect(() => {
     if (account?.address) {
       setWalletAddress(account.address)
     }
-  }, [account])
+  }, [account, setWalletAddress])
 
   const addr = truncateAddress(walletAddress || '')
   function handleChangeWallet() {
