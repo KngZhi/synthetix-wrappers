@@ -27,6 +27,7 @@ import DownArrowSmall from '../public/images/utils/down-arrow-small.svg'
 import BlueInfo from '../public/images/utils/blue-info.svg'
 import {
   isL1State,
+  networkState,
   isWalletConnectedState,
   walletAddressState,
 } from '../store/index'
@@ -103,6 +104,8 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
     setTargetToken(targetTokens[srcTokenIdx])
   }, [srcTokenIdx, srcTokens, targetTokens])
 
+  const { data: srcTokenPrice } = useTokenPrice(srcToken)
+
   const { burnFeeRate, mintFeeRate, capacity, maxTokenAmount, mint, burn } =
     useTokenContract(srcToken, signer, provider)
 
@@ -142,7 +145,7 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
   let srcBalanceValue: string = srcBalance?.formatted || '0'
   let targetBalanceValue: string = targetBalance?.formatted || '0'
   let maxWrappable: number = 80
-  let wrapUSDValue: string = '2,895.25'
+  let wrapUSDValue: string = srcTokenPrice ? (srcTokenPrice * tokenValue).toFixed(2) : '...'
 
   /* Capacity */
   let capacityUtilised: string = '80,000'
