@@ -1,9 +1,9 @@
-import Link from "next/link";
+import Link from 'next/link'
 
-import { FC } from "react";
-import styled from "styled-components";
+import { FC } from 'react'
+import styled from 'styled-components'
 
-import { Button } from "./Button";
+import { Button } from './Button'
 
 const Footer: FC = () => {
   return (
@@ -12,15 +12,15 @@ const Footer: FC = () => {
         <SquareButton
           size="sm"
           onClick={() =>
-            console.log("You clicked on the question mark button!")
+            console.log('You clicked on the question mark button!')
           }
         >
           <span>?</span>
         </SquareButton>
       </Link>
     </Container>
-  );
-};
+  )
+}
 
 const Container = styled.div`
   display: flex;
@@ -28,12 +28,12 @@ const Container = styled.div`
   justify-content: flex-end;
   width: 100%;
   padding: 40px;
-`;
+`
 
 const SquareButton = styled(Button)`
   span {
     font-size: 20px;
   }
-`;
+`
 
-export default Footer;
+export default Footer

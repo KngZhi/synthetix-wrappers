@@ -3,8 +3,7 @@ import Head from 'next/head'
 
 import Header from '../components/header'
 import Content from '../components/content'
-import Footer from "../components/Footer";
-import { useEffect } from 'react'
+import Footer from '../components/Footer'
 
 const HomePage: NextPage = () => {
   return (

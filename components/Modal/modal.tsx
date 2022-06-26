@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
 const BaseModal = styled.div`
   border: 2px solid #000000;

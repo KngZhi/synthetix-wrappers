@@ -1,6 +1,5 @@
 import '../styles/globals.css'
 import type { AppProps } from 'next/app'
-import { globalCss } from '@nextui-org/react'
 import { RecoilRoot } from 'recoil'
 
 import {
@@ -9,17 +8,12 @@ import {
   defaultChains,
   defaultL2Chains,
   configureChains,
-  chain,
-  useNetwork,
 } from 'wagmi'
 
 import { infuraProvider } from 'wagmi/providers/infura'
 import { publicProvider } from 'wagmi/providers/public'
 
-import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
-import { InjectedConnector } from 'wagmi/connectors/injected'
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
-import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 
 const INFURA_ID = process.env.INFURA_ID
 
@@ -37,14 +31,7 @@ const client = createClient({
   webSocketProvider,
 })
 
-const globalStyle = globalCss({
-  body: {
-    color: '#fff',
-  },
-})
-
 function MyApp({ Component, pageProps }: AppProps) {
-  // globalStyle()
   return (
     <WagmiConfig client={client}>
       <RecoilRoot>

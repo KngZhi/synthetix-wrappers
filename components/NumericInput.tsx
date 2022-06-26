@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC } from 'react'
 import styled from 'styled-components'
 
 type NumberInputProps = {
@@ -15,15 +15,16 @@ const NumericInput: FC<NumberInputProps> = ({
   decimal = '0.01',
 }) => {
   function validate(e) {
-    var theEvent = e || window.event
+    let theEvent = e || window.event
+    let key: string
 
     // Handle paste
     if (theEvent.type === 'paste') {
-      key = event.clipboardData.getData('Text')
+      key = theEvent.clipboardData.getData('Text')
     } else {
       // Handle key press
-      var key = theEvent.keyCode || theEvent.which
-      key = String.fromCharCode(key)
+      const keyCode = theEvent.keyCode || theEvent.which
+      key = String.fromCharCode(keyCode)
     }
     var regex = /[0-9]|\./
     if (!regex.test(key)) {

@@ -1,7 +1,6 @@
 import { FC, ReactDOM, useState } from 'react'
 import styled, { css } from 'styled-components'
 import Image from 'next/image'
-import DownArrow from '../public/images/utils/down-arrow.svg'
 import { ChevronDown } from 'react-feather'
 
 type FaqItemProps = {

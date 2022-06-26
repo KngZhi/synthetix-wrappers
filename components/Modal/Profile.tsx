@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react'
+import { FC, } from 'react'
 import Jazzicon, { jsNumberForAddress } from 'react-jazzicon'
 import { Modal, Text, Container, Row, Col } from '@nextui-org/react'
 import styled from 'styled-components'

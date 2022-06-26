@@ -1,18 +1,10 @@
-import { BigNumber } from '@ethersproject/bignumber'
-import { ethers, utils } from 'ethers'
 import web3 from 'web3'
+import Link from 'next/link'
 import { FC, useEffect, useMemo, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import styled, { css } from 'styled-components'
 import Image from 'next/image'
-import {
-  useAccount,
-  useBalance,
-  useSigner,
-  useProvider,
-  useContractWrite,
-  useContractRead,
-} from 'wagmi'
+import { useBalance, useSigner, useProvider } from 'wagmi'
 
 import { Tooltip } from '@nextui-org/react'
 
@@ -27,19 +19,9 @@ import DownArrowSmall from '../public/images/utils/down-arrow-small.svg'
 import BlueInfo from '../public/images/utils/blue-info.svg'
 import {
   isL1State,
-  networkState,
   isWalletConnectedState,
   walletAddressState,
 } from '../store/index'
-
-import {
-  EthWrapperL1Contract,
-  EthWrapperL1KovanContract,
-} from '../constants/contracts'
-
-type WrapprProps = {
-  onTVLClick: () => void
-}
 
 import {
   L1_Wrap,
@@ -51,6 +33,10 @@ import {
 } from '../constants/token'
 
 import { useTokenContract, useTokenPrice } from '../hooks/useContracts'
+
+type WrapprProps = {
+  onTVLClick: () => void
+}
 
 type Tokens = Token[]
 
@@ -71,7 +57,7 @@ const TooltipContent = () => {
   return (
     <TooltipStyled>
       <p>The fee rate is decided by the Grants Council</p>
-      <a>Learn More</a>
+      <Link>Learn More</Link>
     </TooltipStyled>
   )
 }
@@ -106,12 +92,10 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
 
   const { data: srcTokenPrice } = useTokenPrice(srcToken)
 
-  const { burnFeeRate, mintFeeRate, capacity, maxTokenAmount, mint, burn } =
-    useTokenContract(srcToken, signer, provider)
+  const { mint, burn } = useTokenContract(srcToken, signer, provider)
 
   const [tokenValue, setTokenValue] = useState<string>('')
   const [walletAddress] = useRecoilState(walletAddressState)
-  const { data: account } = useAccount()
 
   const changeToken = (idx: number) => {
     setSrcTokenIdx(idx)
@@ -145,7 +129,9 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
   let srcBalanceValue: string = srcBalance?.formatted || '0'
   let targetBalanceValue: string = targetBalance?.formatted || '0'
   let maxWrappable: number = 80
-  let wrapUSDValue: string = srcTokenPrice ? (srcTokenPrice * tokenValue).toFixed(2) : '...'
+  let wrapUSDValue: string = srcTokenPrice
+    ? (srcTokenPrice * tokenValue).toFixed(2)
+    : '...'
 
   /* Capacity */
   let capacityUtilised: string = '80,000'
@@ -512,24 +498,6 @@ const StyledBlackContainerRow = styled(BlackContainerRow)`
   gap: 4px;
 `
 
-const BlueInfoButton = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  background: none;
-  border: none;
-  border-radius: 20px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.9);
-
-  &:hover {
-  }
-
-  &:active {
-    box-shadow: inset -1px -1px 1px rgba(255, 255, 255, 0.15);
-  }
-`
-
 const CurrencySelectorButton = styled(Button)`
   display: flex;
   flex-direction: row;
@@ -599,42 +567,6 @@ const StyledCurrencyContainer2 = styled(CurrencyContainer)`
     font-weight: 700;
     font-size: 24px;
     line-height: 29px;
-  }
-`
-
-const CurrencySelectorContainer = styled.div`
-  /* Hide the dropdown menu by default */
-  display: none;
-  flex-direction: column;
-  gap: 10px;
-  padding: 0px;
-
-  /* Basic style */
-  height: 80px;
-  width: 120px;
-
-  /* Background */
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
-    linear-gradient(311.52deg, #3d464c -36.37%, #131619 62.81%);
-
-  /* Border */
-  border: 1px solid #8282954d;
-  border-radius: 4px;
-
-  /* Shadow */
-  box-shadow: 0px 14px 14px rgba(0, 0, 0, 0.25);
-`
-
-const CurrencySelectoDropdown = styled.div<{ isDrop: boolean }>`
-  flex-direction: column;
-  gap: 8px;
-
-  > ${CurrencySelectorContainer} {
-    position: absolute;
-    margin-top: 4px;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 4px;
   }
 `
 
