@@ -5,6 +5,7 @@ import EthWrapperKovanABI from '../abis/eth-wrapper-kovan.json'
 import EthUSDL2ABI from '../abis/eth-usd-l2.json'
 import SUSD_USD_L2_ABI from '../abis/susd-usd-l2.json'
 import SUSD_USD_L1_ABI from '../abis/susd-usd-l1.json'
+import AGGREGATOR_L2_ABI from '../abis/aggregatorV3Interface-l2.json'
 
 
 export const ETH_WRAPPER_L1 = '0xC1AAE9d18bBe386B102435a8632C8063d31e747C'
@@ -17,6 +18,11 @@ const EthWrapperKovanAddr = '0x44Af736495544a726ED15CB0EBe2d87a6bCC1832'
 type ContractSetup = {
     addressOrName: string;
     contractInterface: ContractInterface;
+}
+
+export const AGGREGATOR_L2_CONTRACT: ContractSetup = {
+    addressOrName: '0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419',
+    contractInterface: AGGREGATOR_L2_ABI,
 }
 
 export const ETH_USD_L1_CONTRACT: ContractSetup = {
