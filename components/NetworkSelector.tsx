@@ -13,14 +13,6 @@ import EthereumLogo from '../public/images/logos/ethereum.svg'
 import OptimismLogo from '../public/images/logos/optimism.svg'
 import DownArrow from '../public/images/utils/down-arrow.svg'
 
-type NetworkButtonProps = {
-  id: string
-  name: string
-  src: StaticImageData
-  onClick: () => void
-  isActive: boolean
-}
-
 const NETWORK_ICON = {
   [chain.mainnet.id]: EthereumLogo,
   [chain.optimism.id]: OptimismLogo,
@@ -28,7 +20,11 @@ const NETWORK_ICON = {
   [chain.kovan.id]: EthereumLogo,
 }
 
-const SUPPORTED_CHAIN: Network[] = [
+type UINetwork = Network & {
+  src: StaticImageData
+}
+
+const SUPPORTED_CHAIN: UINetwork[] = [
   { id: chain.mainnet.id, name: chain.mainnet.name, src: EthereumLogo },
   { id: chain.kovan.id, name: chain.kovan.name, src: EthereumLogo },
   { id: chain.optimism.id, name: chain.optimism.name, src: OptimismLogo },
@@ -59,6 +55,14 @@ type NetworkSelectorProps = {
   containerCls?: string
 }
 
+type NetworkButtonProps = {
+  id: number
+  name: string
+  src: StaticImageData
+  onClick: () => void
+  isActive: boolean
+}
+
 export const NetworkSelector: FC<NetworkSelectorProps> = ({
   menuCls,
   dropdownCls,
@@ -74,7 +78,7 @@ export const NetworkSelector: FC<NetworkSelectorProps> = ({
       try {
         await switchNetworkAsync(id)
       } catch (error) {
-        return error
+        console.error(error)
       }
     } else {
       setActiveNetwork({ id, name })
@@ -111,7 +115,8 @@ export const NetworkSelector: FC<NetworkSelectorProps> = ({
               onClick={() => onSwitchChain(chain)}
               isActive={chain.id === activeNetwork.id}
               key={chain.id}
-              {...chain}
+              name={chain.name}
+              id={chain.id}
             />
           ))}
         </NetworkSelectorContainer>

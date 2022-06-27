@@ -1,7 +1,7 @@
 import { atom, selector } from 'recoil'
 import { chain } from 'wagmi'
 
-export const walletAddressState = atom<string | null>({
+export const walletAddressState = atom<string | undefined>({
   key: 'walletAddress',
   default: undefined,
 })

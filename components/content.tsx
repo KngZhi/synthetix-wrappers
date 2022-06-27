@@ -1,6 +1,6 @@
 import web3 from 'web3'
 import Link from 'next/link'
-import { FC, useEffect, useMemo, useState } from 'react'
+import { FC, useEffect, useMemo, useState, ChangeEvent } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import styled, { css } from 'styled-components'
 import Image from 'next/image'
@@ -57,7 +57,7 @@ const TooltipContent = () => {
   return (
     <TooltipStyled>
       <p>The fee rate is decided by the Grants Council</p>
-      <Link>Learn More</Link>
+      <Link href="/">Learn More</Link>
     </TooltipStyled>
   )
 }
@@ -82,8 +82,8 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
     targetTokens[srcTokenIdx]
   )
 
-  const { data: signer } = useSigner()
-  const provider = useProvider()
+  // const { data: signer } = useSigner()
+  // const provider = useProvider()
 
   useEffect(() => {
     setSrcToken(srcTokens[srcTokenIdx])
@@ -92,7 +92,7 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
 
   const { data: srcTokenPrice } = useTokenPrice(srcToken)
 
-  const { mint, burn } = useTokenContract(srcToken, signer, provider)
+  // const { mint, burn } = useTokenContract(srcToken, signer, provider)
 
   const [tokenValue, setTokenValue] = useState<string>('')
   const [walletAddress] = useRecoilState(walletAddressState)
@@ -104,7 +104,7 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
 
   const resetMax = () => setTokenValue('')
 
-  const onInputChange = (e) => {
+  const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setTokenValue(e.target.value)
   }
 
@@ -145,18 +145,18 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
     setTokenValue(srcBalanceValue)
   }
 
-  const handleWrapClick: Promise<void> = async () => {
-    const action = isWrap ? mint : burn
-    const res = action('10000', {
-      gasPrice: web3.utils.toWei('2', 'Gwei'),
-      gasLimit: 500e3,
-    })
-    console.log(res.hash)
+  const handleWrapClick = async () => {
+    // const action = isWrap ? mint : burn
+    // const res = action('10000', {
+    //   gasPrice: web3.utils.toWei('2', 'Gwei'),
+    //   gasLimit: 500e3,
+    // })
+    // console.log(res.hash)
   }
 
-  const isActionAllowed: boolean = () => {
+  const isActionAllowed = () => {
     if (isWalletConnected === false) return false
-    if (tokenValue <= 0) return false
+    if (parseFloat(tokenValue) <= 0) return false
 
     return true
   }

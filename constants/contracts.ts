@@ -45,7 +45,7 @@ export const SUSD_USD_L2_Contract: ContractSetup = {
     contractInterface: SUSD_USD_L2_ABI
 }
 
-export const EthWrapperL1Contract: ContractSetup = {
+export const ETH_WRAPPER_L1_CONTRACT: ContractSetup = {
     addressOrName: ETH_WRAPPER_L1,
     contractInterface: EthWrapperABI,
 }

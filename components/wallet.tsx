@@ -53,7 +53,7 @@ export default function WalletButton() {
 
   function handleDisconnect() {
     disconnect()
-    setWalletAddress(null)
+    setWalletAddress(undefined)
     setProfileVisible(false)
   }
 
