@@ -10,6 +10,8 @@ import { Tooltip } from '@nextui-org/react'
 import { Button } from './Button'
 import { DefaultDropdownMenu } from './Dropdown'
 import NumericInput from '../components/NumericInput'
+import TooltipContent from '../components/Tooltip'
+import Capacity from '../components/Capacity'
 
 import LinkArrow from '../public/images/utils/link-arrow.svg'
 import Gear from '../public/images/utils/gear.svg'
@@ -50,15 +52,6 @@ function getTokenPairs(isWrap: boolean, isL1: boolean): [Tokens, Tokens] {
   const getTokens = (idx: number) => tokenPairs.map((pair) => pair[idx])
 
   return [getTokens(0), getTokens(1)]
-}
-
-const TooltipContent = () => {
-  return (
-    <TooltipStyled>
-      <p>The fee rate is decided by the Grants Council</p>
-      <Link href="/">Learn More</Link>
-    </TooltipStyled>
-  )
 }
 
 const Wrapper: FC<WrapperProps> = ({ onTVLClick }) => {
@@ -175,10 +168,7 @@ const Wrapper: FC<WrapperProps> = ({ onTVLClick }) => {
       <WrapperContainerColumn>
         <WrapperContainerRow>
           <span>Wrapper</span>
-          <GearButton
-            size="sm"
-            onClick={() => console.log('You clicked on the gear button!')}
-          >
+          <GearButton size="sm">
             <Image src={Gear} alt="gear-icon" priority={true} />
           </GearButton>
         </WrapperContainerRow>
@@ -240,7 +230,11 @@ const Wrapper: FC<WrapperProps> = ({ onTVLClick }) => {
                 </DropdownListContainer>
               }
             />
-            <NumericInput value={tokenValue} onChange={onInputChange} placeholder="0.0" />
+            <NumericInput
+              value={tokenValue}
+              onChange={onInputChange}
+              placeholder="0.0"
+            />
           </BlackContainerRow>
           <BlackContainerRow>
             <span>Max wrappable: {maxWrappable}Ξ</span>
@@ -265,7 +259,6 @@ const Wrapper: FC<WrapperProps> = ({ onTVLClick }) => {
           <BlackContainerRow>
             <StyledCurrencyContainer2>
               <Image
-                className="big"
                 width={16}
                 height={16}
                 src={targetToken.src}
@@ -274,7 +267,11 @@ const Wrapper: FC<WrapperProps> = ({ onTVLClick }) => {
               />
               <span>{targetToken.name}</span>
             </StyledCurrencyContainer2>
-            <NumericInput disabled={true} placeholder="0.0" value={targetBalanceValue}/>
+            <NumericInput
+              disabled={true}
+              placeholder="0.0"
+              value={targetBalanceValue}
+            />
           </BlackContainerRow>
           <StyledBlackContainerRow>
             <span>Fee rate: {feeRate}%</span>
@@ -296,24 +293,11 @@ const Wrapper: FC<WrapperProps> = ({ onTVLClick }) => {
           <span>{isActionAllowed() ? 'Wrap' : 'Select amount to wrap'}</span>
         </ActionButton>
       </WrapperContainerColumn>
-      <CapacityContainer>
-        <TitleContainer>
-          <span>Capacity</span>
-        </TitleContainer>
-        <GaugeContainer>
-          <GaugeProgress percentage={capacityPercentage} />
-        </GaugeContainer>
-        <CapacityDescriptionContainer>
-          <ColumnContainer>
-            <span className="bold">Utilised</span>
-            <span>{capacityUtilised}</span>
-          </ColumnContainer>
-          <ColumnContainer>
-            <span className="bold">Max Capacity</span>
-            <span>{maxCapacity}</span>
-          </ColumnContainer>
-        </CapacityDescriptionContainer>
-      </CapacityContainer>
+      <Capacity
+        capacityPercentage={capacityPercentage}
+        maxCapacity={maxCapacity}
+        capacityUtilised={capacityUtilised}
+      />
     </Container>
   )
 }
@@ -414,11 +398,9 @@ const WrapperContainerColumn = styled.div`
   width: 518px;
   margin-top: 25px;
 
-  /* Background */
   background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
     linear-gradient(311.52deg, #3d464c -36.37%, #131619 62.81%);
 
-  /* Border */
   border: 2px solid #000000;
   border-radius: 20px;
 
@@ -453,14 +435,11 @@ const BlackContainer = styled.div`
   background: #000000;
   border-radius: 4px;
 
-  span {
-    /* Text */
-    font-style: normal;
-    font-weight: 400;
-    font-size: 12px;
-    line-height: 150%;
-    color: #828295;
-  }
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 150%;
+  color: #828295;
 `
 
 const BlackContainerRow = styled.div`
@@ -469,11 +448,6 @@ const BlackContainerRow = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-
-  font-style: normal;
-  font-weight: 700;
-  font-size: 24px;
-  line-height: 26px;
 
   .big {
     flex: 2;
@@ -498,11 +472,9 @@ const CurrencySelectorButton = styled(Button)`
   max-width: 130px;
   height: 37px;
 
-  /* Border */
   border: 1px solid rgba(130, 130, 149, 0.3);
   border-radius: 8px;
 
-  /* Remove background color */
   background: none;
 `
 
@@ -562,32 +534,11 @@ const StyledCurrencyContainer2 = styled(CurrencyContainer)`
 `
 
 const MaxButton = styled.button`
-  display: flex;
-
-  /* Remove button styling */
-  background: none;
-  border: none;
-  padding: 0;
-  font: inherit;
-  cursor: pointer;
-  outline: inherit;
-
   padding-left: 10px;
-
-  span {
-    color: #00d1ff;
-  }
+  color: #00d1ff;
 
   &:hover {
-    span {
-      color: #828295;
-    }
-  }
-
-  &:active {
-    span {
-      color: #00d1ff;
-    }
+    color: #828295;
   }
 `
 
@@ -633,147 +584,6 @@ const ActionButton = styled(Button)<{ disabled: boolean }>`
           color: #000;
         `}
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.9);
-`
-
-const CapacityContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-
-  /* Basic style */
-  height: 150px;
-  width: 518px;
-  margin-top: 24px;
-  padding: 15px;
-
-  /* Background */
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
-    linear-gradient(311.52deg, #3d464c -36.37%, #131619 62.81%);
-
-  /* Border */
-  border: 2px solid #000000;
-  border-radius: 20px;
-
-  /* Shadow */
-  box-shadow: 18px 18px 36px rgba(0, 0, 0, 0.25);
-`
-
-const TitleContainer = styled.div`
-  width: 100%;
-  text-align: center;
-
-  /* Text */
-  span {
-    font-style: normal;
-    font-weight: 700;
-    font-size: 24px;
-    line-height: 26px;
-    color: #ffffff;
-  }
-`
-
-const ColumnContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-
-  span {
-    font-style: normal;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 21px;
-  }
-
-  .align-right {
-    text-align: right;
-  }
-
-  .bold {
-    font-weight: 700;
-  }
-`
-
-const CapacityDescriptionContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 0px 10px;
-
-  & ${ColumnContainer}:nth-child(2) {
-    text-align: right;
-  }
-`
-
-const GaugeContainer = styled.div`
-  width: 100%;
-  height: 26px;
-
-  /* Border */
-  border: 1px solid transparent;
-  background: linear-gradient(#000000 0 0) padding-box,
-    linear-gradient(73.6deg, #85ffc4 2.11%, #5cc6ff 90.45%) border-box;
-  border-radius: 80px;
-`
-
-const TooltipStyled = styled.div`
-  margin-top: 12px;
-  height: 88px;
-  display: flex;
-  justify-center: center;
-  align-items: center;
-  flex-direction: column;
-  gap: 10px;
-  a {
-    color: #00d1ff;
-  }
-`
-
-const GaugeProgress = styled.div<{ percentage: number }>`
-  width: 0%;
-  height: 12px;
-  margin: 6px 6px;
-
-  background: linear-gradient(73.6deg, #85ffc4 2.11%, #5cc6ff 90.45%)
-      padding-box,
-    linear-gradient(#000000 0 0) border-box;
-  border-radius: 50px 0px 0px 50px;
-
-  /* Percentage */
-  &:after {
-    height: 100%;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-
-    font-style: normal;
-    font-weight: 400;
-    font-size: 12px;
-    line-height: 150%;
-    color: #ffffff;
-  }
-
-  ${(props) =>
-    props.percentage >= 0 &&
-    props.percentage < 100 &&
-    css`
-      width: ${(props.percentage * 97) / 100}%;
-
-      &:after {
-        content: '${props.percentage}%';
-        width: calc(100% + ${props.percentage.toString().length} * 1ch + 2ch);
-      }
-    `}
-
-  ${(props) =>
-    props.percentage >= 100 &&
-    css`
-      width: 97%;
-      border-radius: 50px 50px 50px 50px;
-
-      &:after {
-        content: '100%';
-        width: calc(100% + 6ch);
-      }
-    `}
 `
 
 export default Wrapper

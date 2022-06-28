@@ -58,7 +58,6 @@ const NetWorkSelectorButton = styled(BaseButton)<{ active?: boolean }>`
 `
 
 const Button = styled.button<ButtonProps>`
-  /* Basic style */
   padding: 10px, 16px;
   height: 44px;
   width: 160px;
@@ -89,7 +88,6 @@ const Button = styled.button<ButtonProps>`
 
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.9);
 
-  /* Text */
   span {
     font-style: normal;
     font-weight: 600;
@@ -97,7 +95,7 @@ const Button = styled.button<ButtonProps>`
     line-height: 20px;
   }
 
-  &:active {
+  &:hover {
     box-shadow: inset -2px -2px 1px rgba(255, 255, 255, 0.15);
   }
 `
