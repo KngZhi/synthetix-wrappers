@@ -130,7 +130,7 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
   const targetBalanceValue: string = targetBalance?.formatted || '0'
   const maxWrappable = 80
   const wrapUSDValue: string = srcTokenPrice
-    ? (srcTokenPrice * tokenValue).toFixed(2)
+    ? (parseFloat(srcTokenPrice) * parseFloat(tokenValue)).toFixed(2)
     : '...'
 
   /* Capacity */
@@ -245,7 +245,7 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
                 </DropdownListContainer>
               }
             />
-            <NumericInput value={tokenValue} onChange={onInputChange} />
+            <NumericInput value={tokenValue} onChange={onInputChange} placeholder="0.0" />
           </BlackContainerRow>
           <BlackContainerRow>
             <span>Max wrappable: {maxWrappable}Ξ</span>
@@ -280,7 +280,7 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
               />
               <span>{targetToken.name}</span>
             </StyledCurrencyContainer2>
-            <NumericInput disabled type="text" placeholder="0.0" />
+            <NumericInput disabled={true} placeholder="0.0" value={targetBalanceValue}/>
           </BlackContainerRow>
           <StyledBlackContainerRow>
             <span>Fee rate: {feeRate}%</span>

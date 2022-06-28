@@ -1,17 +1,21 @@
-import { FC, KeyboardEvent } from 'react'
+import { FC, KeyboardEvent, ChangeEvent } from 'react'
 import styled from 'styled-components'
 
 type NumberInputProps = {
-  max: number
   value: string
-  onChange: () => void
-  decimal: string
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void
+  max?: number
+  decimal?: string
+  disabled?: boolean
+  placeholder?: string
 }
 
 const NumericInput: FC<NumberInputProps> = ({
   max = 60,
   value,
   onChange,
+  disabled = false,
+  placeholder = ''
 }) => {
   function validate(e: KeyboardEvent<HTMLInputElement>) {
     const theEvent = e || window.event
@@ -27,9 +31,10 @@ const NumericInput: FC<NumberInputProps> = ({
     <BaseInput
       value={value}
       onChange={onChange}
-      placeholder="0.0"
+      placeholder={placeholder}
       max={max}
       onKeyPress={validate}
+      disabled={disabled}
     />
   )
 }

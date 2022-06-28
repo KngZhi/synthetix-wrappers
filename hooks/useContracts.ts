@@ -69,6 +69,10 @@ function getContractSetup(token: Token, chainId: number): ContractSetup {
 }
 
 function getPriceContractSetup(token: Token, chainId: SupportedChainId.MAINNET | SupportedChainId.OPTIMISM): ContractSetup {
+    if (!(chainId in SupportedChainId)) {
+        return ETH_USD_L1_CONTRACT 
+    }
+
     const chainTokenContract = {
         [SupportedChainId.MAINNET]: {
             'eth': ETH_USD_L1_CONTRACT,
@@ -81,9 +85,7 @@ function getPriceContractSetup(token: Token, chainId: SupportedChainId.MAINNET |
         }
     }
 
-    // TODO: make it more robust
     return chainTokenContract[chainId][token.key]
-
 }
 
 interface BaseContractInterface {

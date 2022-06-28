@@ -6,6 +6,7 @@ import EthUSDL2ABI from '../abis/eth-usd-l2.json'
 import SUSD_USD_L2_ABI from '../abis/susd-usd-l2.json'
 import SUSD_USD_L1_ABI from '../abis/susd-usd-l1.json'
 import AGGREGATOR_L2_ABI from '../abis/aggregatorV3Interface-l2.json'
+import { setUncaughtExceptionCaptureCallback } from 'process'
 
 
 export const ETH_WRAPPER_L1 = '0xC1AAE9d18bBe386B102435a8632C8063d31e747C'

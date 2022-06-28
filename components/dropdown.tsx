@@ -27,7 +27,9 @@ const DefaultDropdownMenu: FC<DefaultDropdownMenuProps> = ({
   const handleOpen = () => setIsActive(true)
 
   useEffect(() => {
-    const pageClickEvent = (e: MouseEvent) => {
+    const pageClickEvent = (e: Event) => {
+      console.log(e)
+      
       // If the active element exists and is clicked outside of
       if (
         dropdownRef.current !== null &&

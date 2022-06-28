@@ -22,15 +22,17 @@ export enum SupportedChainId {
 export enum Tokens {
 	sETH = 'sETH',
 	LUSD = 'LUSD',
-	EHT = 'ETH',
+	ETH = 'ETH',
 	sUSD = 'sUSD',
 }
+
+export type TokenKey = 'seth' | 'lusd' | 'eth' | 'susd'
 
 export interface Token {
   name: string;
   key: string;
   address: TokenAddress;
-  src?: StaticImageData;
+  src: StaticImageData;
 }
 
 export const LUSD = {
