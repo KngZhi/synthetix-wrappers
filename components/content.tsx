@@ -33,7 +33,7 @@ import {
 
 import { useTokenContract } from '../hooks/useContracts'
 
-type WrapprProps = {
+type WrapperProps = {
   onTVLClick: () => void
 }
 
@@ -61,7 +61,7 @@ const TooltipContent = () => {
   )
 }
 
-const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
+const Wrapper: FC<WrapperProps> = ({ onTVLClick }) => {
   const [isWrap, setIsWrap] = useState<boolean>(true)
   const isL1 = useRecoilValue(isL1State)
   const isWalletConnected = useRecoilValue(isWalletConnectedState)
@@ -124,7 +124,6 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
     token: targetToken.address,
   })
 
-  /* Wrappr */
   const srcBalanceValue: string = srcBalance?.formatted || '0'
   const targetBalanceValue: string = targetBalance?.formatted || '0'
   const maxWrappable = 80
@@ -173,16 +172,16 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
           <Image src={LinkArrow} alt="link-arrow" priority={true} />
         </TVLButton>
       </ContainerRow>
-      <WrapprContainerColumn>
-        <WrapprContainerRow>
-          <span>Wrappr</span>
+      <WrapperContainerColumn>
+        <WrapperContainerRow>
+          <span>Wrapper</span>
           <GearButton
             size="sm"
             onClick={() => console.log('You clicked on the gear button!')}
           >
             <Image src={Gear} alt="gear-icon" priority={true} />
           </GearButton>
-        </WrapprContainerRow>
+        </WrapperContainerRow>
         <BlackContainer>
           <BlackContainerRow>
             {isWrap ? (
@@ -296,7 +295,7 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
         <ActionButton disabled={!isActionAllowed()} onClick={handleWrapClick}>
           <span>{isActionAllowed() ? 'Wrap' : 'Select amount to wrap'}</span>
         </ActionButton>
-      </WrapprContainerColumn>
+      </WrapperContainerColumn>
       <CapacityContainer>
         <TitleContainer>
           <span>Capacity</span>
@@ -403,7 +402,7 @@ const SelectorButton = styled(Button)<{ active?: boolean }>`
     `}
 `
 
-const WrapprContainerColumn = styled.div`
+const WrapperContainerColumn = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -427,7 +426,7 @@ const WrapprContainerColumn = styled.div`
   box-shadow: 0px 14px 14px rgba(0, 0, 0, 0.25);
 `
 
-const WrapprContainerRow = styled.div`
+const WrapperContainerRow = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -777,4 +776,4 @@ const GaugeProgress = styled.div<{ percentage: number }>`
     `}
 `
 
-export default Wrappr
+export default Wrapper
