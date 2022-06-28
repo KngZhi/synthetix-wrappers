@@ -54,9 +54,20 @@ const CurrencySelectorButton = styled(Button)`
   background: none;
 `
 
+const StyledCurrencyContainer2 = styled(CurrencyContainer)`
+  padding: 0;
+
+  /* Text */
+  span {
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 29px;
+  }
+`
+
 export {
   CurrencyContainer,
   StyledCurrencyContainer,
-//   StyledCurrencyContainer2,
+  StyledCurrencyContainer2,
   CurrencySelectorButton,
 }

@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { FC, useEffect, useMemo, useState, ChangeEvent } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import styled, { css } from 'styled-components'
@@ -8,14 +7,21 @@ import { useBalance } from 'wagmi'
 import { Tooltip } from '@nextui-org/react'
 
 import { Button } from './Button'
+import ArrowButton from './Button/ArrowButton'
+
 import { DefaultDropdownMenu } from './Dropdown'
 import NumericInput from '../components/NumericInput'
 import TooltipContent from '../components/Tooltip'
 import Capacity from '../components/Capacity'
+import {
+  CurrencyContainer,
+  CurrencySelectorButton,
+  StyledCurrencyContainer,
+  StyledCurrencyContainer2,
+} from '../components/Currency'
 
 import LinkArrow from '../public/images/utils/link-arrow.svg'
 import Gear from '../public/images/utils/gear.svg'
-import Arrows from '../public/images/utils/arrows.svg'
 import DownArrowSmall from '../public/images/utils/down-arrow-small.svg'
 import BlueInfo from '../public/images/utils/blue-info.svg'
 import {
@@ -240,13 +246,7 @@ const Wrapper: FC<WrapperProps> = ({ onTVLClick }) => {
             <span>Max wrappable: {maxWrappable}Ξ</span>
           </BlackContainerRow>
         </BlackContainer>
-        <ArrowButton
-          onClick={() =>
-            console.log('You clicked on the double arrows button!')
-          }
-        >
-          <Image src={Arrows} alt="trade-arrows" priority={true} />
-        </ArrowButton>
+        <ArrowButton />
         <BlackContainer>
           <BlackContainerRow>
             {isWrap ? (
@@ -312,16 +312,11 @@ const Container = styled.div`
 
 const ContainerRow = styled.div`
   width: 518px;
-  //height: 44px;
 
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;
-
-  .align-right {
-    //align-content: flex-end;
-  }
 `
 
 const TVLButton = styled(Button)`
@@ -463,74 +458,9 @@ const StyledBlackContainerRow = styled(BlackContainerRow)`
   gap: 4px;
 `
 
-const CurrencySelectorButton = styled(Button)`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-
-  padding: 0;
-  max-width: 130px;
-  height: 37px;
-
-  border: 1px solid rgba(130, 130, 149, 0.3);
-  border-radius: 8px;
-
-  background: none;
-`
-
 const DropdownListContainer = styled.div`
   width: 140px;
   padding: 8px;
-`
-
-const CurrencyContainer = styled.div<{ active?: boolean }>`
-  display: flex;
-  flex-direction: row;
-  justify-content: left;
-  align-items: center;
-  gap: 8px;
-
-  padding: 0px 10px;
-  width: 100%;
-  height: 40px;
-
-  ${(props) =>
-    props.active &&
-    css`
-      background: rgba(130, 130, 149, 0.3);
-      border-radius: 4px;
-    `}
-
-  /* Text */
-    span {
-    font-style: normal;
-    font-weight: 600;
-    font-size: 14px;
-    line-height: 20px;
-    color: #ffffff;
-  }
-`
-
-const StyledCurrencyContainer = styled(CurrencyContainer)`
-  justify-content: space-between;
-
-  /* Text */
-  span {
-    font-weight: 700;
-    font-size: 24px;
-    line-height: 29px;
-  }
-`
-
-const StyledCurrencyContainer2 = styled(CurrencyContainer)`
-  padding: 0;
-
-  /* Text */
-  span {
-    font-weight: 700;
-    font-size: 24px;
-    line-height: 29px;
-  }
 `
 
 const MaxButton = styled.button`
@@ -544,29 +474,6 @@ const MaxButton = styled.button`
 
 const GearButton = styled(Button)`
   padding: 0px;
-`
-
-const ArrowButton = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  padding: 10px;
-
-  background: #000000;
-  border: 1px solid #000000;
-  border-radius: 20px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.9);
-
-  &:hover {
-    border: 1px solid rgba(130, 130, 149, 0.3);
-    background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
-      linear-gradient(311.52deg, #3d464c -36.37%, #131619 62.81%);
-  }
-
-  &:active {
-    box-shadow: inset -1px -1px 1px rgba(255, 255, 255, 0.15);
-  }
 `
 
 const ActionButton = styled(Button)<{ disabled: boolean }>`
