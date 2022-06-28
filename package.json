@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "next lint && tsc",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -26,6 +26,7 @@
     "recoil": "^0.7.3",
     "styled-components": "^5.3.5",
     "tsx": "^3.5.0",
+    "usehooks-ts": "^2.6.0",
     "wagmi": "^0.4.11",
     "web3": "^1.7.3"
   },

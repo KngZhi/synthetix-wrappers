@@ -17,6 +17,10 @@
     "quotes": [
       2,
       "single"
+    ],
+    "max-lines": [
+      "error",
+      600
     ]
   }
 }

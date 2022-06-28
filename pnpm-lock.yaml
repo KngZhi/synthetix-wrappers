@@ -32,6 +32,7 @@ specifiers:
   tailwindcss: ^3.0.24
   tsx: ^3.5.0
   typescript: 4.7.3
+  usehooks-ts: ^2.6.0
   wagmi: ^0.4.11
   web3: ^1.7.3
 
@@ -52,6 +53,7 @@ dependencies:
   recoil: 0.7.3_ef5jwxihqo6n7gxfmzogljlgcm
   styled-components: 5.3.5_ef5jwxihqo6n7gxfmzogljlgcm
   tsx: 3.5.0
+  usehooks-ts: 2.6.0_react@18.1.0
   wagmi: 0.4.11_ef5jwxihqo6n7gxfmzogljlgcm
   web3: 1.7.3
 
@@ -8679,6 +8681,14 @@ packages:
       react: 18.1.0
     dev: false
 
+  /usehooks-ts/2.6.0_react@18.1.0:
+    resolution: {integrity: sha512-Kj/4oc2nOxRDGTDb2v1ZulF7+tpeXFuqI6cUesM0Vic7TPPDlFORxKh4ivsYg+NTvX/YbM+lhqqkfFTiIt23eg==}
+    peerDependencies:
+      react: '>=16.9.0'
+    dependencies:
+      react: 18.1.0
+    dev: false
+
   /utf-8-validate/5.0.9:
     resolution: {integrity: sha512-Yek7dAy0v3Kl0orwMlvi7TPtiCNrdfHNd7Gcc/pLq4BLXqfAmd0J7OWMizUQnTTJsyjKn02mU7anqwfmUP4J8Q==}
     engines: {node: '>=6.14.2'}
@@ -9304,7 +9314,7 @@ packages:
     dev: false
 
   github.com/ethereumjs/ethereumjs-abi/ee3994657fa7a427238e6ba92a84d0b529bbcde0:
-    resolution: {tarball: https://codeload.github.com/ethereumjs/ethereumjs-abi/tar.gz/ee3994657fa7a427238e6ba92a84d0b529bbcde0}
+    resolution: {commit: ee3994657fa7a427238e6ba92a84d0b529bbcde0, repo: git+ssh://git@github.com/ethereumjs/ethereumjs-abi.git, type: git}
     name: ethereumjs-abi
     version: 0.6.8
     dependencies:
