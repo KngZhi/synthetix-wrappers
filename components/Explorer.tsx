@@ -67,7 +67,6 @@ const AddressLink = styled(ExternalLink)<{ hasENS: boolean; isENS: boolean }>`
 `
 
 type ExplorerProps = {
-    account: any
     chainId: number
     ENSName: string
 }
@@ -85,7 +84,6 @@ function getExplorerLink(chainId: number, data: string): string{
 }
 
 export const Explorer: FC<ExplorerProps> = ({
-    account,
     chainId,
     ENSName,
 }) => {

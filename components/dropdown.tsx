@@ -1,4 +1,4 @@
-import React, { ReactElement, MouseEvent } from 'react'
+import React, { ReactElement } from 'react'
 import { FC, useRef, useState, useEffect } from 'react'
 import styled, { css } from 'styled-components'
 

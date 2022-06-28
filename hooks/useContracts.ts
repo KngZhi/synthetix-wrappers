@@ -8,17 +8,13 @@ import {
     ETH_WRAPPER_L2,
     LUSD_WRAPPER_L1,
     LUSD_WRAPPER_L2,
-    ETH_USD_L2_Contract,
-    ETH_USD_L1_CONTRACT,
-    SUSD_USD_L2_Contract,
-    SUSD_USD_L1_Contract,
     ETH_WRAPPER_L1_CONTRACT,
 } from '../constants/contracts'
 import EthWrapperL1ABI from '../abis/eth-wrapper-l1.json'
 import EthWrapperL2ABI from '../abis/eth-wrapper-l2.json'
 import LUSDWrapperL1ABI from '../abis/lusd-wrapper-l1.json'
 import LUSDWrapperL2ABI from '../abis/lusd-wrapper-l2.json'
-import { formatUnits, Result } from 'ethers/lib/utils'
+import { Result } from 'ethers/lib/utils'
 
 type ContractSetup = {
     addressOrName: string;
@@ -66,26 +62,6 @@ function getContractSetup(token: Token, chainId: number): ContractSetup {
             break
     }
     return contractSetup
-}
-
-function getPriceContractSetup(token: Token, chainId: SupportedChainId.MAINNET | SupportedChainId.OPTIMISM): ContractSetup {
-    if (!(chainId in SupportedChainId)) {
-        return ETH_USD_L1_CONTRACT 
-    }
-
-    const chainTokenContract = {
-        [SupportedChainId.MAINNET]: {
-            'eth': ETH_USD_L1_CONTRACT,
-            'susd': SUSD_USD_L1_Contract,
-        },
-        [SupportedChainId.OPTIMISM]: {
-            'eth': ETH_USD_L2_Contract,
-            'seth': ETH_USD_L2_Contract,
-            'susd': SUSD_USD_L2_Contract,
-        }
-    }
-
-    return chainTokenContract[chainId][token.key]
 }
 
 interface BaseContractInterface {
@@ -145,13 +121,4 @@ export function useTokenContract(
         mintFeeRate,
         maxTokenAmount,
     }
-}
-
-export function useTokenPrice(token: Token) {
-    const [activeNetwork] = useRecoilState(networkState)
-    const contract = getPriceContractSetup(token, activeNetwork?.id)
-    const { data } = useContractRead(contract, 'latestAnswer')
-    const { data: unit } = useContractRead(contract, 'decimals')
-
-    return { data: (data && unit) ? formatUnits(data, unit) : '0.0', rawData: data }
 }

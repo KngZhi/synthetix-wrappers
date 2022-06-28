@@ -1,10 +1,9 @@
-import web3 from 'web3'
 import Link from 'next/link'
 import { FC, useEffect, useMemo, useState, ChangeEvent } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import styled, { css } from 'styled-components'
 import Image from 'next/image'
-import { useBalance, useSigner, useProvider } from 'wagmi'
+import { useBalance } from 'wagmi'
 
 import { Tooltip } from '@nextui-org/react'
 
@@ -32,7 +31,7 @@ import {
   PairToken,
 } from '../constants/token'
 
-import { useTokenContract, useTokenPrice } from '../hooks/useContracts'
+import { useTokenContract } from '../hooks/useContracts'
 
 type WrapprProps = {
   onTVLClick: () => void
@@ -90,7 +89,7 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
     setTargetToken(targetTokens[srcTokenIdx])
   }, [srcTokenIdx, srcTokens, targetTokens])
 
-  const { data: srcTokenPrice } = useTokenPrice(srcToken)
+  // const { data: srcTokenPrice } = useTokenPrice(srcToken)
 
   // const { mint, burn } = useTokenContract(srcToken, signer, provider)
 
@@ -129,9 +128,6 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
   const srcBalanceValue: string = srcBalance?.formatted || '0'
   const targetBalanceValue: string = targetBalance?.formatted || '0'
   const maxWrappable = 80
-  const wrapUSDValue: string = srcTokenPrice
-    ? (parseFloat(srcTokenPrice) * parseFloat(tokenValue)).toFixed(2)
-    : '...'
 
   /* Capacity */
   const capacityUtilised = '80,000'
@@ -249,7 +245,6 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
           </BlackContainerRow>
           <BlackContainerRow>
             <span>Max wrappable: {maxWrappable}Ξ</span>
-            <span>{wrapUSDValue === '' ? '' : `$${wrapUSDValue}`}</span>
           </BlackContainerRow>
         </BlackContainer>
         <ArrowButton
@@ -296,9 +291,6 @@ const Wrappr: FC<WrapprProps> = ({ onTVLClick }) => {
             >
               <Image src={BlueInfo} alt="info-icon" priority={true} />
             </Tooltip>
-            <span className="big align-right">
-              {wrapUSDValue === '' ? '' : `$${wrapUSDValue}`}
-            </span>
           </StyledBlackContainerRow>
         </BlackContainer>
         <ActionButton disabled={!isActionAllowed()} onClick={handleWrapClick}>
