@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import Image from 'next/image'
-import Arrows from '../../public/images/utils/arrows.svg'
+import Arrows from '../public/images/utils/arrows.svg'
 const Button = styled.button`
   display: flex;
   align-items: center;

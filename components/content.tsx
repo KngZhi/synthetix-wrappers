@@ -7,7 +7,7 @@ import { useBalance } from 'wagmi'
 import { Tooltip } from '@nextui-org/react'
 
 import { Button } from './Button'
-import ArrowButton from './Button/ArrowButton'
+import ArrowButton from './ArrowButton'
 
 import { DefaultDropdownMenu } from './Dropdown'
 import NumericInput from '../components/NumericInput'
