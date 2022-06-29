@@ -26,8 +26,10 @@ const Container = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
+  align-items: center;
   width: 100%;
-  padding: 40px;
+  margin-top: 40px;
+  padding: 0 40px;
 `
 
 const SquareButton = styled(Button)`
