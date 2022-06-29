@@ -1,6 +1,7 @@
 import React, { ReactElement } from 'react'
-import { FC, useRef, useState, useEffect } from 'react'
+import { FC, useRef, useState } from 'react'
 import styled, { css } from 'styled-components'
+import { useOnClickOutside } from 'usehooks-ts'
 
 type DefaultDropdownMenuProps = {
   trigger: ReactElement
@@ -10,8 +11,6 @@ type DefaultDropdownMenuProps = {
   dropdownCls?: string
   offset?: number
 }
-
-// TODO: rewrite this as flyout component
 
 const DefaultDropdownMenu: FC<DefaultDropdownMenuProps> = ({
   trigger,
@@ -26,28 +25,7 @@ const DefaultDropdownMenu: FC<DefaultDropdownMenuProps> = ({
   const handleClose = () => setIsActive(false)
   const handleOpen = () => setIsActive(true)
 
-  useEffect(() => {
-    const pageClickEvent = (e: Event) => {
-      console.log(e)
-      
-      // If the active element exists and is clicked outside of
-      if (
-        dropdownRef.current !== null &&
-        !dropdownRef.current.contains(e.target as Node)
-      ) {
-        handleClose()
-      }
-    }
-
-    // If the item is active (ie open) then listen for clicks
-    if (isActive) {
-      window.addEventListener('click', pageClickEvent)
-    }
-
-    return () => {
-      window.removeEventListener('click', pageClickEvent)
-    }
-  }, [isActive, dropdownRef])
+  useOnClickOutside(dropdownRef, handleClose)
 
   return (
     <DropdownContainer ref={dropdownRef} className={className}>
