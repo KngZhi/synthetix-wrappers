@@ -18,6 +18,7 @@ specifiers:
   eslint: 8.17.0
   eslint-config-next: 12.1.6
   eslint-config-react-app: ^7.0.1
+  ethers: ^5.6.9
   husky: ^8.0.0
   next: 12.1.6
   postcss: ^8.4.14
@@ -44,6 +45,7 @@ dependencies:
   '@walletconnect/web3-provider': 1.7.8
   copy-to-clipboard: 3.3.1
   dotenv: 16.0.1
+  ethers: 5.6.9
   next: 12.1.6_xab2ksyqfwgnu3ykyybaqku6vm
   react: 18.1.0
   react-dom: 18.1.0_react@18.1.0
@@ -54,7 +56,7 @@ dependencies:
   styled-components: 5.3.5_ef5jwxihqo6n7gxfmzogljlgcm
   tsx: 3.5.0
   usehooks-ts: 2.6.0_react@18.1.0
-  wagmi: 0.4.11_ef5jwxihqo6n7gxfmzogljlgcm
+  wagmi: 0.4.11_4guzfpg65vmwyxlmcox62jbgfi
   web3: 1.7.3
 
 devDependencies:
@@ -3009,7 +3011,7 @@ packages:
       eslint-visitor-keys: 3.3.0
     dev: true
 
-  /@wagmi/core/0.3.7_mx7p5gtt35d53iysednsncjuw4:
+  /@wagmi/core/0.3.7_omdg3vftt2nm4oexip3ked3hti:
     resolution: {integrity: sha512-RJAaypcQK0OA/ezpgNz4Smk4rUUMf9IXapLR2PtDLUWjJxI2Xw5l+Pq4t6xOvJt6fNO1GKM0iRjUaUN37py0+w==}
     peerDependencies:
       '@coinbase/wallet-sdk': '>=3.2.0'
@@ -3023,6 +3025,7 @@ packages:
     dependencies:
       '@coinbase/wallet-sdk': 3.2.0
       '@walletconnect/ethereum-provider': 1.7.8
+      ethers: 5.6.9
       eventemitter3: 4.0.7
       zustand: 4.0.0-rc.1_react@18.1.0
     transitivePeerDependencies:
@@ -8758,15 +8761,16 @@ packages:
       extsprintf: 1.3.0
     dev: false
 
-  /wagmi/0.4.11_ef5jwxihqo6n7gxfmzogljlgcm:
+  /wagmi/0.4.11_4guzfpg65vmwyxlmcox62jbgfi:
     resolution: {integrity: sha512-5GTA7ugsRvnza660Bgy4WKYlS3CodZSw/bVNFGaICJTi3DX/8dO0veCQsSzwQzh+koDgYg0ZRNTLbHH7VR+bUg==}
     peerDependencies:
       ethers: '>=5.5.1'
       react: '>=17.0.0'
     dependencies:
       '@coinbase/wallet-sdk': 3.2.0
-      '@wagmi/core': 0.3.7_mx7p5gtt35d53iysednsncjuw4
+      '@wagmi/core': 0.3.7_omdg3vftt2nm4oexip3ked3hti
       '@walletconnect/ethereum-provider': 1.7.8
+      ethers: 5.6.9
       react: 18.1.0
       react-query: 4.0.0-beta.23_ef5jwxihqo6n7gxfmzogljlgcm
       use-sync-external-store: 1.1.0_react@18.1.0
