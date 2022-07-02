@@ -1,5 +1,6 @@
-import { ContractInterface, Signer, providers, } from 'ethers'
-import { useContractRead, useProvider } from 'wagmi'
+import { ContractInterface, Signer, providers, BigNumber, } from 'ethers'
+import { useContractRead, useContractWrite, useProvider } from 'wagmi'
+import { CallOverrides  } from 'ethers'
 import { SupportedChainId, Token } from '../constants/token'
 import { useRecoilState } from 'recoil'
 import { networkState } from '../store/index'
@@ -66,6 +67,11 @@ function getContractSetup(token: Token, chainId: number): ContractSetup {
     return contractSetup
 }
 
+type ContractArgs = {
+    args: BigNumber[] | BigNumber | undefined
+    overrides: CallOverrides
+}
+
 interface BaseContractInterface {
     burnFeeRate: string
     mintFeeRate: string
@@ -73,8 +79,8 @@ interface BaseContractInterface {
     maxTokenAmount: string
     calculateBurnFee?: () => Promise<string>
     calculateMintFee?: () => Promise<string>
-    mint?: () => string
-    burn?: () => string
+    mint: (args: ContractArgs) => void
+    burn: (args: ContractArgs) => void
 }
 
 enum Read {
@@ -99,7 +105,6 @@ export function useTokenContract(
 ): BaseContractInterface {
 
     const [activeNetwork] = useRecoilState(networkState)
-    // const provider = useProvider()
     const isL1 = useRecoilValue(isL1State)
     const contractSetup = getContractSetup(token, activeNetwork?.id)
 
@@ -107,6 +112,15 @@ export function useTokenContract(
         ...contractSetup,
         functionName: method,
     })
+
+    const useWrite = (functionName: string) => useContractWrite({
+        ...contractSetup,
+        functionName,
+    })
+
+    const { write: mint } = useWrite(Write.MINT)
+    const { write: burn } = useWrite(Write.BURN)
+
     const { data: burnFeeRate } = useRead(Read.BURN_FEE_RATE)
     const { data: capacity } = useRead(Read.CAPACITY)
     const { data: mintFeeRate } = useRead(Read.MINT_FEE_RATE)
@@ -117,6 +131,8 @@ export function useTokenContract(
     const { data: maxTokenAmount } = useRead(maxToken)
 
     return {
+        mint,
+        burn,
         burnFeeRate: format(burnFeeRate),
         capacity: format(capacity),
         mintFeeRate: format(mintFeeRate),

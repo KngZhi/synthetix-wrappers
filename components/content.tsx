@@ -3,7 +3,7 @@ import { useRecoilState, useRecoilValue } from 'recoil'
 import styled, { css } from 'styled-components'
 import Image from 'next/image'
 import { useBalance, useProvider, useSigner } from 'wagmi'
-import { Result } from 'ethers/lib/utils'
+import { parseEther, parseUnits, Result } from 'ethers/lib/utils'
 
 import { Tooltip } from '@nextui-org/react'
 
@@ -92,7 +92,7 @@ const Wrapper: FC<WrapperProps> = ({ onTVLClick }) => {
   const contract = useTokenContract(srcToken)
 
   useEffect(() => {
-    setFeeRate(isWrap ? contract.mintFeeRate : contract.burnFeeRate )
+    setFeeRate(isWrap ? contract.mintFeeRate : contract.burnFeeRate)
     setMaxWrappable(contract.maxTokenAmount)
     setMaxCapacity(contract.capacity)
   }, [contract, isWrap])
@@ -142,15 +142,19 @@ const Wrapper: FC<WrapperProps> = ({ onTVLClick }) => {
   }
 
   const handleWrapClick = async () => {
-    // const action = isWrap ? mint : burn
-    // const res = action('10000', {
-    //   gasPrice: web3.utils.toWei('2', 'Gwei'),
-    //   gasLimit: 500e3,
-    // })
+    const action = isWrap ? contract.mint : contract.burn
+    action({
+      args: parseEther(tokenValue),
+      overrides: {
+        gasPrice: parseUnits('2', 'gwei'),
+        gasLimit: 500e3,
+      },
+    })
   }
 
   const isActionAllowed = () => {
     if (isWalletConnected === false) return false
+    if (parseFloat(srcBalanceValue) === 0) return false
     if (parseFloat(tokenValue) <= 0) return false
 
     return true
