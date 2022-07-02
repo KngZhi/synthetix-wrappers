@@ -1,7 +1,7 @@
 import { FC, useEffect } from 'react'
 import styled from 'styled-components'
 import Image, { StaticImageData } from 'next/image'
-import { chain, useNetwork } from 'wagmi'
+import { chain, useNetwork, useSwitchNetwork } from 'wagmi'
 import { useRecoilValue, useRecoilState } from 'recoil'
 
 import { DefaultDropdownMenu } from './Dropdown'
@@ -69,7 +69,8 @@ export const NetworkSelector: FC<NetworkSelectorProps> = ({
   containerCls,
 }) => {
   const [activeNetwork, setActiveNetwork] = useRecoilState(networkState)
-  const { switchNetworkAsync, activeChain } = useNetwork()
+  const { chain } = useNetwork()
+  const { switchNetworkAsync, isSuccess } = useSwitchNetwork()
   const isWalletConnected = useRecoilValue(isWalletConnectedState)
 
   const onSwitchChain = async (chain: Network) => {
@@ -77,6 +78,9 @@ export const NetworkSelector: FC<NetworkSelectorProps> = ({
     if (isWalletConnected && switchNetworkAsync) {
       try {
         await switchNetworkAsync(id)
+        if (isSuccess) {
+          setActiveNetwork({ id, name })
+        }
       } catch (error) {
         console.error(error)
       }
@@ -86,10 +90,10 @@ export const NetworkSelector: FC<NetworkSelectorProps> = ({
   }
 
   useEffect(() => {
-    if (activeChain) {
-      setActiveNetwork({ id: activeChain.id, name: activeChain.name })
+    if (chain) {
+      setActiveNetwork({ id: chain.id, name: chain.name })
     }
-  }, [activeChain, setActiveNetwork])
+  }, [chain, setActiveNetwork])
 
   return (
     <DefaultDropdownMenu

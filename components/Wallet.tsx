@@ -34,16 +34,16 @@ export default function WalletButton() {
 
   const [profileVisible, setProfileVisible] = useState<boolean>(false)
 
-  const { connect, connectors, isConnecting, pendingConnector } = useConnect()
-  const { data: account } = useAccount()
+  const { connect, connectors, } = useConnect()
+  const { address } = useAccount()
 
   const { disconnect } = useDisconnect()
 
   useEffect(() => {
-    if (account?.address) {
-      setWalletAddress(account.address)
+    if (address) {
+      setWalletAddress(address)
     }
-  }, [account, setWalletAddress])
+  }, [address, setWalletAddress])
 
   const addr = truncateAddress(walletAddress || '')
   function handleChangeWallet() {
@@ -111,7 +111,7 @@ export default function WalletButton() {
               <WalletSelectorButton
                 key={connector.id}
                 onClick={() => {
-                  connect(connector)
+                  connect({ connector })
                   closeHandle()
                 }}
               >
@@ -119,9 +119,6 @@ export default function WalletButton() {
                 <span>
                   {connector.name}
                   {!connector.ready && ' (unsupported)'}
-                  {isConnecting &&
-                    connector.id === pendingConnector?.id &&
-                    ' (connecting)'}
                 </span>
               </WalletSelectorButton>
             ))}
