@@ -2,7 +2,8 @@ import { FC, useEffect, useMemo, useState, ChangeEvent } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import styled, { css } from 'styled-components'
 import Image from 'next/image'
-import { useBalance } from 'wagmi'
+import { useBalance, useProvider, useSigner } from 'wagmi'
+import { Result } from 'ethers/lib/utils'
 
 import { Tooltip } from '@nextui-org/react'
 
@@ -66,6 +67,9 @@ const Wrapper: FC<WrapperProps> = ({ onTVLClick }) => {
   const isWalletConnected = useRecoilValue(isWalletConnectedState)
   const tokenPairs = getTokenPairs(isWrap, isL1)
   const [srcTokenIdx, setSrcTokenIdx] = useState<number>(0)
+  const [feeRate, setFeeRate] = useState<string>('0')
+  const [maxWrappable, setMaxWrappable] = useState<string>('0')
+  const [maxCapacity, setMaxCapacity] = useState<string>('0')
 
   const srcTokens = useMemo(() => {
     return tokenPairs[0]
@@ -80,17 +84,18 @@ const Wrapper: FC<WrapperProps> = ({ onTVLClick }) => {
     targetTokens[srcTokenIdx]
   )
 
-  // const { data: signer } = useSigner()
-  // const provider = useProvider()
-
   useEffect(() => {
     setSrcToken(srcTokens[srcTokenIdx])
     setTargetToken(targetTokens[srcTokenIdx])
   }, [srcTokenIdx, srcTokens, targetTokens])
 
-  // const { data: srcTokenPrice } = useTokenPrice(srcToken)
+  const contract = useTokenContract(srcToken)
 
-  // const { mint, burn } = useTokenContract(srcToken, signer, provider)
+  useEffect(() => {
+    setFeeRate(isWrap ? contract.mintFeeRate : contract.burnFeeRate )
+    setMaxWrappable(contract.maxTokenAmount)
+    setMaxCapacity(contract.capacity)
+  }, [contract, isWrap])
 
   const [tokenValue, setTokenValue] = useState<string>('')
   const [walletAddress] = useRecoilState(walletAddressState)
@@ -125,15 +130,12 @@ const Wrapper: FC<WrapperProps> = ({ onTVLClick }) => {
 
   const srcBalanceValue: string = srcBalance?.formatted || '0'
   const targetBalanceValue: string = targetBalance?.formatted || '0'
-  const maxWrappable = 80
 
   /* Capacity */
   const capacityUtilised = '80,000'
-  const maxCapacity = '200,000'
+  // const maxCapacity = '200,000'
   const capacityPercentage: number =
     (parseInt(capacityUtilised, 10) / parseInt(maxCapacity, 10)) * 100
-
-  const feeRate = 0
 
   const onMaxClick = () => {
     setTokenValue(srcBalanceValue)
@@ -145,7 +147,6 @@ const Wrapper: FC<WrapperProps> = ({ onTVLClick }) => {
     //   gasPrice: web3.utils.toWei('2', 'Gwei'),
     //   gasLimit: 500e3,
     // })
-    // console.log(res.hash)
   }
 
   const isActionAllowed = () => {

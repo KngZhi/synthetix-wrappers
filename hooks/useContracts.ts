@@ -1,5 +1,5 @@
 import { ContractInterface, Signer, providers, } from 'ethers'
-import { useContractRead } from 'wagmi'
+import { useContractRead, useProvider } from 'wagmi'
 import { SupportedChainId, Token } from '../constants/token'
 import { useRecoilState } from 'recoil'
 import { networkState } from '../store/index'
@@ -14,7 +14,9 @@ import EthWrapperL1ABI from '../abis/eth-wrapper-l1.json'
 import EthWrapperL2ABI from '../abis/eth-wrapper-l2.json'
 import LUSDWrapperL1ABI from '../abis/lusd-wrapper-l1.json'
 import LUSDWrapperL2ABI from '../abis/lusd-wrapper-l2.json'
-import { Result } from 'ethers/lib/utils'
+import { formatUnits, Result } from 'ethers/lib/utils'
+import { isL1State } from '../store/index'
+import { useRecoilValue } from 'recoil'
 
 type ContractSetup = {
     addressOrName: string;
@@ -65,10 +67,10 @@ function getContractSetup(token: Token, chainId: number): ContractSetup {
 }
 
 interface BaseContractInterface {
-    burnFeeRate: Result | undefined
-    mintFeeRate: Result | undefined
-    capacity: Result | undefined
-    maxTokenAmount: Result | undefined
+    burnFeeRate: string
+    mintFeeRate: string
+    capacity: string
+    maxTokenAmount: string
     calculateBurnFee?: () => Promise<string>
     calculateMintFee?: () => Promise<string>
     mint?: () => string
@@ -76,49 +78,49 @@ interface BaseContractInterface {
 }
 
 enum Read {
+    BURN_FEE_RATE = 'burnFeeRate',
     CALCULATE_BURN_FEE = 'calculateBurnFee',
     CALCULATE_MINT_FEE = 'calculateMintFee',
-    MINT_FEE_RATE = 'mintFeeRate',
-    BURN_FEE_RATE = 'burnFeeRate',
-    MAX_ETH = 'maxETH',
     CAPACITY = 'capacity',
+    DECIMAL = 'decimal',
     GET_RESERVES = 'getReserves',
-    MAX_TOKEN_AMOUNT = 'maxTokenAmount'
+    MAX_ETH = 'maxETH',
+    MAX_TOKEN_AMOUNT = 'maxTokenAmount',
+    MINT_FEE_RATE = 'mintFeeRate',
 }
 
-// enum Write {
-//     BURN = 'burn',
-//     MINT = 'mint',
-// }
+enum Write {
+    BURN = 'burn',
+    MINT = 'mint',
+}
 
 export function useTokenContract(
     token: Token,
-    signer: Signer,
-    provider: providers.Provider
 ): BaseContractInterface {
 
     const [activeNetwork] = useRecoilState(networkState)
+    // const provider = useProvider()
+    const isL1 = useRecoilValue(isL1State)
     const contractSetup = getContractSetup(token, activeNetwork?.id)
-    // const readContract = useContract({
-    //     ...contractSetup,
-    //     signerOrProvider: provider,
-    // })
 
-    // const writeContract = useContract({
-    //     ...contractSetup,
-    //     signerOrProvider: signer || provider,
-    // })
-    const useRead = (field: string) => useContractRead(contractSetup, field)
+    const useRead = (method: string) => useContractRead({
+        ...contractSetup,
+        functionName: method,
+    })
     const { data: burnFeeRate } = useRead(Read.BURN_FEE_RATE)
     const { data: capacity } = useRead(Read.CAPACITY)
     const { data: mintFeeRate } = useRead(Read.MINT_FEE_RATE)
-    const maxToken = token.name === 'eth' ? Read.MAX_ETH : Read.MAX_TOKEN_AMOUNT
+    const maxToken = (isL1 && token.key === 'eth')
+        ? Read.MAX_ETH
+        : Read.MAX_TOKEN_AMOUNT
+    console.log(maxToken, token.key)
+    const format = (data: Result | undefined) => data ? formatUnits(data, token.decimals) : '0'
     const { data: maxTokenAmount } = useRead(maxToken)
 
     return {
-        burnFeeRate,
-        capacity,
-        mintFeeRate,
-        maxTokenAmount,
+        burnFeeRate: format(burnFeeRate),
+        capacity: format(capacity),
+        mintFeeRate: format(mintFeeRate),
+        maxTokenAmount: format(maxTokenAmount),
     }
 }

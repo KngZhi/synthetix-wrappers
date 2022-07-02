@@ -11,11 +11,11 @@ export const LUSD_ADDRESS = '0x5f98805a4e8be255a32880fdec7f6728c6568ba0'
 export const sUSD_ADDRESS = '0x57ab1ec28d129707052df4df418d58a2d46d5f51'
 
 export enum SupportedChainId {
-  MAINNET = 1,
-  KOVAN = 42,
+	MAINNET = 1,
+	KOVAN = 42,
 
-  OPTIMISM = 10,
-  OPTIMISTIC_KOVAN = 69,
+	OPTIMISM = 10,
+	OPTIMISTIC_KOVAN = 69,
 }
 
 
@@ -29,17 +29,19 @@ export enum Tokens {
 export type TokenKey = 'seth' | 'lusd' | 'eth' | 'susd'
 
 export interface Token {
-  name: string;
-  key: string;
-  address: TokenAddress;
-  src: StaticImageData;
+	name: string;
+	key: string;
+	address: TokenAddress;
+	src: StaticImageData;
+	decimals: number;
 }
 
-export const LUSD = {
+export const LUSD: Token = {
 	name: 'LUSD',
 	key: 'lusd',
 	address: LUSD_ADDRESS,
 	src: LUSDLogo,
+	decimals: 18,
 }
 
 export const sETH = {
@@ -47,6 +49,7 @@ export const sETH = {
 	key: 'seth',
 	address: sETH_ADDRESS,
 	src: ETHLogo,
+	decimals: 18,
 }
 
 export const ETH = {
@@ -54,6 +57,7 @@ export const ETH = {
 	key: 'eth',
 	address: '',
 	src: ETHLogo,
+	decimals: 18,
 }
 
 export const sUSD = {
@@ -61,6 +65,7 @@ export const sUSD = {
 	key: 'susd',
 	address: sUSD_ADDRESS,
 	src: sUSDLogo,
+	decimals: 18,
 }
 
 export type PairToken = [Token, Token]
