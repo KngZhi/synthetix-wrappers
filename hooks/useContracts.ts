@@ -113,7 +113,6 @@ export function useTokenContract(
     const maxToken = (isL1 && token.key === 'eth')
         ? Read.MAX_ETH
         : Read.MAX_TOKEN_AMOUNT
-    console.log(maxToken, token.key)
     const format = (data: Result | undefined) => data ? formatUnits(data, token.decimals) : '0'
     const { data: maxTokenAmount } = useRead(maxToken)
 
