@@ -34,7 +34,7 @@ specifiers:
   tsx: ^3.5.0
   typescript: 4.7.3
   usehooks-ts: ^2.6.0
-  wagmi: ^0.4.11
+  wagmi: '0.5'
   web3: ^1.7.3
 
 dependencies:
@@ -56,7 +56,7 @@ dependencies:
   styled-components: 5.3.5_ef5jwxihqo6n7gxfmzogljlgcm
   tsx: 3.5.0
   usehooks-ts: 2.6.0_react@18.1.0
-  wagmi: 0.4.11_4guzfpg65vmwyxlmcox62jbgfi
+  wagmi: 0.5.5_4guzfpg65vmwyxlmcox62jbgfi
   web3: 1.7.3
 
 devDependencies:
@@ -1414,6 +1414,13 @@ packages:
     dependencies:
       regenerator-runtime: 0.13.9
 
+  /@babel/runtime/7.18.6:
+    resolution: {integrity: sha512-t9wi7/AW6XtKahAe20Yw0/mMljKq0B1r2fPdvaAdV/KPDZewFXdaaa6K7lxmZBZ8FBNpCiAT6iHPmd6QO9bKfQ==}
+    engines: {node: '>=6.9.0'}
+    dependencies:
+      regenerator-runtime: 0.13.9
+    dev: false
+
   /@babel/runtime/7.9.6:
     resolution: {integrity: sha512-64AF1xY3OAkFHqOb9s4jpgk1Mm5vDZ4L3acHvAml+53nO1XbXLuDodsVpO4OIUsmemlUHMxNdYMNJmsvOwLrvQ==}
     dependencies:
@@ -1488,13 +1495,14 @@ packages:
       '@babel/helper-validator-identifier': 7.16.7
       to-fast-properties: 2.0.0
 
-  /@coinbase/wallet-sdk/3.2.0:
-    resolution: {integrity: sha512-uw9rdsfzXsdmC9FblMt2UH4094vLl9h3i1za5A2MaC8Ak1X/E1QbGr1oi64QAx9HD+M75zmy506F+zT0/s5dpQ==}
+  /@coinbase/wallet-sdk/3.3.0:
+    resolution: {integrity: sha512-Prmxs5eYRxe5i+kDSsny97oPG4Pa5PhLmNDx8f7UQrvlPowGy5Tg0gHOqCie6ck2shVMdW8sKJ+RCLIRZ9kIjA==}
     engines: {node: '>= 10.0.0'}
     dependencies:
       '@metamask/safe-event-emitter': 2.0.0
       bind-decorator: 1.0.11
       bn.js: 5.2.1
+      buffer: 6.0.3
       clsx: 1.1.1
       eth-block-tracker: 4.4.3
       eth-json-rpc-filters: 4.2.2
@@ -1502,10 +1510,11 @@ packages:
       js-sha256: 0.9.0
       json-rpc-engine: 6.1.0
       keccak: 3.0.2
-      preact: 10.7.3
-      qs: 6.10.5
+      preact: 10.8.2
+      qs: 6.11.0
       rxjs: 6.6.7
       stream-browserify: 3.0.0
+      util: 0.12.4
     transitivePeerDependencies:
       - '@babel/core'
       - encoding
@@ -2017,7 +2026,7 @@ packages:
       '@json-rpc-tools/utils': 1.7.6
       axios: 0.21.4
       safe-json-utils: 1.1.1
-      ws: 7.5.3
+      ws: 7.5.8
     transitivePeerDependencies:
       - bufferutil
       - debug
@@ -3011,10 +3020,10 @@ packages:
       eslint-visitor-keys: 3.3.0
     dev: true
 
-  /@wagmi/core/0.3.7_omdg3vftt2nm4oexip3ked3hti:
-    resolution: {integrity: sha512-RJAaypcQK0OA/ezpgNz4Smk4rUUMf9IXapLR2PtDLUWjJxI2Xw5l+Pq4t6xOvJt6fNO1GKM0iRjUaUN37py0+w==}
+  /@wagmi/core/0.4.4_q45v7wxmmp2eib4fr6ra2nda2u:
+    resolution: {integrity: sha512-F5GDev6ylp3ZhvLnZriQYPrT0aHGlgcxahMozraO4snQizyMp6CTJ7gJHyL/7at+rDXDqI6Kb5Yy09GGfoaQFA==}
     peerDependencies:
-      '@coinbase/wallet-sdk': '>=3.2.0'
+      '@coinbase/wallet-sdk': '>=3.3.0'
       '@walletconnect/ethereum-provider': '>=1.7.5'
       ethers: '>=5.5.1'
     peerDependenciesMeta:
@@ -3023,7 +3032,7 @@ packages:
       '@walletconnect/ethereum-provider':
         optional: true
     dependencies:
-      '@coinbase/wallet-sdk': 3.2.0
+      '@coinbase/wallet-sdk': 3.3.0
       '@walletconnect/ethereum-provider': 1.7.8
       ethers: 5.6.9
       eventemitter3: 4.0.7
@@ -3764,7 +3773,7 @@ packages:
   /broadcast-channel/3.7.0:
     resolution: {integrity: sha512-cIAKJXAxGJceNZGTZSBzMxzyOn72cVgPnKx4dc6LRjQgbaJUQqhy5rzL3zbMxkMWsGKkv2hSFkPRMEXfoMZ2Mg==}
     dependencies:
-      '@babel/runtime': 7.18.3
+      '@babel/runtime': 7.18.6
       detect-node: 2.1.0
       js-sha3: 0.8.0
       microseconds: 0.2.0
@@ -3887,6 +3896,13 @@ packages:
 
   /buffer/5.7.1:
     resolution: {integrity: sha512-EHcyIPBQ4BSGlvjB16k5KgAJ27CIsHY/2JBmCRReo48y9rQ3MaUzWX3KVlBa4U7MyX02HdVj0K7C3WaB3ju7FQ==}
+    dependencies:
+      base64-js: 1.5.1
+      ieee754: 1.2.1
+    dev: false
+
+  /buffer/6.0.3:
+    resolution: {integrity: sha512-FTiCpNxtwiZZHEZbcbTIcZjERVICn9yq/pDFkTl95/AxzD1naBctN7YO68riM/gLSDY7sdrMby8hofADYuuqOA==}
     dependencies:
       base64-js: 1.5.1
       ieee754: 1.2.1
@@ -6773,7 +6789,7 @@ packages:
   /match-sorter/6.3.1:
     resolution: {integrity: sha512-mxybbo3pPNuA+ZuCUhm5bwNkXrJTbsk5VWbR5wiwz/GC6LIiegBGn2w3O08UG/jdbYLinw51fSQ5xNU1U3MgBw==}
     dependencies:
-      '@babel/runtime': 7.18.3
+      '@babel/runtime': 7.18.6
       remove-accents: 0.4.2
     dev: false
 
@@ -7454,8 +7470,8 @@ packages:
     resolution: {integrity: sha512-WKrRpCSwL2t3tpOOGhf2WfTpcmbpxaWtDbdJdKdjd0aEiTkvOmS4NBkG6kzlaAHI9AkQ3iVqbFWM3Ei7mZ4o1Q==}
     dev: false
 
-  /preact/10.7.3:
-    resolution: {integrity: sha512-giqJXP8VbtA1tyGa3f1n9wiN7PrHtONrDyE3T+ifjr/tTkg+2N4d/6sjC9WyJKv8wM7rOYDveqy5ZoFmYlwo4w==}
+  /preact/10.8.2:
+    resolution: {integrity: sha512-AKGt0BsDSiAYzVS78jZ9qRwuorY2CoSZtf1iOC6gLb/3QyZt+fLT09aYJBjRc/BEcRc4j+j3ggERMdNE43i1LQ==}
     dev: false
 
   /precond/0.2.3:
@@ -7573,8 +7589,8 @@ packages:
       side-channel: 1.0.4
     dev: false
 
-  /qs/6.10.5:
-    resolution: {integrity: sha512-O5RlPh0VFtR78y79rgcgKK4wbAI0C5zGVLztOIdpWX6ep368q5Hv6XRxDvXuZ9q3C6v+e3n8UfZZJw7IIG27eQ==}
+  /qs/6.11.0:
+    resolution: {integrity: sha512-MvjoMCJwEarSbUYk5O+nmoSzSutSsTwF85zcHPQ9OrlFoZOYIjaqBAJIqIXjptyD5vThxGq52Xu/MaJzRkIk4Q==}
     engines: {node: '>=0.6'}
     dependencies:
       side-channel: 1.0.4
@@ -7688,13 +7704,13 @@ packages:
       react-native:
         optional: true
     dependencies:
-      '@babel/runtime': 7.18.3
+      '@babel/runtime': 7.18.6
       '@types/use-sync-external-store': 0.0.3
       broadcast-channel: 3.7.0
       match-sorter: 6.3.1
       react: 18.1.0
       react-dom: 18.1.0_react@18.1.0
-      use-sync-external-store: 1.1.0_react@18.1.0
+      use-sync-external-store: 1.2.0_react@18.1.0
     dev: false
 
   /react-transition-group/4.4.2_ef5jwxihqo6n7gxfmzogljlgcm:
@@ -8639,7 +8655,7 @@ packages:
   /unload/2.2.0:
     resolution: {integrity: sha512-B60uB5TNBLtN6/LsgAf3udH9saB5p7gqJwcFfbOEZ8BcBHnGwCf6G/TGiEqkRAxX7zAFIUtzdrXQSdL3Q/wqNA==}
     dependencies:
-      '@babel/runtime': 7.18.3
+      '@babel/runtime': 7.18.6
       detect-node: 2.1.0
     dev: false
 
@@ -8678,6 +8694,14 @@ packages:
 
   /use-sync-external-store/1.1.0_react@18.1.0:
     resolution: {integrity: sha512-SEnieB2FPKEVne66NpXPd1Np4R1lTNKfjuy3XdIoPQKYBAFdzbzSZlSn1KJZUiihQLQC5Znot4SBz1EOTBwQAQ==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.1.0
+    dev: false
+
+  /use-sync-external-store/1.2.0_react@18.1.0:
+    resolution: {integrity: sha512-eEgnFxGQ1Ife9bzYs6VLi8/4X6CObHMw9Qr9tPY43iKwsPw8xE8+EFsf/2cFZ5S3esXgpWgtSCtLNS41F+sKPA==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
     dependencies:
@@ -8761,19 +8785,19 @@ packages:
       extsprintf: 1.3.0
     dev: false
 
-  /wagmi/0.4.11_4guzfpg65vmwyxlmcox62jbgfi:
-    resolution: {integrity: sha512-5GTA7ugsRvnza660Bgy4WKYlS3CodZSw/bVNFGaICJTi3DX/8dO0veCQsSzwQzh+koDgYg0ZRNTLbHH7VR+bUg==}
+  /wagmi/0.5.5_4guzfpg65vmwyxlmcox62jbgfi:
+    resolution: {integrity: sha512-nCp3o9RNrIjFBSIUvOD3M9CEWR3IW7Y21mpLtsWcbr0oNociAzWIrPg9dZcAc/FD0HtFOdP1l0eWfIMUyX3Dag==}
     peerDependencies:
       ethers: '>=5.5.1'
       react: '>=17.0.0'
     dependencies:
-      '@coinbase/wallet-sdk': 3.2.0
-      '@wagmi/core': 0.3.7_omdg3vftt2nm4oexip3ked3hti
+      '@coinbase/wallet-sdk': 3.3.0
+      '@wagmi/core': 0.4.4_q45v7wxmmp2eib4fr6ra2nda2u
       '@walletconnect/ethereum-provider': 1.7.8
       ethers: 5.6.9
       react: 18.1.0
       react-query: 4.0.0-beta.23_ef5jwxihqo6n7gxfmzogljlgcm
-      use-sync-external-store: 1.1.0_react@18.1.0
+      use-sync-external-store: 1.2.0_react@18.1.0
     transitivePeerDependencies:
       - '@babel/core'
       - bufferutil
@@ -9213,6 +9237,19 @@ packages:
         optional: true
     dev: false
 
+  /ws/7.5.8:
+    resolution: {integrity: sha512-ri1Id1WinAX5Jqn9HejiGb8crfRio0Qgu8+MtL36rlTA6RLsMdWt1Az/19A2Qij6uSHUMphEFaTKa4WG+UNHNw==}
+    engines: {node: '>=8.3.0'}
+    peerDependencies:
+      bufferutil: ^4.0.1
+      utf-8-validate: ^5.0.2
+    peerDependenciesMeta:
+      bufferutil:
+        optional: true
+      utf-8-validate:
+        optional: true
+    dev: false
+
   /xhr-request-promise/0.1.3:
     resolution: {integrity: sha512-YUBytBsuwgitWtdRzXDDkWAXzhdGB8bYm0sSzMPZT7Z2MBjMSTHFsyCT1yCRATY+XC69DUrQraRAEgcoCRaIPg==}
     dependencies:
@@ -9318,7 +9355,7 @@ packages:
     dev: false
 
   github.com/ethereumjs/ethereumjs-abi/ee3994657fa7a427238e6ba92a84d0b529bbcde0:
-    resolution: {commit: ee3994657fa7a427238e6ba92a84d0b529bbcde0, repo: git+ssh://git@github.com/ethereumjs/ethereumjs-abi.git, type: git}
+    resolution: {tarball: https://codeload.github.com/ethereumjs/ethereumjs-abi/tar.gz/ee3994657fa7a427238e6ba92a84d0b529bbcde0}
     name: ethereumjs-abi
     version: 0.6.8
     dependencies:
