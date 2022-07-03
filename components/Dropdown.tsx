@@ -1,10 +1,10 @@
 import React, { ReactElement } from 'react'
-import { FC, useRef, useState } from 'react'
+import { FC, useRef } from 'react'
 import styled, { css } from 'styled-components'
-import { useOnClickOutside } from 'usehooks-ts'
+import { useOnClickOutside, useBoolean } from 'usehooks-ts'
 
 type DefaultDropdownMenuProps = {
-  trigger: ReactElement
+  trigger: JSX.Element
   dropList: ReactElement
   className?: string
   triggerCls?: string
@@ -21,22 +21,20 @@ const DefaultDropdownMenu: FC<DefaultDropdownMenuProps> = ({
   offset = 0,
 }) => {
   const dropdownRef = useRef<HTMLDivElement>(null)
-  const [isActive, setIsActive] = useState(false)
-  const handleClose = () => setIsActive(false)
-  const handleOpen = () => setIsActive(true)
+  const { value: isActive, setTrue, setFalse } = useBoolean(false)
 
-  useOnClickOutside(dropdownRef, handleClose)
+  useOnClickOutside(dropdownRef, setFalse)
 
   return (
     <DropdownContainer ref={dropdownRef} className={className}>
-      <DropdownTrigger className={triggerCls} onClick={handleOpen}>
+      <DropdownTrigger className={triggerCls} onClick={setTrue}>
         {trigger}
       </DropdownTrigger>
       <DropdownList
         className={dropdownCls}
         offset={offset}
         active={isActive}
-        onClick={handleClose}
+        onClick={setFalse}
       >
         {dropList}
       </DropdownList>

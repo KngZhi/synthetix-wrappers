@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useState, ChangeEvent } from 'react'
+import { useEffect, useMemo, useState, ChangeEvent } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import styled, { css } from 'styled-components'
 import Image from 'next/image'
@@ -61,7 +61,7 @@ function getTokenPairs(isWrap: boolean, isL1: boolean): [Tokens, Tokens] {
   return [getTokens(0), getTokens(1)]
 }
 
-const Wrapper: FC<WrapperProps> = ({ onTVLClick }) => {
+const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
   const [isWrap, setIsWrap] = useState<boolean>(true)
   const isL1 = useRecoilValue(isL1State)
   const isWalletConnected = useRecoilValue(isWalletConnectedState)
