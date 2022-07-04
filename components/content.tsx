@@ -69,6 +69,7 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
   const [feeRate, setFeeRate] = useState<string>('0')
   const [maxWrappable, setMaxWrappable] = useState<string>('0')
   const [maxCapacity, setMaxCapacity] = useState<string>('0')
+  const [capacityUtilised, setCapacityUtilised] = useState<string>('0')
 
   const srcTokens = useMemo(() => {
     return tokenPairs[0]
@@ -92,11 +93,12 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
 
   useEffect(() => {
     setFeeRate(isWrap ? contract.mintFeeRate : contract.burnFeeRate)
-    setMaxWrappable(contract.maxTokenAmount)
-    setMaxCapacity(contract.capacity)
+    setMaxCapacity(contract.maxTokenAmount)
+    setCapacityUtilised(contract.capacityUtilised)
   }, [contract, isWrap])
 
-  const [tokenValue, setTokenValue] = useState<string>('')
+  const [srcTokenValue, setSrcTokenValue] = useState<string>('')
+  const [targetTokenValue, setTargetTokenValue] = useState<string>('')
   const [walletAddress] = useRecoilState(walletAddressState)
 
   const changeToken = (idx: number) => {
@@ -131,10 +133,8 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
   const targetBalanceValue: string = targetBalance?.formatted || '0'
 
   /* Capacity */
-  const capacityUtilised = '80,000'
-  // const maxCapacity = '200,000'
   const capacityPercentage: number =
-    (parseInt(capacityUtilised, 10) / parseInt(maxCapacity, 10)) * 100
+    ((parseInt(capacityUtilised, 10) / parseInt(maxCapacity, 10)) * 100)
 
   const onMaxClick = () => {
     setTokenValue(srcBalanceValue)

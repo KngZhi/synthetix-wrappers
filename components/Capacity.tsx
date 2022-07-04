@@ -111,8 +111,7 @@ const GaugeProgress = styled.div<{ percentage: number }>`
       width: ${(props.percentage * 97) / 100}%;
 
       &:after {
-        content: '${props.percentage}%';
-        width: calc(100% + ${props.percentage.toString().length} * 1ch + 2ch);
+        content: '${props.percentage.toFixed(2)}%';
       }
     `}
 

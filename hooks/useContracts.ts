@@ -77,6 +77,7 @@ interface BaseContractInterface {
     mintFeeRate: string
     capacity: string
     maxTokenAmount: string
+    capacityUtilised: string
     calculateBurnFee?: () => Promise<string>
     calculateMintFee?: () => Promise<string>
     mint: (args: ContractArgs) => void
@@ -108,9 +109,10 @@ export function useTokenContract(
     const isL1 = useRecoilValue(isL1State)
     const contractSetup = getContractSetup(token, activeNetwork?.id)
 
-    const useRead = (method: string) => useContractRead({
+    const useRead = (method: string, args?: BigNumber) => useContractRead({
         ...contractSetup,
         functionName: method,
+        args
     })
 
     const useWrite = (functionName: string) => useContractWrite({
@@ -120,19 +122,20 @@ export function useTokenContract(
 
     const { write: mint } = useWrite(Write.MINT)
     const { write: burn } = useWrite(Write.BURN)
-
     const { data: burnFeeRate } = useRead(Read.BURN_FEE_RATE)
     const { data: capacity } = useRead(Read.CAPACITY)
     const { data: mintFeeRate } = useRead(Read.MINT_FEE_RATE)
     const maxToken = (isL1 && token.key === 'eth')
         ? Read.MAX_ETH
         : Read.MAX_TOKEN_AMOUNT
+    const { data: capacityUtilised }= useRead(Read.GET_RESERVES)
     const format = (data: Result | undefined) => data ? formatUnits(data, token.decimals) : '0'
     const { data: maxTokenAmount } = useRead(maxToken)
 
     return {
         mint,
         burn,
+        capacityUtilised: format(capacityUtilised),
         burnFeeRate: format(burnFeeRate),
         capacity: format(capacity),
         mintFeeRate: format(mintFeeRate),
