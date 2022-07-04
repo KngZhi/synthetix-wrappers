@@ -22,7 +22,6 @@ import {
 } from '../components/Currency'
 
 import LinkArrow from '../public/images/utils/link-arrow.svg'
-import Gear from '../public/images/utils/gear.svg'
 import DownArrowSmall from '../public/images/utils/down-arrow-small.svg'
 import BlueInfo from '../public/images/utils/blue-info.svg'
 import {
@@ -179,9 +178,6 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
       <WrapperContainerColumn>
         <WrapperContainerRow>
           <span>Wrapper</span>
-          <GearButton size="sm">
-            <Image src={Gear} alt="gear-icon" priority={true} />
-          </GearButton>
         </WrapperContainerRow>
         <BlackContainer>
           <BlackContainerRow>
@@ -475,10 +471,6 @@ const MaxButton = styled.button`
   &:hover {
     color: #828295;
   }
-`
-
-const GearButton = styled(Button)`
-  padding: 0px;
 `
 
 const ActionButton = styled(Button)<{ disabled: boolean }>`
