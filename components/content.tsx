@@ -106,10 +106,10 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
     resetMax()
   }
 
-  const resetMax = () => setTokenValue('')
+  const resetMax = () => setSrcTokenValue('')
 
   const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setTokenValue(e.target.value)
+    setSrcTokenValue(e.target.value)
   }
 
   const onWrapChange = (isWrap: boolean) => {
@@ -137,13 +137,13 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
     ((parseInt(capacityUtilised, 10) / parseInt(maxCapacity, 10)) * 100)
 
   const onMaxClick = () => {
-    setTokenValue(srcBalanceValue)
+    setSrcTokenValue(srcBalanceValue)
   }
 
   const handleWrapClick = async () => {
     const action = isWrap ? contract.mint : contract.burn
     action({
-      args: parseEther(tokenValue),
+      args: parseEther(srcTokenValue),
       overrides: {
         gasPrice: parseUnits('2', 'gwei'),
         gasLimit: 500e3,
@@ -154,7 +154,7 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
   const isActionAllowed = () => {
     if (isWalletConnected === false) return false
     if (parseFloat(srcBalanceValue) === 0) return false
-    if (parseFloat(tokenValue) <= 0) return false
+    if (parseFloat(srcTokenValue) <= 0) return false
 
     return true
   }
@@ -238,7 +238,7 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
               }
             />
             <NumericInput
-              value={tokenValue}
+              value={srcTokenValue}
               onChange={onInputChange}
               placeholder="0.0"
             />
