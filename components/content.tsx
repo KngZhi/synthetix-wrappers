@@ -2,8 +2,8 @@ import { useEffect, useMemo, useState, ChangeEvent } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import styled, { css } from 'styled-components'
 import Image from 'next/image'
-import { useBalance, useProvider, useSigner } from 'wagmi'
-import { parseEther, parseUnits, Result } from 'ethers/lib/utils'
+import { useBalance } from 'wagmi'
+import { parseEther, parseUnits } from 'ethers/lib/utils'
 
 import { Tooltip } from '@nextui-org/react'
 
@@ -99,7 +99,7 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
   }, [contract, isWrap])
 
   const [srcTokenValue, setSrcTokenValue] = useState<string>('')
-  const [targetTokenValue, setTargetTokenValue] = useState<string>('')
+  const [targetTokenValue] = useState<string>('')
   const [walletAddress] = useRecoilState(walletAddressState)
 
   const changeToken = (idx: number) => {
@@ -135,7 +135,7 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
 
   /* Capacity */
   const capacityPercentage: number =
-    ((parseInt(capacityUtilised, 10) / parseInt(maxCapacity, 10)) * 100)
+    (parseInt(capacityUtilised, 10) / parseInt(maxCapacity, 10)) * 100
 
   const onMaxClick = () => {
     setSrcTokenValue(srcBalanceValue)
@@ -272,7 +272,7 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
             <NumericInput
               disabled={true}
               placeholder="0.0"
-              value={targetBalanceValue}
+              value={targetTokenValue}
             />
           </BlackContainerRow>
           <StyledBlackContainerRow>
