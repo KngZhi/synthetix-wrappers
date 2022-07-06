@@ -8,6 +8,7 @@ import { DefaultDropdownMenu } from './Dropdown'
 import { NetWorkButton, NetWorkSelectorButton } from './Button'
 
 import { Network, networkState, isWalletConnectedState } from '../store/index'
+import { SupportedChainId } from '../constants/token'
 
 import EthereumLogo from '../public/images/logos/ethereum.svg'
 import OptimismLogo from '../public/images/logos/optimism.svg'
@@ -16,24 +17,7 @@ import DownArrow from '../public/images/utils/down-arrow.svg'
 const NETWORK_ICON = {
   [chain.mainnet.id]: EthereumLogo,
   [chain.optimism.id]: OptimismLogo,
-  [chain.optimismKovan.id]: OptimismLogo,
-  [chain.kovan.id]: EthereumLogo,
 }
-
-type UINetwork = Network & {
-  src: StaticImageData
-}
-
-const SUPPORTED_CHAIN: UINetwork[] = [
-  { id: chain.mainnet.id, name: chain.mainnet.name, src: EthereumLogo },
-  { id: chain.kovan.id, name: chain.kovan.name, src: EthereumLogo },
-  { id: chain.optimism.id, name: chain.optimism.name, src: OptimismLogo },
-  {
-    id: chain.optimismKovan.id,
-    name: chain.optimismKovan.name,
-    src: OptimismLogo,
-  },
-]
 
 const NetworkButton: FC<NetworkButtonProps> = ({
   name,
@@ -69,9 +53,11 @@ export const NetworkSelector: FC<NetworkSelectorProps> = ({
   containerCls,
 }) => {
   const [activeNetwork, setActiveNetwork] = useRecoilState(networkState)
-  const { chain } = useNetwork()
+  const { chain, chains } = useNetwork()
   const { switchNetworkAsync, isSuccess } = useSwitchNetwork()
   const isWalletConnected = useRecoilValue(isWalletConnectedState)
+  console.log(chain)
+  
 
   const onSwitchChain = async (chain: Network) => {
     const { id, name } = chain
@@ -90,6 +76,9 @@ export const NetworkSelector: FC<NetworkSelectorProps> = ({
   }
 
   useEffect(() => {
+    if (chain?.unsupported) {
+      return
+    }
     if (chain) {
       setActiveNetwork({ id: chain.id, name: chain.name })
     }
@@ -113,7 +102,7 @@ export const NetworkSelector: FC<NetworkSelectorProps> = ({
       }
       dropList={
         <NetworkSelectorContainer>
-          {SUPPORTED_CHAIN.map((chain) => (
+          {chains.map((chain) => (
             <NetworkButton
               src={NETWORK_ICON[chain.id]}
               onClick={() => onSwitchChain(chain)}

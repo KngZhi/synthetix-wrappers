@@ -5,9 +5,8 @@ import { RecoilRoot } from 'recoil'
 import {
   WagmiConfig,
   createClient,
-  defaultChains,
-  defaultL2Chains,
   configureChains,
+  chain,
 } from 'wagmi'
 
 import { infuraProvider } from 'wagmi/providers/infura'
@@ -18,7 +17,7 @@ import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
 const INFURA_ID = process.env.INFURA_ID
 
 const { chains, provider, webSocketProvider } = configureChains(
-  [...defaultChains, ...defaultL2Chains],
+  [chain.mainnet, chain.optimism],
   [infuraProvider({ infuraId: INFURA_ID }), publicProvider()]
 )
 
