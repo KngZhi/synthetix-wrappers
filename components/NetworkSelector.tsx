@@ -8,7 +8,6 @@ import { DefaultDropdownMenu } from './Dropdown'
 import { NetWorkButton, NetWorkSelectorButton } from './Button'
 
 import { Network, networkState, isWalletConnectedState } from '../store/index'
-import { SupportedChainId } from '../constants/token'
 
 import EthereumLogo from '../public/images/logos/ethereum.svg'
 import OptimismLogo from '../public/images/logos/optimism.svg'
@@ -18,6 +17,11 @@ const NETWORK_ICON = {
   [chain.mainnet.id]: EthereumLogo,
   [chain.optimism.id]: OptimismLogo,
 }
+
+const SUPPORTED_CHAIN: Network[] = [
+  { id: chain.mainnet.id, name: chain.mainnet.name, },
+  { id: chain.optimism.id, name: chain.optimism.name, },
+]
 
 const NetworkButton: FC<NetworkButtonProps> = ({
   name,
@@ -53,10 +57,9 @@ export const NetworkSelector: FC<NetworkSelectorProps> = ({
   containerCls,
 }) => {
   const [activeNetwork, setActiveNetwork] = useRecoilState(networkState)
-  const { chain, chains } = useNetwork()
+  const { chain } = useNetwork()
   const { switchNetworkAsync, isSuccess } = useSwitchNetwork()
   const isWalletConnected = useRecoilValue(isWalletConnectedState)
-  console.log(chain)
   
 
   const onSwitchChain = async (chain: Network) => {
@@ -102,7 +105,7 @@ export const NetworkSelector: FC<NetworkSelectorProps> = ({
       }
       dropList={
         <NetworkSelectorContainer>
-          {chains.map((chain) => (
+          {SUPPORTED_CHAIN.map((chain) => (
             <NetworkButton
               src={NETWORK_ICON[chain.id]}
               onClick={() => onSwitchChain(chain)}
