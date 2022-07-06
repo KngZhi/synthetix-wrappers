@@ -93,6 +93,7 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
 
   useEffect(() => {
     setFeeRate(isWrap ? contract.mintFeeRate : contract.burnFeeRate)
+    setMaxWrappable(contract.capacity)
     setMaxCapacity(contract.maxTokenAmount)
     setCapacityUtilised(contract.capacityUtilised)
   }, [contract, isWrap])
