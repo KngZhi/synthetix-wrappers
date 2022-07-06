@@ -8,6 +8,7 @@ import { parseEther, parseUnits } from 'ethers/lib/utils'
 import { Tooltip } from '@nextui-org/react'
 
 import { Button } from './Button'
+import ActionButton from './Button/ActionButton'
 import ArrowButton from './ArrowButton'
 
 import { DefaultDropdownMenu } from './Dropdown'
@@ -98,7 +99,7 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
     setCapacityUtilised(contract.capacityUtilised)
   }, [contract, isWrap])
 
-  const [srcTokenValue, setSrcTokenValue] = useState<string>('')
+  const [srcTokenValue, setSrcTokenValue] = useState<string>('0.0')
   const [targetTokenValue] = useState<string>('')
   const [walletAddress] = useRecoilState(walletAddressState)
 
@@ -150,14 +151,6 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
         gasLimit: 500e3,
       },
     })
-  }
-
-  const isActionAllowed = () => {
-    if (isWalletConnected === false) return false
-    if (parseFloat(srcBalanceValue) === 0) return false
-    if (parseFloat(srcTokenValue) <= 0) return false
-
-    return true
   }
 
   return (
@@ -291,9 +284,15 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
             </Tooltip>
           </StyledBlackContainerRow>
         </BlackContainer>
-        <ActionButton disabled={!isActionAllowed()} onClick={handleWrapClick}>
-          <span>{isActionAllowed() ? 'Wrap' : 'Select amount to wrap'}</span>
-        </ActionButton>
+        <ActionButton
+          isWalletConnected={isWalletConnected}
+          balanceValue={srcBalanceValue}
+          inputValue={srcTokenValue || '0'}
+          maxWrappable={maxCapacity}
+          onClick={handleWrapClick}
+          isWrap={isWrap}
+          connect={() => { console.log('connect')}}
+        />
       </WrapperContainerColumn>
       <Capacity
         capacityPercentage={capacityPercentage}
@@ -314,7 +313,6 @@ const Container = styled.div`
 
 const ContainerRow = styled.div`
   width: 518px;
-
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
@@ -472,23 +470,6 @@ const MaxButton = styled.button`
   &:hover {
     color: #828295;
   }
-`
-
-const ActionButton = styled(Button)<{ disabled: boolean }>`
-  width: 464px;
-  height: 40px;
-
-  ${({ disabled }) =>
-    disabled
-      ? css`
-          background: rgba(86, 86, 99, 0.6);
-          color: #565663;
-        `
-      : css`
-          background: linear-gradient(90deg, #85ffc4, #5cc6ff);
-          color: #000;
-        `}
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.9);
 `
 
 export default Wrapper
