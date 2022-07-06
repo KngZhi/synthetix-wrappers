@@ -155,7 +155,7 @@ const MoreButton = styled(WalletButton)`
   }
 `
 
-const XButton = styled.div`
+const XButton = styled(BaseButton)`
   display: flex;
   /* Brand/Gradient001 */
 

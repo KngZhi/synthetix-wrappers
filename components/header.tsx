@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 import Image from 'next/image'
 
-import { Button } from './Button'
 import { NetworkSelector } from './NetworkSelector'
 import WalletButton from './Wallet'
 
@@ -16,12 +15,6 @@ const Header = () => {
       <MenuContainer>
         <NetworkSelector />
         <WalletButton />
-        <DotButton
-          size="sm"
-          onClick={() => console.log('You clicked on the option button!')}
-        >
-          <span>...</span>
-        </DotButton>
       </MenuContainer>
     </HeaderContainer>
   )
@@ -43,13 +36,6 @@ const MenuContainer = styled(BaseContainer)`
   justify-content: center;
   padding: 0px;
   gap: 18px;
-`
-
-const DotButton = styled(Button)`
-  span {
-    font-weight: 700;
-    font-size: 20px;
-  }
 `
 
 export default Header
