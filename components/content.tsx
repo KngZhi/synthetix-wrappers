@@ -1,4 +1,9 @@
-import { useEffect, useMemo, useState, ChangeEvent } from 'react'
+import {
+  useEffect,
+  useMemo,
+  useState,
+  ChangeEventHandler,
+} from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import styled, { css } from 'styled-components'
 import Image from 'next/image'
@@ -63,14 +68,19 @@ function getTokenPairs(isWrap: boolean, isL1: boolean): [Tokens, Tokens] {
 
 const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
   const [isWrap, setIsWrap] = useState<boolean>(true)
-  const isL1 = useRecoilValue(isL1State)
-  const isWalletConnected = useRecoilValue(isWalletConnectedState)
-  const tokenPairs = getTokenPairs(isWrap, isL1)
   const [srcTokenIdx, setSrcTokenIdx] = useState<number>(0)
   const [feeRate, setFeeRate] = useState<string>('0')
   const [maxWrappable, setMaxWrappable] = useState<string>('0')
   const [maxCapacity, setMaxCapacity] = useState<string>('0')
   const [capacityUtilised, setCapacityUtilised] = useState<string>('0')
+  const [srcTokenValue, setSrcTokenValue] = useState<string>('0.0')
+  const [targetTokenValue] = useState<string>('')
+
+  const isL1 = useRecoilValue(isL1State)
+  const isWalletConnected = useRecoilValue(isWalletConnectedState)
+  const [walletAddress] = useRecoilState(walletAddressState)
+
+  const tokenPairs = getTokenPairs(isWrap, isL1)
 
   const srcTokens = useMemo(() => {
     return tokenPairs[0]
@@ -93,32 +103,15 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
   const contract = useTokenContract(srcToken)
 
   useEffect(() => {
+    setSrcTokenIdx(0)
+    resetSrcTokenValue()
     setFeeRate(isWrap ? contract.mintFeeRate : contract.burnFeeRate)
     setMaxWrappable(contract.capacity)
     setMaxCapacity(contract.maxTokenAmount)
     setCapacityUtilised(contract.capacityUtilised)
   }, [contract, isWrap])
 
-  const [srcTokenValue, setSrcTokenValue] = useState<string>('0.0')
-  const [targetTokenValue] = useState<string>('')
-  const [walletAddress] = useRecoilState(walletAddressState)
-
-  const changeToken = (idx: number) => {
-    setSrcTokenIdx(idx)
-    resetMax()
-  }
-
-  const resetMax = () => setSrcTokenValue('')
-
-  const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSrcTokenValue(e.target.value)
-  }
-
-  const onWrapChange = (isWrap: boolean) => {
-    setIsWrap(isWrap)
-    setSrcTokenIdx(0)
-    resetMax()
-  }
+  const resetSrcTokenValue = () => setSrcTokenValue('')
 
   const { data: srcBalance } = useBalance({
     addressOrName: walletAddress,
@@ -142,7 +135,7 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
     setSrcTokenValue(srcBalanceValue)
   }
 
-  const handleWrapClick = async () => {
+  const onActionClick = async () => {
     const action = isWrap ? contract.mint : contract.burn
     action({
       args: parseEther(srcTokenValue),
@@ -151,6 +144,19 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
         gasLimit: 500e3,
       },
     })
+  }
+
+  const onTokenChange = (idx: number) => {
+    setSrcTokenIdx(idx)
+    resetSrcTokenValue()
+  }
+
+  const onInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    setSrcTokenValue(e.target.value)
+  }
+
+  const onWrapChange = (isWrap: boolean) => {
+    setIsWrap(isWrap)
   }
 
   return (
@@ -215,7 +221,7 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
                 <DropdownListContainer>
                   {srcTokens.map((token, idx) => (
                     <CurrencyContainer
-                      onClick={() => changeToken(idx)}
+                      onClick={() => onTokenChange(idx)}
                       key={token.key}
                       active={token.key === srcToken.key}
                     >
@@ -289,9 +295,11 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
           balanceValue={srcBalanceValue}
           inputValue={srcTokenValue || '0'}
           maxWrappable={maxCapacity}
-          onClick={handleWrapClick}
+          onClick={onActionClick}
           isWrap={isWrap}
-          connect={() => { console.log('connect')}}
+          connect={() => {
+            console.log('connect')
+          }}
         />
       </WrapperContainerColumn>
       <Capacity
