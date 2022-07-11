@@ -1,9 +1,4 @@
-import {
-  useEffect,
-  useMemo,
-  useState,
-  ChangeEventHandler,
-} from 'react'
+import { useEffect, useMemo, useState, ChangeEventHandler } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import styled, { css } from 'styled-components'
 import Image from 'next/image'
@@ -68,7 +63,10 @@ function getTokenPairs(isWrap: boolean, isL1: boolean): [Tokens, Tokens] {
 }
 
 const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
-  const { value: isWrap, setTrue: setWrap, setFalse: setUnwrap } = useBoolean(false)
+  const {
+    value: isWrap,
+    setValue: setIsWrap,
+  } = useBoolean(false)
   const [srcTokenIdx, setSrcTokenIdx] = useState<number>(0)
   const [feeRate, setFeeRate] = useState<string>('0')
   const [maxWrappable, setMaxWrappable] = useState<string>('0')
@@ -158,7 +156,7 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
     const calcTargetTokenValue = (inputTokenValue: string): string => {
       const srcToken = parseFloat(inputTokenValue)
       if (!srcToken || srcToken === 0) return ''
-      const valueRemain = (1 - parseFloat(feeRate) / 100)
+      const valueRemain = 1 - parseFloat(feeRate) / 100
       // remove tailing zero
       return String(+(srcToken * valueRemain).toFixed(6))
     }
@@ -166,14 +164,19 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
     setTargetTokenValue(calcTargetTokenValue(srcTokenValue))
   }, [srcTokenValue, feeRate])
 
+  const onWrapClick = (val: boolean) => {
+    setSrcTokenIdx(0)
+    setIsWrap(val)
+  }
+
   return (
     <Container>
       <ContainerRow>
         <SelectorContainer>
-          <SelectorButton active={isWrap} onClick={setWrap}>
+          <SelectorButton active={isWrap} onClick={() => onWrapClick(true)}>
             <span>Wrap</span>
           </SelectorButton>
-          <SelectorButton active={!isWrap} onClick={setUnwrap}>
+          <SelectorButton active={!isWrap} onClick={() => onWrapClick(false)}>
             <span>Unwrap</span>
           </SelectorButton>
         </SelectorContainer>
