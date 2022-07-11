@@ -10,7 +10,7 @@ const CurrencyContainer = styled.div<{ active?: boolean }>`
   gap: 8px;
 
   padding: 0px 10px;
-  width: 100%;
+  max-width: 140px;
   height: 40px;
 
   ${(props) =>

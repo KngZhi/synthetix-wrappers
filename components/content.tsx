@@ -74,7 +74,7 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
   const [maxCapacity, setMaxCapacity] = useState<string>('0')
   const [capacityUtilised, setCapacityUtilised] = useState<string>('0')
   const [srcTokenValue, setSrcTokenValue] = useState<string>('0.0')
-  const [targetTokenValue] = useState<string>('')
+  const [targetTokenValue, setTargetTokenValue] = useState<string>('')
 
   const isL1 = useRecoilValue(isL1State)
   const isWalletConnected = useRecoilValue(isWalletConnectedState)
@@ -152,6 +152,18 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
   const onInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setSrcTokenValue(e.target.value)
   }
+
+  useEffect(() => {
+    const calcTargetTokenValue = (inputTokenValue: string): string => {
+      const srcToken = parseFloat(inputTokenValue)
+      if (!srcToken || srcToken === 0) return ''
+      const valueRemain = (1 - parseFloat(feeRate) / 100)
+      // remove tailing zero
+      return String(+(srcToken * valueRemain).toFixed(6))
+    }
+
+    setTargetTokenValue(calcTargetTokenValue(srcTokenValue))
+  }, [srcTokenValue, feeRate])
 
   const onWrapChange = (isWrap: boolean) => {
     setSrcTokenIdx(0)
