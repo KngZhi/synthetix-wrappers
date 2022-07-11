@@ -1,7 +1,8 @@
-import { FC, useState, ReactNode } from 'react'
+import { FC, ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 import Image, { StaticImageData } from 'next/image'
 import { ChevronDown } from 'react-feather'
+import { useBoolean } from 'usehooks-ts'
 
 type FaqItemProps = {
   category: string | ReactNode
@@ -11,10 +12,10 @@ type FaqItemProps = {
 }
 
 const FaqItem: FC<FaqItemProps> = ({ category, image, content, title }) => {
-  const [isActive, setIsActive] = useState<boolean>(false)
+  const { value: isActive, toggle} = useBoolean(false)
   return (
     <BaseDiv active={isActive}>
-      <TitlePanel onClick={() => setIsActive(!isActive)}>
+      <TitlePanel onClick={toggle}>
         <Image alt="rocket" src={image} />
         <div className="title">
           <h2>{category}</h2>

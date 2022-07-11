@@ -9,6 +9,7 @@ import styled, { css } from 'styled-components'
 import Image from 'next/image'
 import { useBalance } from 'wagmi'
 import { parseEther, parseUnits } from 'ethers/lib/utils'
+import { useBoolean } from 'usehooks-ts'
 
 import { Tooltip } from '@nextui-org/react'
 
@@ -67,7 +68,7 @@ function getTokenPairs(isWrap: boolean, isL1: boolean): [Tokens, Tokens] {
 }
 
 const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
-  const [isWrap, setIsWrap] = useState<boolean>(true)
+  const { value: isWrap, setTrue: setWrap, setFalse: setUnwrap } = useBoolean(false)
   const [srcTokenIdx, setSrcTokenIdx] = useState<number>(0)
   const [feeRate, setFeeRate] = useState<string>('0')
   const [maxWrappable, setMaxWrappable] = useState<string>('0')
@@ -165,20 +166,14 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
     setTargetTokenValue(calcTargetTokenValue(srcTokenValue))
   }, [srcTokenValue, feeRate])
 
-  const onWrapChange = (isWrap: boolean) => {
-    setSrcTokenIdx(0)
-    resetSrcTokenValue()
-    setIsWrap(isWrap)
-  }
-
   return (
     <Container>
       <ContainerRow>
         <SelectorContainer>
-          <SelectorButton active={isWrap} onClick={() => onWrapChange(true)}>
+          <SelectorButton active={isWrap} onClick={setWrap}>
             <span>Wrap</span>
           </SelectorButton>
-          <SelectorButton active={!isWrap} onClick={() => onWrapChange(false)}>
+          <SelectorButton active={!isWrap} onClick={setUnwrap}>
             <span>Unwrap</span>
           </SelectorButton>
         </SelectorContainer>

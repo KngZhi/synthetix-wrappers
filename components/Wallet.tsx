@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import styled from 'styled-components'
 import { useConnect, useAccount, useDisconnect } from 'wagmi'
 import { Modal, Text } from '@nextui-org/react'
+import { useBoolean } from 'usehooks-ts'
 
 import {
   Button as BaseButton,
@@ -25,16 +26,21 @@ import Profile from './Modal/Profile'
 import { useRecoilValue, useRecoilState } from 'recoil'
 
 export default function WalletButton() {
-  const [visible, setVisible] = useState<boolean>(false)
+  const {
+    value: visible,
+    setFalse: hideWallet,
+    setTrue: showWallet,
+  } = useBoolean(false)
+  const {
+    value: profileVisible,
+    setFalse: hideProfile,
+    setTrue: showProfile,
+  } = useBoolean(false)
   const [walletAddress, setWalletAddress] = useRecoilState(walletAddressState)
   const isWalletConnected = useRecoilValue(isWalletConnectedState)
   const [activeNetwork] = useRecoilState(networkState)
-  const handler = () => setVisible(true)
-  const closeHandle = () => setVisible(false)
 
-  const [profileVisible, setProfileVisible] = useState<boolean>(false)
-
-  const { connect, connectors, } = useConnect()
+  const { connect, connectors } = useConnect()
   const { address } = useAccount()
 
   const { disconnect } = useDisconnect()
@@ -47,25 +53,25 @@ export default function WalletButton() {
 
   const addr = truncateAddress(walletAddress || '')
   function handleChangeWallet() {
-    handler()
-    setProfileVisible(false)
+    showWallet()
+    hideProfile()
   }
 
   function handleDisconnect() {
     disconnect()
     setWalletAddress(undefined)
-    setProfileVisible(false)
+    hideProfile()
   }
 
   return (
     <>
       {isWalletConnected ? (
-        <AddrButton onClick={() => setProfileVisible(true)}>
+        <AddrButton onClick={showProfile}>
           <span className="dot"></span>
           {addr}
         </AddrButton>
       ) : (
-        <ConnectWalletButton onClick={handler}>
+        <ConnectWalletButton onClick={showWallet}>
           <span>Connect Wallet</span>
         </ConnectWalletButton>
       )}
@@ -76,9 +82,9 @@ export default function WalletButton() {
           shortAddr={addr}
           chainId={activeNetwork?.id}
           disconnect={handleDisconnect}
-          onClose={() => setProfileVisible(false)}
+          onClose={hideProfile}
           changeWallet={handleChangeWallet}
-        ></Profile>
+        />
         <Modal
           css={{
             background:
@@ -90,7 +96,7 @@ export default function WalletButton() {
           width="370px"
           closeButton
           open={visible}
-          onClose={closeHandle}
+          onClose={hideWallet}
         >
           <Modal.Header
             css={{ flexDirection: 'column', alignContent: 'center' }}
@@ -110,10 +116,7 @@ export default function WalletButton() {
             {connectors.map((connector) => (
               <WalletSelectorButton
                 key={connector.id}
-                onClick={() => {
-                  connect({ connector })
-                  closeHandle()
-                }}
+                onClick={() => connect({ connector })}
               >
                 <Image src={MetaMaskPic} alt={connector.name} />
                 <span>
