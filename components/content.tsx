@@ -103,8 +103,6 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
   const contract = useTokenContract(srcToken)
 
   useEffect(() => {
-    setSrcTokenIdx(0)
-    resetSrcTokenValue()
     setFeeRate(isWrap ? contract.mintFeeRate : contract.burnFeeRate)
     setMaxWrappable(contract.capacity)
     setMaxCapacity(contract.maxTokenAmount)
@@ -156,6 +154,8 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
   }
 
   const onWrapChange = (isWrap: boolean) => {
+    setSrcTokenIdx(0)
+    resetSrcTokenValue()
     setIsWrap(isWrap)
   }
 
