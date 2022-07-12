@@ -116,7 +116,10 @@ export default function WalletButton() {
             {connectors.map((connector) => (
               <WalletSelectorButton
                 key={connector.id}
-                onClick={() => connect({ connector })}
+                onClick={() => {
+                  connect({ connector })
+                  hideWallet()
+                }}
               >
                 <Image src={MetaMaskPic} alt={connector.name} />
                 <span>
