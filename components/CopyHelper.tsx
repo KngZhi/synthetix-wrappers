@@ -31,6 +31,7 @@ const CopyIcon = styled(LinkStyledButton)`
   flex-shrink: 0;
   display: flex;
   text-decoration: none;
+  width: 105px;
   :hover,
   :active,
   :focus {
