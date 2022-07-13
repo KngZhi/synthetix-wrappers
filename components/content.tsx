@@ -63,16 +63,13 @@ function getTokenPairs(isWrap: boolean, isL1: boolean): [Tokens, Tokens] {
 }
 
 const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
-  const {
-    value: isWrap,
-    setValue: setIsWrap,
-  } = useBoolean(false)
+  const { value: isWrap, setValue: setIsWrap } = useBoolean(true)
   const [srcTokenIdx, setSrcTokenIdx] = useState<number>(0)
   const [feeRate, setFeeRate] = useState<string>('0')
   const [maxWrappable, setMaxWrappable] = useState<string>('0')
   const [maxCapacity, setMaxCapacity] = useState<string>('0')
   const [capacityUtilised, setCapacityUtilised] = useState<string>('0')
-  const [srcTokenValue, setSrcTokenValue] = useState<string>('0.0')
+  const [srcTokenValue, setSrcTokenValue] = useState<string>('')
   const [targetTokenValue, setTargetTokenValue] = useState<string>('')
 
   const isL1 = useRecoilValue(isL1State)
@@ -108,8 +105,6 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
     setCapacityUtilised(contract.capacityUtilised)
   }, [contract, isWrap])
 
-  const resetSrcTokenValue = () => setSrcTokenValue('')
-
   const { data: srcBalance } = useBalance({
     addressOrName: walletAddress,
     watch: true,
@@ -127,6 +122,8 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
   /* Capacity */
   const capacityPercentage: number =
     (parseInt(capacityUtilised, 10) / parseInt(maxCapacity, 10)) * 100
+
+  const resetSrcTokenValue = () => setSrcTokenValue('')
 
   const onMaxClick = () => {
     setSrcTokenValue(srcBalanceValue)
@@ -166,6 +163,7 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
 
   const onWrapClick = (val: boolean) => {
     setSrcTokenIdx(0)
+    resetSrcTokenValue()
     setIsWrap(val)
   }
 
