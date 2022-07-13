@@ -1,5 +1,5 @@
-import { ContractInterface, Signer, providers, BigNumber, } from 'ethers'
-import { useContractRead, useContractWrite, useProvider } from 'wagmi'
+import { ContractInterface, BigNumber, } from 'ethers'
+import { useContractRead, useContractWrite } from 'wagmi'
 import { CallOverrides  } from 'ethers'
 import { SupportedChainId, Token } from '../constants/token'
 import { useRecoilState } from 'recoil'
@@ -104,18 +104,17 @@ enum Write {
 export function useTokenContract(
     token: Token,
 ): BaseContractInterface {
-
     const [activeNetwork] = useRecoilState(networkState)
     const isL1 = useRecoilValue(isL1State)
     const contractSetup = getContractSetup(token, activeNetwork?.id)
 
-    const useRead = (method: string, args?: BigNumber) => useContractRead({
+    const useRead = (functionName: Read, args?: BigNumber) => useContractRead({
         ...contractSetup,
-        functionName: method,
+        functionName,
         args
     })
 
-    const useWrite = (functionName: string) => useContractWrite({
+    const useWrite = (functionName: Write) => useContractWrite({
         ...contractSetup,
         functionName,
     })
