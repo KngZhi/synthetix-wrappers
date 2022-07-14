@@ -1,7 +1,7 @@
 import { ContractInterface, BigNumber, } from 'ethers'
 import { useContractRead, useContractWrite } from 'wagmi'
 import { CallOverrides  } from 'ethers'
-import { SupportedChainId, Token } from '../constants/token'
+import { SupportedChainId, TokenInterface } from '../constants/token'
 import { useRecoilState } from 'recoil'
 import { networkState } from '../store/index'
 import {
@@ -24,7 +24,7 @@ type ContractSetup = {
     contractInterface: ContractInterface;
 }
 
-function getContractSetup(token: Token, chainId: number): ContractSetup {
+function getContractSetup(token: TokenInterface, chainId: number): ContractSetup {
     let contractSetup: ContractSetup
     switch (chainId) {
         case SupportedChainId.KOVAN:
@@ -102,7 +102,7 @@ enum Write {
 }
 
 export function useTokenContract(
-    token: Token,
+    token: TokenInterface,
 ): BaseContractInterface {
     const [activeNetwork] = useRecoilState(networkState)
     const isL1 = useRecoilValue(isL1State)

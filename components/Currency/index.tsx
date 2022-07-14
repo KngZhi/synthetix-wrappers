@@ -1,20 +1,54 @@
 import styled, { css } from 'styled-components'
+import Image from 'next/image'
 
 import { Button } from '../Button'
+import { TokenInterface } from '../../constants/token'
 
-const CurrencyContainer = styled.div<{ active?: boolean }>`
+type TokenProps = {
+  token: TokenInterface
+  imageSize: number
+  fontSize?: number
+  fontWeight?: number
+  padding?: string
+}
+
+const Token = ({ token, imageSize }: TokenProps): JSX.Element => {
+  return (
+    <CurrencyContainer
+      padding={'0'}
+      fontSize={24}>
+      <Image
+        width={imageSize}
+        height={imageSize}
+        src={token.src}
+        alt={token.name}
+        priority={true}
+      />
+      <span>{token.name}</span>
+    </CurrencyContainer>
+  )
+}
+
+type CurrencyProps = {
+  active?: boolean
+  fontSize?: number
+  fontWeight?: number
+  padding?: string
+}
+
+const CurrencyContainer = styled.div<CurrencyProps>`
   display: flex;
   flex-direction: row;
   justify-content: left;
   align-items: center;
   gap: 8px;
 
-  padding: 0px 10px;
+  padding: ${({ padding }) => padding || '0px 10px'};
   max-width: 140px;
   height: 40px;
 
-  ${(props) =>
-    props.active &&
+  ${({ active }) =>
+    active &&
     css`
       background: rgba(130, 130, 149, 0.3);
       border-radius: 4px;
@@ -22,8 +56,8 @@ const CurrencyContainer = styled.div<{ active?: boolean }>`
 
   span {
     font-style: normal;
-    font-weight: 600;
-    font-size: 14px;
+    font-weight: ${(props) => props.fontWeight || 600};
+    font-size: ${({ fontSize }) => (fontSize ? `${fontSize}px` : '14px')};
     line-height: 20px;
     color: #ffffff;
   }
@@ -54,20 +88,9 @@ const CurrencySelectorButton = styled(Button)`
   background: none;
 `
 
-const StyledCurrencyContainer2 = styled(CurrencyContainer)`
-  padding: 0;
-
-  /* Text */
-  span {
-    font-weight: 700;
-    font-size: 24px;
-    line-height: 29px;
-  }
-`
-
 export {
   CurrencyContainer,
   StyledCurrencyContainer,
-  StyledCurrencyContainer2,
   CurrencySelectorButton,
+  Token,
 }

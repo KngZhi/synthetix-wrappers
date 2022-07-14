@@ -28,7 +28,7 @@ export enum Tokens {
 
 export type TokenKey = 'seth' | 'lusd' | 'eth' | 'susd'
 
-export interface Token {
+export interface TokenInterface {
 	name: string;
 	key: string;
 	address: TokenAddress;
@@ -36,7 +36,7 @@ export interface Token {
 	decimals: number;
 }
 
-export const LUSD: Token = {
+export const LUSD: TokenInterface = {
 	name: 'LUSD',
 	key: 'lusd',
 	address: LUSD_ADDRESS,
@@ -68,7 +68,7 @@ export const sUSD = {
 	decimals: 18,
 }
 
-export type PairToken = [Token, Token]
+export type PairToken = [TokenInterface, TokenInterface]
 
 export const L1_Wrap: PairToken[] = [
 	[LUSD, sUSD],

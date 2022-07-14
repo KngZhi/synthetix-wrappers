@@ -20,7 +20,7 @@ import {
   CurrencyContainer,
   CurrencySelectorButton,
   StyledCurrencyContainer,
-  StyledCurrencyContainer2,
+  Token,
 } from '../components/Currency'
 
 import LinkArrow from '../public/images/utils/link-arrow.svg'
@@ -37,7 +37,7 @@ import {
   L1_Unwrap,
   L2_WRAP,
   L2_Unwrap,
-  Token,
+  TokenInterface,
   PairToken,
 } from '../constants/token'
 
@@ -47,7 +47,7 @@ type WrapperProps = {
   onTVLClick: () => void
 }
 
-type Tokens = Token[]
+type Tokens = TokenInterface[]
 
 function getTokenPairs(isWrap: boolean, isL1: boolean): [Tokens, Tokens] {
   let tokenPairs: PairToken[]
@@ -86,8 +86,8 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
     return tokenPairs[1]
   }, [tokenPairs])
 
-  const [srcToken, setSrcToken] = useState<Token>(srcTokens[srcTokenIdx])
-  const [targetToken, setTargetToken] = useState<Token>(
+  const [srcToken, setSrcToken] = useState<TokenInterface>(srcTokens[srcTokenIdx])
+  const [targetToken, setTargetToken] = useState<TokenInterface>(
     targetTokens[srcTokenIdx]
   )
 
@@ -266,16 +266,10 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
             <span>Balance: {targetBalanceValue}</span>
           </BlackContainerRow>
           <BlackContainerRow>
-            <StyledCurrencyContainer2>
-              <Image
-                width={16}
-                height={16}
-                src={targetToken.src}
-                alt={targetToken.name}
-                priority={true}
-              />
-              <span>{targetToken.name}</span>
-            </StyledCurrencyContainer2>
+            <Token
+              token={targetToken}
+              imageSize={16}
+            />
             <NumericInput
               disabled={true}
               placeholder="0.0"
