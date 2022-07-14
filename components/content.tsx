@@ -16,12 +16,7 @@ import { DefaultDropdownMenu } from './Dropdown'
 import NumericInput from '../components/NumericInput'
 import TooltipContent from '../components/Tooltip'
 import Capacity from '../components/Capacity'
-import {
-  CurrencyContainer,
-  CurrencySelectorButton,
-  StyledCurrencyContainer,
-  Token,
-} from '../components/Currency'
+import { TokenSelector, Token } from '../components/Currency'
 
 import LinkArrow from '../public/images/utils/link-arrow.svg'
 import DownArrowSmall from '../public/images/utils/down-arrow-small.svg'
@@ -86,7 +81,9 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
     return tokenPairs[1]
   }, [tokenPairs])
 
-  const [srcToken, setSrcToken] = useState<TokenInterface>(srcTokens[srcTokenIdx])
+  const [srcToken, setSrcToken] = useState<TokenInterface>(
+    srcTokens[srcTokenIdx]
+  )
   const [targetToken, setTargetToken] = useState<TokenInterface>(
     targetTokens[srcTokenIdx]
   )
@@ -206,41 +203,29 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
               className="coin_drop"
               offset={40}
               trigger={
-                <CurrencySelectorButton>
-                  <StyledCurrencyContainer>
-                    <Image
-                      width={24}
-                      height={24}
-                      className="big"
-                      src={srcToken.src}
-                      alt={srcToken.name}
-                      priority={true}
-                    />
-                    <span>{srcToken.name}</span>
-                    <Image
-                      src={DownArrowSmall}
-                      alt="down-arrow"
-                      priority={true}
-                    />
-                  </StyledCurrencyContainer>
-                </CurrencySelectorButton>
+                <TokenSelector>
+                  <Token
+                    token={srcToken}
+                    children={
+                      <Image
+                        src={DownArrowSmall}
+                        alt="down-arrow"
+                        priority={true}
+                      />
+                    }
+                  />
+                </TokenSelector>
               }
               dropList={
                 <DropdownListContainer>
                   {srcTokens.map((token, idx) => (
-                    <CurrencyContainer
+                    <Token
                       onClick={() => onTokenChange(idx)}
                       key={token.key}
                       active={token.key === srcToken.key}
-                    >
-                      <Image
-                        width={24}
-                        height={24}
-                        src={token.src}
-                        alt={token.name}
-                      ></Image>
-                      <span>{token.name}</span>
-                    </CurrencyContainer>
+                      token={token}
+                      fontSize={14}
+                    />
                   ))}
                 </DropdownListContainer>
               }
@@ -266,10 +251,7 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
             <span>Balance: {targetBalanceValue}</span>
           </BlackContainerRow>
           <BlackContainerRow>
-            <Token
-              token={targetToken}
-              imageSize={16}
-            />
+            <Token token={targetToken}/>
             <NumericInput
               disabled={true}
               placeholder="0.0"

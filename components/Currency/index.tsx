@@ -1,22 +1,40 @@
 import styled, { css } from 'styled-components'
 import Image from 'next/image'
 
-import { Button } from '../Button'
 import { TokenInterface } from '../../constants/token'
 
 type TokenProps = {
   token: TokenInterface
-  imageSize: number
+  imageSize?: number
+  onClick?(): void
+  children?: JSX.Element
+}
+
+type TokenStyleProps = {
+  active?: boolean
   fontSize?: number
   fontWeight?: number
   padding?: string
 }
 
-const Token = ({ token, imageSize }: TokenProps): JSX.Element => {
+const Token = ({
+  token,
+  imageSize = 24,
+  onClick,
+  children,
+  fontSize,
+  fontWeight,
+  padding,
+  active = false,
+}: TokenProps & TokenStyleProps): JSX.Element => {
   return (
-    <CurrencyContainer
-      padding={'0'}
-      fontSize={24}>
+    <TokenContainer
+      onClick={onClick}
+      active={active}
+      padding={padding}
+      fontWeight={fontWeight}
+      fontSize={fontSize}
+    >
       <Image
         width={imageSize}
         height={imageSize}
@@ -25,18 +43,13 @@ const Token = ({ token, imageSize }: TokenProps): JSX.Element => {
         priority={true}
       />
       <span>{token.name}</span>
-    </CurrencyContainer>
+      {children}
+    </TokenContainer>
   )
 }
 
-type CurrencyProps = {
-  active?: boolean
-  fontSize?: number
-  fontWeight?: number
-  padding?: string
-}
 
-const CurrencyContainer = styled.div<CurrencyProps>`
+const TokenContainer = styled.div<TokenStyleProps>`
   display: flex;
   flex-direction: row;
   justify-content: left;
@@ -55,42 +68,20 @@ const CurrencyContainer = styled.div<CurrencyProps>`
     `}
 
   span {
-    font-style: normal;
-    font-weight: ${(props) => props.fontWeight || 600};
-    font-size: ${({ fontSize }) => (fontSize ? `${fontSize}px` : '14px')};
-    line-height: 20px;
+    font-weight: ${(props) => props.fontWeight || 700};
+    font-size: ${({ fontSize }) => (fontSize ? `${fontSize}px` : '24px')};
     color: #ffffff;
   }
 `
 
-const StyledCurrencyContainer = styled(CurrencyContainer)`
-  justify-content: space-between;
-
-  span {
-    font-weight: 700;
-    font-size: 24px;
-    line-height: 29px;
-  }
-`
-
-const CurrencySelectorButton = styled(Button)`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-
-  padding: 0;
+const TokenSelector = styled.div`
   max-width: 130px;
-  height: 37px;
-
+  cursor: pointer;
   border: 1px solid rgba(130, 130, 149, 0.3);
   border-radius: 8px;
-
-  background: none;
 `
 
 export {
-  CurrencyContainer,
-  StyledCurrencyContainer,
-  CurrencySelectorButton,
+  TokenSelector,
   Token,
 }
