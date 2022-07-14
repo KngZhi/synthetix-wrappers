@@ -16,7 +16,7 @@ import { DefaultDropdownMenu } from './Dropdown'
 import NumericInput from '../components/NumericInput'
 import TooltipContent from '../components/Tooltip'
 import Capacity from '../components/Capacity'
-import { TokenSelector, Token } from '../components/Currency'
+import { TokenSelector, Token } from './Token'
 
 import LinkArrow from '../public/images/utils/link-arrow.svg'
 import DownArrowSmall from '../public/images/utils/down-arrow-small.svg'
