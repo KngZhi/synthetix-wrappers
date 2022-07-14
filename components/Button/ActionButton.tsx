@@ -6,7 +6,7 @@ type state = 'error' | 'ok' | 'unconnected'
 interface State {
   disabled: boolean
   msg: string
-  action(): void
+  action?(): void
   state: state
 }
 
@@ -33,9 +33,6 @@ export default function ActionButton({
     state: 'error',
     msg,
     disabled: false,
-    action() {
-        console.log('clicked')
-    }
   })
   const actionState = (): State => {
     // if (!isWalletConnected) {
@@ -57,6 +54,7 @@ export default function ActionButton({
     if (parseFloat(inputValue) > parseFloat(maxWrappable)) {
       return errorState('There is no sufficient Wrappable Token Amount')
     }
+
     if (parseFloat(inputValue) > parseFloat(balanceValue)) {
       return errorState('No sufficient balance')
     }
@@ -65,8 +63,6 @@ export default function ActionButton({
         return errorState(`Select Amount to ${isWrap ? 'Wrap' : 'Burn'}`)
     }
 
-    console.log(parseFloat(inputValue), inputValue)
-    
     return {
       state: 'ok',
       msg: isWrap ? 'Wrap' : 'Burn',

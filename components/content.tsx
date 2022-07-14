@@ -302,7 +302,7 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
           isWalletConnected={isWalletConnected}
           balanceValue={srcBalanceValue}
           inputValue={srcTokenValue || '0'}
-          maxWrappable={maxCapacity}
+          maxWrappable={maxWrappable}
           onClick={onActionClick}
           isWrap={isWrap}
           connect={() => {
