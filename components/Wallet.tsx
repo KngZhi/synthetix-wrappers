@@ -7,7 +7,6 @@ import { useBoolean } from 'usehooks-ts'
 import {
   Button as BaseButton,
   WalletSelectorButton,
-  MoreButton,
   AddrButton,
 } from './Button'
 
@@ -142,9 +141,6 @@ export default function WalletButton() {
               paddingBottom: '13px',
             }}
           >
-            <MoreButton>
-              <span> See More</span>
-            </MoreButton>
           </Modal.Footer>
         </Modal>
       </>
