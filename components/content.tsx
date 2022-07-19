@@ -199,37 +199,41 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
             </MaxButton>
           </BlackContainerRow>
           <BlackContainerRow>
-            <DefaultDropdownMenu
-              className="coin_drop"
-              offset={40}
-              trigger={
-                <TokenSelector>
-                  <Token
-                    token={srcToken}
-                    children={
-                      <Image
-                        src={DownArrowSmall}
-                        alt="down-arrow"
-                        priority={true}
-                      />
-                    }
-                  />
-                </TokenSelector>
-              }
-              dropList={
-                <DropdownListContainer>
-                  {srcTokens.map((token, idx) => (
+            {srcTokens.length === 1 ? (
+              <Token token={srcToken} />
+            ) : (
+              <DefaultDropdownMenu
+                className="coin_drop"
+                offset={40}
+                trigger={
+                  <TokenSelector>
                     <Token
-                      onClick={() => onTokenChange(idx)}
-                      key={token.key}
-                      active={token.key === srcToken.key}
-                      token={token}
-                      fontSize={14}
+                      token={srcToken}
+                      children={
+                        <Image
+                          src={DownArrowSmall}
+                          alt="down-arrow"
+                          priority={true}
+                        />
+                      }
                     />
-                  ))}
-                </DropdownListContainer>
-              }
-            />
+                  </TokenSelector>
+                }
+                dropList={
+                  <DropdownListContainer>
+                    {srcTokens.map((token, idx) => (
+                      <Token
+                        onClick={() => onTokenChange(idx)}
+                        key={token.key}
+                        active={token.key === srcToken.key}
+                        token={token}
+                        fontSize={14}
+                      />
+                    ))}
+                  </DropdownListContainer>
+                }
+              />
+            )}
             <NumericInput
               value={srcTokenValue}
               onChange={onInputChange}
@@ -251,7 +255,7 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
             <span>Balance: {targetBalanceValue}</span>
           </BlackContainerRow>
           <BlackContainerRow>
-            <Token token={targetToken}/>
+            <Token token={targetToken} />
             <NumericInput
               disabled={true}
               placeholder="0.0"
