@@ -2,6 +2,7 @@ import { StaticImageData } from 'next/image'
 import ETHLogo from '../public/images/logos/ethereum.svg'
 import LUSDLogo from '../public/images/synths/sLUSD.png'
 import sUSDLogo from '../public/images/synths/sUSD.png'
+import sETHLogo from '../public/images/synths/sETH.png'
 
 export type CurrencyKey = string;
 export type TokenAddress = string;
@@ -48,7 +49,7 @@ export const sETH = {
 	name: 'sETH',
 	key: 'seth',
 	address: sETH_ADDRESS,
-	src: ETHLogo,
+	src: sETHLogo,
 	decimals: 18,
 }
 
