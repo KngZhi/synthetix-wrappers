@@ -18,12 +18,18 @@ import {
 } from '../store/index'
 
 import styles from './Modal/Modal.module.css'
-import Image from 'next/image'
-import MetaMaskPic from '../public/images/wallets/metamask.svg'
+import Image, { StaticImageData } from 'next/image'
+import MetaMask from '../public/images/wallets/metamask.svg'
+import WalletConnect from '../public/images/wallets/WalletConnect.svg'
 
 import { truncateAddress } from '../utils/string'
 import Profile from './Modal/Profile'
 import { useRecoilValue, useRecoilState } from 'recoil'
+
+const picTable: Record<string, StaticImageData> = {
+  MetaMask: MetaMask,
+  WalletConnect: WalletConnect,
+}
 
 export default function WalletButton() {
   const {
@@ -121,7 +127,7 @@ export default function WalletButton() {
                   hideWallet()
                 }}
               >
-                <Image src={MetaMaskPic} alt={connector.name} />
+                <Image src={picTable[connector.name]} alt={connector.name} />
                 <span>
                   {connector.name}
                   {!connector.ready && ' (unsupported)'}
