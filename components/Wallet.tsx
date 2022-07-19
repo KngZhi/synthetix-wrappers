@@ -30,12 +30,17 @@ const picTable: Record<string, StaticImageData> = {
   WalletConnect: WalletConnect,
 }
 
-export default function WalletButton() {
-  const {
-    value: visible,
-    setFalse: hideWallet,
-    setTrue: showWallet,
-  } = useBoolean(false)
+type WalletButtonProps = {
+  visible: boolean
+  hideWallet: () => void
+  showWallet: () => void
+}
+
+export default function WalletButton({
+  visible,
+  hideWallet,
+  showWallet,
+}: WalletButtonProps) {
   const {
     value: profileVisible,
     setFalse: hideProfile,
@@ -140,8 +145,7 @@ export default function WalletButton() {
               paddingTop: '$0',
               paddingBottom: '13px',
             }}
-          >
-          </Modal.Footer>
+          ></Modal.Footer>
         </Modal>
       </>
     </>
@@ -149,19 +153,15 @@ export default function WalletButton() {
 }
 
 const ConnectWalletButton = styled(BaseButton)`
-  /* Remove break lines */
   white-space: nowrap;
 
-  /* Border */
   border: 2px solid transparent;
   background: linear-gradient(#000000 0 0) padding-box,
     linear-gradient(73.6deg, #85ffc4 2.11%, #5cc6ff 90.45%) border-box;
 
-  /* Text */
   span {
     font-weight: 700;
 
-    /* Gradient */
     background-color: white;
     background-image: linear-gradient(73.6deg, #85ffc4 2.11%, #5cc6ff 90.45%);
     background-size: 100%;

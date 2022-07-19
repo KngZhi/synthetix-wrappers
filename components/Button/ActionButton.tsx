@@ -35,14 +35,14 @@ export default function ActionButton({
     disabled: false,
   })
   const actionState = (): State => {
-    // if (!isWalletConnected) {
-    //   return {
-    //     state: 'unconnected',
-    //     msg: 'Connect Wallet',
-    //     action: connect,
-    //     disabled: false,
-    //   }
-    // }
+    if (!isWalletConnected) {
+      return {
+        state: 'unconnected',
+        msg: 'Connect Wallet',
+        action: connect,
+        disabled: false,
+      }
+    }
     if (parseFloat(maxWrappable) === 0) {
       return errorState('No sufficient Wrappable Token Amount')
     }

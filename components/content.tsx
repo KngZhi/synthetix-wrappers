@@ -40,6 +40,7 @@ import { useTokenContract } from '../hooks/useContracts'
 
 type WrapperProps = {
   onTVLClick: () => void
+  showWallet: () => void
 }
 
 type Tokens = TokenInterface[]
@@ -57,7 +58,7 @@ function getTokenPairs(isWrap: boolean, isL1: boolean): [Tokens, Tokens] {
   return [getTokens(0), getTokens(1)]
 }
 
-const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
+const Wrapper = ({ onTVLClick, showWallet }: WrapperProps): JSX.Element => {
   const { value: isWrap, setValue: setIsWrap } = useBoolean(true)
   const [srcTokenIdx, setSrcTokenIdx] = useState<number>(0)
   const [feeRate, setFeeRate] = useState<string>('0')
@@ -285,9 +286,7 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
           maxWrappable={maxWrappable}
           onClick={onActionClick}
           isWrap={isWrap}
-          connect={() => {
-            console.log('connect')
-          }}
+          connect={showWallet}
         />
       </WrapperContainerColumn>
       <Capacity
