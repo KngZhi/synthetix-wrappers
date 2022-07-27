@@ -176,10 +176,10 @@ const Wrapper = ({ onTVLClick, showWallet }: WrapperProps): JSX.Element => {
             <span>Unwrap</span>
           </SelectorButton>
         </SelectorContainer>
-        <TVLButton className="align-right" onClick={onTVLClick}>
+        {/* <TVLButton className="align-right" onClick={onTVLClick}>
           <span>TVL</span>
           <Image src={LinkArrow} alt="link-arrow" priority={true} />
-        </TVLButton>
+        </TVLButton> */}
       </ContainerRow>
       <WrapperContainerColumn>
         <WrapperContainerRow>
@@ -310,7 +310,7 @@ const ContainerRow = styled.div`
   width: 518px;
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
 `
 
