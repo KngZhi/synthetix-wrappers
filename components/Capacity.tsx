@@ -101,7 +101,7 @@ const GaugeProgress = styled.div<{ percentage: number }>`
     font-weight: 400;
     font-size: 12px;
     line-height: 150%;
-    color: #ffffff;
+    color: #000;
   }
 
   ${(props) =>
