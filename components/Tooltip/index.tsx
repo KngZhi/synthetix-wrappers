@@ -16,7 +16,7 @@ const TooltipStyled = styled.div`
 export default function TooltipContent() {
   return (
     <TooltipStyled>
-      <p>The fee rate is decided by the Grants Council</p>
+      <p>The fee rate is decided by the Spartan Council</p>
       <Link href="/">Learn More</Link>
     </TooltipStyled>
   )
