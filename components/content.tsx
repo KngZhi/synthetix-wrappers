@@ -37,6 +37,7 @@ import {
 } from '../constants/token'
 
 import { useTokenContract } from '../hooks/useContracts'
+import { formatCurrency as currency } from 'utils/string'
 
 type WrapperProps = {
   onTVLClick: () => void
@@ -194,7 +195,9 @@ const Wrapper = ({ onTVLClick, showWallet }: WrapperProps): JSX.Element => {
                 Burn
               </span>
             )}
-            <span>Balance: {srcBalanceValue}</span>
+            <span>
+              Balance: {currency(srcBalanceValue, srcToken.precision)}
+            </span>
             <MaxButton onClick={onMaxClick}>
               <span>MAX</span>
             </MaxButton>
@@ -242,7 +245,9 @@ const Wrapper = ({ onTVLClick, showWallet }: WrapperProps): JSX.Element => {
             />
           </BlackContainerRow>
           <BlackContainerRow>
-            <span>Max wrappable: {maxWrappable}Ξ</span>
+            <span>
+              Max wrappable: {currency(maxWrappable, srcToken.precision)}Ξ
+            </span>
           </BlackContainerRow>
         </BlackContainer>
         <ArrowButton />
@@ -253,7 +258,9 @@ const Wrapper = ({ onTVLClick, showWallet }: WrapperProps): JSX.Element => {
             ) : (
               <span style={{ color: '#ED1EFF' }}>Receive</span>
             )}
-            <span>Balance: {targetBalanceValue}</span>
+            <span>
+              Balance: {currency(targetBalanceValue, targetToken.precision)}
+            </span>
           </BlackContainerRow>
           <BlackContainerRow>
             <Token token={targetToken} />
@@ -291,8 +298,8 @@ const Wrapper = ({ onTVLClick, showWallet }: WrapperProps): JSX.Element => {
       </WrapperContainerColumn>
       <Capacity
         capacityPercentage={capacityPercentage}
-        maxCapacity={maxCapacity}
-        capacityUtilised={capacityUtilised}
+        maxCapacity={currency(maxCapacity, srcToken.precision)}
+        capacityUtilised={currency(capacityUtilised, srcToken.precision)}
       />
     </Container>
   )

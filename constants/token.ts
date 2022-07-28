@@ -35,6 +35,7 @@ export interface TokenInterface {
 	address: TokenAddress;
 	src: StaticImageData;
 	decimals: number;
+	precision: number;
 }
 
 export const LUSD: TokenInterface = {
@@ -43,30 +44,34 @@ export const LUSD: TokenInterface = {
 	address: LUSD_ADDRESS,
 	src: LUSDLogo,
 	decimals: 18,
+	precision: 2,
 }
 
-export const sETH = {
+export const sETH: TokenInterface = {
 	name: 'sETH',
 	key: 'seth',
 	address: sETH_ADDRESS,
 	src: sETHLogo,
 	decimals: 18,
+	precision: 4,
 }
 
-export const ETH = {
+export const ETH: TokenInterface = {
 	name: 'ETH',
 	key: 'eth',
 	address: '',
 	src: ETHLogo,
 	decimals: 18,
+	precision: 4,
 }
 
-export const sUSD = {
+export const sUSD: TokenInterface = {
 	name: 'sUSD',
 	key: 'susd',
 	address: sUSD_ADDRESS,
 	src: sUSDLogo,
 	decimals: 18,
+	precision: 2,
 }
 
 export type PairToken = [TokenInterface, TokenInterface]
