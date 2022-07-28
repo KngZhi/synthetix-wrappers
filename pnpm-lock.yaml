@@ -14,6 +14,7 @@ specifiers:
   '@walletconnect/web3-provider': ^1.7.8
   autoprefixer: ^10.4.7
   copy-to-clipboard: ^3.3.1
+  currency.js: ^2.0.4
   dotenv: ^16.0.1
   eslint: 8.17.0
   eslint-config-next: 12.1.6
@@ -44,6 +45,7 @@ dependencies:
   '@synthetixio/contracts-interface': 2.73.1
   '@walletconnect/web3-provider': 1.7.8
   copy-to-clipboard: 3.3.1
+  currency.js: 2.0.4
   dotenv: 16.0.1
   ethers: 5.6.9
   next: 12.1.6_xab2ksyqfwgnu3ykyybaqku6vm
@@ -4324,6 +4326,11 @@ packages:
 
   /csstype/3.1.0:
     resolution: {integrity: sha512-uX1KG+x9h5hIJsaKR9xHUeUraxf8IODOwq9JLNPq6BwB04a/xgpq3rcx47l5BZu5zBPlgD342tdke3Hom/nJRA==}
+
+  /currency.js/2.0.4:
+    resolution: {integrity: sha512-6/OplJYgJ0RUlli74d93HJ/OsKVBi8lB1+Z6eJYS1YZzBuIp4qKKHpJ7ad+GvTlWmLR/hLJOWTykN5Nm8NJ7+w==}
+    engines: {node: '>=4'}
+    dev: false
 
   /d/1.0.1:
     resolution: {integrity: sha512-m62ShEObQ39CfralilEQRjH6oAMtNCV1xJyEx5LpRYUVN+EviphDgUc/F3hnYbADmkiNs67Y+3ylmlG7Lnu+FA==}
