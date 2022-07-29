@@ -95,7 +95,7 @@ const Wrapper = ({ onTVLClick, showWallet }: WrapperProps): JSX.Element => {
     setTargetToken(targetTokens[srcTokenIdx])
   }, [srcTokenIdx, srcTokens, targetTokens])
 
-  const contract = useTokenContract(srcToken)
+  const contract = useTokenContract(isWrap ? srcToken : targetToken)
 
   useEffect(() => {
     setFeeRate(isWrap ? contract.mintFeeRate : contract.burnFeeRate)
