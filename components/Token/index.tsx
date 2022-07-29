@@ -75,7 +75,7 @@ const TokenContainer = styled.div<TokenStyleProps>`
 `
 
 const TokenSelector = styled.div`
-  max-width: 130px;
+  max-width: 150px;
   cursor: pointer;
   border: 1px solid rgba(130, 130, 149, 0.3);
   border-radius: 8px;

@@ -1,5 +1,5 @@
 import { StaticImageData } from 'next/image'
-import ETHLogo from '../public/images/logos/ethereum.svg'
+import WETHLogo from '../public/images/synths/weth.png'
 import LUSDLogo from '../public/images/synths/sLUSD.png'
 import sUSDLogo from '../public/images/synths/sUSD.png'
 import sETHLogo from '../public/images/synths/sETH.png'
@@ -10,6 +10,7 @@ export type TokenAddress = string;
 export const sETH_ADDRESS = '0x5e74c9036fb86bd7ecdcb084a0673efc32ea31cb'
 export const LUSD_ADDRESS = '0x5f98805a4e8be255a32880fdec7f6728c6568ba0'
 export const sUSD_ADDRESS = '0x57ab1ec28d129707052df4df418d58a2d46d5f51'
+export const WETH_ADDRESS = '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2'
 
 export enum SupportedChainId {
 	MAINNET = 1,
@@ -56,11 +57,11 @@ export const sETH: TokenInterface = {
 	precision: 4,
 }
 
-export const ETH: TokenInterface = {
-	name: 'ETH',
-	key: 'eth',
-	address: '',
-	src: ETHLogo,
+export const WETH: TokenInterface = {
+	name: 'WETH',
+	key: 'weth',
+	address: WETH_ADDRESS,
+	src: WETHLogo,
 	decimals: 18,
 	precision: 4,
 }
@@ -77,18 +78,21 @@ export const sUSD: TokenInterface = {
 export type PairToken = [TokenInterface, TokenInterface]
 
 export const L1_Wrap: PairToken[] = [
+	[WETH, sETH],
 	[LUSD, sUSD],
 ]
 
 export const L1_Unwrap: PairToken[] = [
-	[sETH, ETH],
+	[sETH, WETH],
 	[sUSD, LUSD],
 ]
 
 export const L2_WRAP: PairToken[] = [
-	[ETH, sETH]
+	[LUSD, sUSD],
+	[WETH, sETH]
 ]
 
 export const L2_Unwrap: PairToken[] = [
-	[sETH, ETH],
+	[sUSD, LUSD],
+	[sETH, WETH],
 ]

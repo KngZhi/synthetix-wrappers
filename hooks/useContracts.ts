@@ -11,6 +11,7 @@ import {
     LUSD_WRAPPER_L2,
     ETH_WRAPPER_L1_CONTRACT,
 } from '../constants/contracts'
+import { WETH, sETH } from '../constants/token'
 import EthWrapperL1ABI from '../abis/eth-wrapper-l1.json'
 import EthWrapperL2ABI from '../abis/eth-wrapper-l2.json'
 import LUSDWrapperL1ABI from '../abis/lusd-wrapper-l1.json'
@@ -29,7 +30,7 @@ function getContractSetup(token: TokenInterface, chainId: number): ContractSetup
     switch (chainId) {
         case SupportedChainId.KOVAN:
         case SupportedChainId.MAINNET:
-            if (['eth', 'seth'].includes(token.key)) {
+            if ([WETH.key, WETH.key].includes(token.key)) {
                 contractSetup = {
                     addressOrName: ETH_WRAPPER_L1,
                     contractInterface: EthWrapperL1ABI,
@@ -43,7 +44,7 @@ function getContractSetup(token: TokenInterface, chainId: number): ContractSetup
             break
         case SupportedChainId.OPTIMISM:
         case SupportedChainId.OPTIMISTIC_KOVAN:
-            if (['eth', 'seth'].includes(token.key)) {
+            if ([WETH.key, WETH.key].includes(token.key)) {
                 contractSetup = {
                     addressOrName: ETH_WRAPPER_L2,
                     contractInterface: EthWrapperL2ABI,
