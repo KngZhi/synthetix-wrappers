@@ -12,9 +12,19 @@
                 "type": "address"
             },
             {
-                "internalType": "address payable",
-                "name": "_WETH",
+                "internalType": "contract IERC20",
+                "name": "_token",
                 "type": "address"
+            },
+            {
+                "internalType": "bytes32",
+                "name": "_currencyKey",
+                "type": "bytes32"
+            },
+            {
+                "internalType": "bytes32",
+                "name": "_synthContractName",
+                "type": "bytes32"
             }
         ],
         "payable": false,
@@ -182,9 +192,9 @@
         "name": "burnFeeRate",
         "outputs": [
             {
-                "internalType": "uint256",
+                "internalType": "int256",
                 "name": "",
-                "type": "uint256"
+                "type": "int256"
             }
         ],
         "payable": false,
@@ -206,6 +216,11 @@
                 "internalType": "uint256",
                 "name": "",
                 "type": "uint256"
+            },
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
             }
         ],
         "payable": false,
@@ -227,6 +242,11 @@
                 "internalType": "uint256",
                 "name": "",
                 "type": "uint256"
+            },
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
             }
         ],
         "payable": false,
@@ -249,23 +269,14 @@
         "type": "function"
     },
     {
-        "constant": false,
-        "inputs": [],
-        "name": "distributeFees",
-        "outputs": [],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
         "constant": true,
         "inputs": [],
-        "name": "feesEscrowed",
+        "name": "currencyKey",
         "outputs": [
             {
-                "internalType": "uint256",
+                "internalType": "bytes32",
                 "name": "",
-                "type": "uint256"
+                "type": "bytes32"
             }
         ],
         "payable": false,
@@ -320,7 +331,7 @@
     {
         "constant": true,
         "inputs": [],
-        "name": "maxETH",
+        "name": "maxTokenAmount",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -353,9 +364,9 @@
         "name": "mintFeeRate",
         "outputs": [
             {
-                "internalType": "uint256",
+                "internalType": "int256",
                 "name": "",
-                "type": "uint256"
+                "type": "int256"
             }
         ],
         "payable": false,
@@ -462,36 +473,6 @@
         "type": "function"
     },
     {
-        "constant": true,
-        "inputs": [],
-        "name": "sETHIssued",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [],
-        "name": "sUSDIssued",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
         "constant": false,
         "inputs": [
             {
@@ -509,7 +490,22 @@
     {
         "constant": true,
         "inputs": [],
-        "name": "totalIssuedSynths",
+        "name": "synthContractName",
+        "outputs": [
+            {
+                "internalType": "bytes32",
+                "name": "",
+                "type": "bytes32"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "targetSynthIssued",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -524,12 +520,27 @@
     {
         "constant": true,
         "inputs": [],
-        "name": "weth",
+        "name": "token",
         "outputs": [
             {
-                "internalType": "contract IWETH",
+                "internalType": "contract IERC20",
                 "name": "",
                 "type": "address"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "totalIssuedSynths",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
             }
         ],
         "payable": false,

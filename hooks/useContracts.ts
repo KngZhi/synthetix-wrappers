@@ -124,12 +124,9 @@ export function useTokenContract(
     const { data: burnFeeRate } = useRead(Read.BURN_FEE_RATE)
     const { data: capacity } = useRead(Read.CAPACITY)
     const { data: mintFeeRate } = useRead(Read.MINT_FEE_RATE)
-    const maxToken = (isL1 && (token.key === 'eth' || token.key === 'seth'))
-        ? Read.MAX_ETH
-        : Read.MAX_TOKEN_AMOUNT
     const { data: capacityUtilised }= useRead(Read.GET_RESERVES)
     const format = (data: Result | undefined) => data ? formatUnits(data, token.decimals) : '0'
-    const { data: maxTokenAmount } = useRead(maxToken)
+    const { data: maxTokenAmount } = useRead(Read.MAX_TOKEN_AMOUNT)
 
     return {
         mint,
