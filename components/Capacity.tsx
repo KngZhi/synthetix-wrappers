@@ -123,7 +123,7 @@ const GaugeProgress = styled.div<{ percentage: number }>`
 
       &:after {
         content: '100%';
-        width: calc(100% + 6ch);
+        width: calc(100%);
       }
     `}
 `
