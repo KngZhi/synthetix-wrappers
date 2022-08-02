@@ -5,67 +5,36 @@ import { SupportedChainId, TokenInterface } from '../constants/token'
 import { useRecoilState } from 'recoil'
 import { networkState } from '../store/index'
 import {
-    ETH_WRAPPER_L1,
-    ETH_WRAPPER_L2,
-    LUSD_WRAPPER_L1,
-    LUSD_WRAPPER_L2,
     ETH_WRAPPER_L1_CONTRACT,
+    ETH_WRAPPER_L2_CONTRACT,
+    LUSD_WRAPPER_L1_CONTRACT,
+    LUSD_WRAPPER_L2_CONTRACT,
+    ContractSetup,
 } from '../constants/contracts'
 import { WETH, sETH } from '../constants/token'
-import EthWrapperL1ABI from '../abis/eth-wrapper-l1.json'
-import EthWrapperL2ABI from '../abis/eth-wrapper-l2.json'
-import LUSDWrapperL1ABI from '../abis/lusd-wrapper-l1.json'
-import LUSDWrapperL2ABI from '../abis/lusd-wrapper-l2.json'
 import { formatUnits, Result } from 'ethers/lib/utils'
 import { isL1State } from '../store/index'
 import { useRecoilValue } from 'recoil'
 
-type ContractSetup = {
-    addressOrName: string;
-    contractInterface: ContractInterface;
-}
-
 function getContractSetup(token: TokenInterface, chainId: number): ContractSetup {
-    let contractSetup: ContractSetup
     switch (chainId) {
         case SupportedChainId.KOVAN:
         case SupportedChainId.MAINNET:
             if ([WETH.key, WETH.key].includes(token.key)) {
-                contractSetup = {
-                    addressOrName: ETH_WRAPPER_L1,
-                    contractInterface: EthWrapperL1ABI,
-                }
+                return ETH_WRAPPER_L1_CONTRACT
             } else {
-                contractSetup = {
-                    addressOrName: LUSD_WRAPPER_L1,
-                    contractInterface: LUSDWrapperL1ABI,
-                }
+                return LUSD_WRAPPER_L1_CONTRACT
             }
-            break
         case SupportedChainId.OPTIMISM:
         case SupportedChainId.OPTIMISTIC_KOVAN:
             if ([WETH.key, WETH.key].includes(token.key)) {
-                contractSetup = {
-                    addressOrName: ETH_WRAPPER_L2,
-                    contractInterface: EthWrapperL2ABI,
-                }
+                return ETH_WRAPPER_L2_CONTRACT
             } else {
-                contractSetup = {
-                    addressOrName: LUSD_WRAPPER_L2,
-                    contractInterface: LUSDWrapperL2ABI,
-                }
+                return LUSD_WRAPPER_L2_CONTRACT
             }
-            break
         default:
-            console.log(
-                '[ERR]: can not find ideal contract for current token',
-                token,
-                chainId,
-            )
-            contractSetup = ETH_WRAPPER_L1_CONTRACT
-            break
+            return ETH_WRAPPER_L1_CONTRACT
     }
-    return contractSetup
 }
 
 type ContractArgs = {

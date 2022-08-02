@@ -1,7 +1,11 @@
 import { ContractInterface } from 'ethers'
-import EthWrapperABI from '../abis/eth-wrapper-l1.json'
 import EthWrapperKovanABI from '../abis/eth-wrapper-kovan.json'
 import AGGREGATOR_L2_ABI from '../abis/aggregatorV3Interface-l2.json'
+
+import EthWrapperL1ABI from '../abis/eth-wrapper-l1.json'
+import EthWrapperL2ABI from '../abis/eth-wrapper-l2.json'
+import LUSDWrapperL1ABI from '../abis/lusd-wrapper-l1.json'
+import LUSDWrapperL2ABI from '../abis/lusd-wrapper-l2.json'
 
 
 export const ETH_WRAPPER_L1 = '0xCea392596F1AB7f1d6f8F241967094cA519E6129'
@@ -11,7 +15,7 @@ export const LUSD_WRAPPER_L2 = '0x8a91e92fdd86e734781c38db52a390e1b99fba7c'
 
 const EthWrapperKovanAddr = '0x44Af736495544a726ED15CB0EBe2d87a6bCC1832'
 
-type ContractSetup = {
+export interface ContractSetup {
     addressOrName: string;
     contractInterface: ContractInterface;
 }
@@ -23,7 +27,22 @@ export const AGGREGATOR_L2_CONTRACT: ContractSetup = {
 
 export const ETH_WRAPPER_L1_CONTRACT: ContractSetup = {
     addressOrName: ETH_WRAPPER_L1,
-    contractInterface: EthWrapperABI,
+    contractInterface: EthWrapperL1ABI,
+}
+
+export const ETH_WRAPPER_L2_CONTRACT: ContractSetup = {
+    addressOrName: ETH_WRAPPER_L2,
+    contractInterface: EthWrapperL2ABI,
+}
+
+export const LUSD_WRAPPER_L1_CONTRACT: ContractSetup = {
+    addressOrName: LUSD_WRAPPER_L1,
+    contractInterface: LUSDWrapperL1ABI,
+}
+
+export const LUSD_WRAPPER_L2_CONTRACT: ContractSetup = {
+    addressOrName: LUSD_WRAPPER_L2,
+    contractInterface: LUSDWrapperL2ABI,
 }
 
 export const EthWrapperL1KovanContract: ContractSetup = {
