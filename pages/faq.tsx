@@ -9,6 +9,8 @@ import FaqItem from '../components/FaqItem'
 import RocketImage from '../public/images/utils/rocket.png'
 import ImageImage from '../public/images/utils/Image.png'
 
+import FAQcontents from '../public/faq.json'
+
 const Faq = () => {
   return (
     <>
@@ -36,18 +38,14 @@ const Faq = () => {
           </Link>
         </Header>
         <FaqItems>
-          <FaqItem
-            category="GETTING STARTED"
-            title="What is Wrapper"
-            content="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras at iaculis odio diam pretium risus. Ornare id eu ut sed. Sit convallis purus suspendisse purus praesent nec massa, pellentesque purus. Integer molestie tempus volutpat eget risus, in pellentesque dolor."
-            image={RocketImage}
-          />
-          <FaqItem
-            category="WRAP"
-            image={ImageImage}
-            title="Lorem lpsum"
-            content="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras at iaculis odio diam pretium risus. Ornare id eu ut sed. Sit convallis purus suspendisse purus praesent nec massa, pellentesque purus. Integer molestie tempus volutpat eget risus, in pellentesque dolor."
-          ></FaqItem>
+          {FAQcontents.map((item) => (
+            <FaqItem
+              image={RocketImage}
+              category="GETTING STARTED"
+              title={item.title}
+              content={item.content}
+            />
+          ))}
         </FaqItems>
       </DefaultLayout>
     </>

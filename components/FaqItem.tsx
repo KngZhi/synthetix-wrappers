@@ -99,6 +99,7 @@ const TitlePanel = styled.div`
   align-items: center;
   padding: 15px 14px 15px 24px;
   height: 67px;
+  cursor: pointer;
 `
 const ContentPanel = styled.div<{ active: boolean }>`
   padding: 0 24px 20px;
