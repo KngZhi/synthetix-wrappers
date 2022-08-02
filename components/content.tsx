@@ -18,7 +18,6 @@ import TooltipContent from '../components/Tooltip'
 import Capacity from '../components/Capacity'
 import { TokenSelector, Token } from './Token'
 
-import LinkArrow from '../public/images/utils/link-arrow.svg'
 import DownArrowSmall from '../public/images/utils/down-arrow-small.svg'
 import BlueInfo from '../public/images/utils/blue-info.svg'
 import {
@@ -321,17 +320,17 @@ const ContainerRow = styled.div`
   align-items: center;
 `
 
-const TVLButton = styled(Button)`
-  width: 100%;
-  width: 68px;
-  height: 32px;
-  margin-left: 84px;
+// const TVLButton = styled(Button)`
+//   width: 100%;
+//   width: 68px;
+//   height: 32px;
+//   margin-left: 84px;
 
-  background: linear-gradient(121.5deg, #101215 55.37%, #22272b 106.67%);
-  border: 1px solid #000000;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.9);
-  border-radius: 40px;
-`
+//   background: linear-gradient(121.5deg, #101215 55.37%, #22272b 106.67%);
+//   border: 1px solid #000000;
+//   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.9);
+//   border-radius: 40px;
+// `
 
 const SelectorContainer = styled.div`
   display: flex;

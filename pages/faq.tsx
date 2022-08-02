@@ -7,7 +7,6 @@ import LinkArrow from '../public/images/utils/link-arrow.svg'
 import { XButton } from '../components/Button'
 import FaqItem from '../components/FaqItem'
 import RocketImage from '../public/images/utils/rocket.png'
-import ImageImage from '../public/images/utils/Image.png'
 
 import FAQcontents from '../public/faq.json'
 
