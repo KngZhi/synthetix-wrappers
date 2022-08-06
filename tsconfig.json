@@ -18,6 +18,7 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "baseUrl": ".",
+    "strictNullChecks": true,
     "incremental": true
   },
   "include": [
