@@ -1,4 +1,4 @@
-import { ContractInterface, BigNumber, } from 'ethers'
+import { BigNumber, } from 'ethers'
 import { useContractRead, useContractWrite } from 'wagmi'
 import { CallOverrides  } from 'ethers'
 import { SupportedChainId, TokenInterface } from '../constants/token'
@@ -11,23 +11,22 @@ import {
     LUSD_WRAPPER_L2_CONTRACT,
     ContractSetup,
 } from '../constants/contracts'
-import { WETH, sETH } from '../constants/token'
+import { WETH, sETH, } from '../constants/token'
 import { formatUnits, Result } from 'ethers/lib/utils'
 import { isL1State } from '../store/index'
 import { useRecoilValue } from 'recoil'
 
 function getContractSetup(token: TokenInterface, chainId: number): ContractSetup {
+    const ETHs = [WETH.key, sETH.key]
     switch (chainId) {
-        case SupportedChainId.KOVAN:
         case SupportedChainId.MAINNET:
-            if ([WETH.key, WETH.key].includes(token.key)) {
+            if (ETHs.includes(token.key)) {
                 return ETH_WRAPPER_L1_CONTRACT
             } else {
                 return LUSD_WRAPPER_L1_CONTRACT
             }
         case SupportedChainId.OPTIMISM:
-        case SupportedChainId.OPTIMISTIC_KOVAN:
-            if ([WETH.key, WETH.key].includes(token.key)) {
+            if (ETHs.includes(token.key)) {
                 return ETH_WRAPPER_L2_CONTRACT
             } else {
                 return LUSD_WRAPPER_L2_CONTRACT
