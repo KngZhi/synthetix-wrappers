@@ -1,9 +1,15 @@
 import { atom, selector } from 'recoil'
 import { chain } from 'wagmi'
+import { OnboardAPI } from '@web3-onboard/core'
 
 export const walletAddressState = atom<string | undefined>({
   key: 'walletAddress',
   default: undefined,
+})
+
+export const web3OnboardState = atom<OnboardAPI | null>({
+  key: 'web3Onboard',
+  default: null,
 })
 
 export const isWalletConnectedState = selector<boolean>({

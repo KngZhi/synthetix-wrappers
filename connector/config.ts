@@ -1,4 +1,4 @@
-import Onboard from '@web3-onboard/core'
+import { init } from '@web3-onboard/react'
 import injectedModule from '@web3-onboard/injected-wallets'
 import coinbaseWalletModule from '@web3-onboard/coinbase'
 import walletConnectModule from '@web3-onboard/walletconnect'
@@ -20,7 +20,7 @@ const gnosis = gnosisModule()
 const portis = portisModule({ apiKey: `${process.env.NEXT_PUBLIC_PORTIS_APP_ID}` })
 const torus = torusModule()
 
-export const onboard = Onboard({
+export const onboard = init({
 	appMetadata: {
 		name: 'Synthetix',
 		icon: SynthetixIcon,
