@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, ChangeEventHandler } from 'react'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilValue } from 'recoil'
 import styled, { css } from 'styled-components'
 import Image from 'next/image'
 import { useBalance } from 'wagmi'
@@ -22,8 +22,6 @@ import DownArrowSmall from '../public/images/utils/down-arrow-small.svg'
 import BlueInfo from '../public/images/utils/blue-info.svg'
 import {
   isL1State,
-  isWalletConnectedState,
-  walletAddressState,
 } from '../store/index'
 
 import {
@@ -36,11 +34,11 @@ import {
 } from '../constants/token'
 
 import { useTokenContract } from '../hooks/useContracts'
+import { useConnectorContext } from 'connector/Connector'
 import { formatCurrency as currency } from 'utils/string'
 
 type WrapperProps = {
   onTVLClick: () => void
-  showWallet: () => void
 }
 
 type Tokens = TokenInterface[]
@@ -58,7 +56,7 @@ function getTokenPairs(isWrap: boolean, isL1: boolean): [Tokens, Tokens] {
   return [getTokens(0), getTokens(1)]
 }
 
-const Wrapper = ({ onTVLClick, showWallet }: WrapperProps): JSX.Element => {
+const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
   const { value: isWrap, setValue: setIsWrap } = useBoolean(true)
   const [srcTokenIdx, setSrcTokenIdx] = useState<number>(0)
   const [feeRate, setFeeRate] = useState<string>('0')
@@ -68,9 +66,8 @@ const Wrapper = ({ onTVLClick, showWallet }: WrapperProps): JSX.Element => {
   const [srcTokenValue, setSrcTokenValue] = useState<string>('')
   const [targetTokenValue, setTargetTokenValue] = useState<string>('')
 
+  const { walletAddress, connectWallet } = useConnectorContext()
   const isL1 = useRecoilValue(isL1State)
-  const isWalletConnected = useRecoilValue(isWalletConnectedState)
-  const [walletAddress] = useRecoilState(walletAddressState)
 
   const tokenPairs = getTokenPairs(isWrap, isL1)
 
@@ -104,13 +101,13 @@ const Wrapper = ({ onTVLClick, showWallet }: WrapperProps): JSX.Element => {
   }, [contract, isWrap])
 
   const { data: srcBalance } = useBalance({
-    addressOrName: walletAddress,
+    addressOrName: '',
     watch: true,
     token: srcToken.address,
   })
 
   const { data: targetBalance } = useBalance({
-    addressOrName: walletAddress,
+    addressOrName: '',
     token: targetToken.address,
   })
 
@@ -286,13 +283,13 @@ const Wrapper = ({ onTVLClick, showWallet }: WrapperProps): JSX.Element => {
           </StyledBlackContainerRow>
         </BlackContainer>
         <ActionButton
-          isWalletConnected={isWalletConnected}
+          isWalletConnected={!!walletAddress}
           balanceValue={srcBalanceValue}
           inputValue={srcTokenValue || '0'}
           maxWrappable={maxWrappable}
           onClick={onActionClick}
           isWrap={isWrap}
-          connect={showWallet}
+          connect={connectWallet}
         />
       </WrapperContainerColumn>
       <Capacity

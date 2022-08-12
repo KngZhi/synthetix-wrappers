@@ -1,6 +1,5 @@
-import { useEffect } from 'react'
 import styled from 'styled-components'
-import { useConnect, useAccount, useDisconnect } from 'wagmi'
+import { useConnect } from 'wagmi'
 import { Modal, Text } from '@nextui-org/react'
 import { useBoolean } from 'usehooks-ts'
 
@@ -11,8 +10,6 @@ import {
 } from './Button'
 
 import {
-  isWalletConnectedState,
-  walletAddressState,
   networkState,
 } from '../store/index'
 
@@ -23,7 +20,8 @@ import WalletConnect from '../public/images/wallets/WalletConnect.svg'
 
 import { truncateAddress } from '../utils/string'
 import Profile from './Modal/Profile'
-import { useRecoilValue, useRecoilState } from 'recoil'
+import { useRecoilState } from 'recoil'
+import { useConnectorContext } from 'connector/Connector'
 
 const picTable: Record<string, StaticImageData> = {
   MetaMask: MetaMask,
@@ -41,47 +39,37 @@ export default function WalletButton({
   hideWallet,
   showWallet,
 }: WalletButtonProps) {
+  const { connectWallet, disconnectWallet, walletAddress }= useConnectorContext()
+
   const {
     value: profileVisible,
     setFalse: hideProfile,
     setTrue: showProfile,
   } = useBoolean(false)
-  const [walletAddress, setWalletAddress] = useRecoilState(walletAddressState)
-  const isWalletConnected = useRecoilValue(isWalletConnectedState)
   const [activeNetwork] = useRecoilState(networkState)
 
   const { connect, connectors } = useConnect()
-  const { address } = useAccount()
-
-  const { disconnect } = useDisconnect()
-
-  useEffect(() => {
-    if (address) {
-      setWalletAddress(address)
-    }
-  }, [address, setWalletAddress])
 
   const addr = truncateAddress(walletAddress || '')
   function handleChangeWallet() {
-    showWallet()
     hideProfile()
+    connectWallet()
   }
 
   function handleDisconnect() {
-    disconnect()
-    setWalletAddress(undefined)
+    disconnectWallet()
     hideProfile()
   }
 
   return (
     <>
-      {isWalletConnected ? (
+      {walletAddress ? (
         <AddrButton onClick={showProfile}>
           <span className="dot"></span>
           {addr}
         </AddrButton>
       ) : (
-        <ConnectWalletButton onClick={showWallet}>
+        <ConnectWalletButton onClick={connectWallet}>
           <span>Connect Wallet</span>
         </ConnectWalletButton>
       )}
