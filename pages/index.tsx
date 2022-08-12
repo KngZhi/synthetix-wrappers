@@ -14,7 +14,6 @@ import Content from '../components/content'
 import Footer from '../components/Footer'
 
 import { onboard } from '../connector/config'
-import { web3OnboardState } from '../store'
 import { useSetRecoilState } from 'recoil'
 
 const HomePage: NextPage = () => {
@@ -23,10 +22,6 @@ const HomePage: NextPage = () => {
     setFalse: hideWallet,
     setTrue: showWallet,
   } = useBoolean(false)
-  const setWeb3OnboardState = useSetRecoilState(web3OnboardState)
-  useEffect(() => {
-    setWeb3OnboardState(onboard)
-  }, [setWeb3OnboardState])
 
   return (
     <>
@@ -53,7 +48,6 @@ const HomePage: NextPage = () => {
           </MenuContainer>
         </HeaderContainer>
         <Content
-          showWallet={showWallet}
           onTVLClick={() => {
             console.log('TVL Click')
           }}
