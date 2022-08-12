@@ -9,6 +9,7 @@ import { publicProvider } from 'wagmi/providers/public'
 
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
+import { ConnectorContextProvider, useConnectorContext } from '../connector'
 
 const INFURA_ID = process.env.INFURA_ID
 
@@ -33,9 +34,11 @@ const client = createClient({
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <WagmiConfig client={client}>
-      <RecoilRoot>
-        <Component {...pageProps} />
-      </RecoilRoot>
+      <ConnectorContextProvider>
+        <RecoilRoot>
+          <Component {...pageProps} />
+        </RecoilRoot>
+      </ConnectorContextProvider>
     </WagmiConfig>
   )
 }
