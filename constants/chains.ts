@@ -10,7 +10,7 @@ export interface Chain {
 	rpcUrl: string;
 }
 
-const Ethereum: Chain = {
+export const Ethereum: Chain = {
 	id: getChainIdHex(NetworkIdByName.mainnet),
 	token: 'ETH',
 	label: 'Ethereum',
