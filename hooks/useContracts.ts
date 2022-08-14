@@ -1,6 +1,6 @@
 import { BigNumber, } from 'ethers'
-import { useContractRead, useContractWrite } from 'wagmi'
-import { CallOverrides  } from 'ethers'
+import { useContractWrite, useContractRead, useClient } from 'wagmi'
+import { CallOverrides } from 'ethers'
 import { SupportedChainId, TokenInterface } from '../constants/token'
 import { useRecoilState } from 'recoil'
 import { networkState } from '../store/index'
@@ -15,17 +15,19 @@ import { WETH, sETH, } from '../constants/token'
 import { formatUnits, Result } from 'ethers/lib/utils'
 import { isL1State } from '../store/index'
 import { useRecoilValue } from 'recoil'
+import { Optimism, Ethereum } from 'constants/chains'
+import useBaseContract, { useContractRead as readContract } from './useBaseContract'
 
-function getContractSetup(token: TokenInterface, chainId: number): ContractSetup {
+function getContractSetup(token: TokenInterface, chainId: string): ContractSetup {
     const ETHs = [WETH.key, sETH.key]
     switch (chainId) {
-        case SupportedChainId.MAINNET:
+        case Ethereum.id:
             if (ETHs.includes(token.key)) {
                 return ETH_WRAPPER_L1_CONTRACT
             } else {
                 return LUSD_WRAPPER_L1_CONTRACT
             }
-        case SupportedChainId.OPTIMISM:
+        case Optimism.id:
             if (ETHs.includes(token.key)) {
                 return ETH_WRAPPER_L2_CONTRACT
             } else {
@@ -74,32 +76,27 @@ export function useTokenContract(
     token: TokenInterface,
 ): BaseContractInterface {
     const [activeNetwork] = useRecoilState(networkState)
-    const isL1 = useRecoilValue(isL1State)
     const contractSetup = getContractSetup(token, activeNetwork?.id)
-
-    const useRead = (functionName: Read, args?: BigNumber) => useContractRead({
-        ...contractSetup,
-        functionName,
-        args
-    })
+    const useRead = (functionName: Read) => readContract({ contract: contractSetup, functionName })
 
     const useWrite = (functionName: Write) => useContractWrite({
         ...contractSetup,
         functionName,
     })
 
-    const { write: mint } = useWrite(Write.MINT)
-    const { write: burn } = useWrite(Write.BURN)
-    const { data: burnFeeRate } = useRead(Read.BURN_FEE_RATE)
-    const { data: capacity } = useRead(Read.CAPACITY)
-    const { data: mintFeeRate } = useRead(Read.MINT_FEE_RATE)
-    const { data: capacityUtilised }= useRead(Read.GET_RESERVES)
-    const format = (data: Result | undefined) => data ? formatUnits(data, token.decimals) : '0'
-    const { data: maxTokenAmount } = useRead(Read.MAX_TOKEN_AMOUNT)
+    // const { write: mint } = useWrite(Write.MINT)
+    // const { write: burn } = useWrite(Write.BURN)
+    const burnFeeRate = useRead(Read.BURN_FEE_RATE)
+    const capacity = useRead(Read.CAPACITY)
+    const mintFeeRate = useRead(Read.MINT_FEE_RATE)
+    const capacityUtilised = useRead(Read.GET_RESERVES)
+    const maxTokenAmount = useRead(Read.MAX_TOKEN_AMOUNT)
+    const format = (data: BigNumber | undefined) => data ? formatUnits(data, token.decimals) : '0'
+    
 
     return {
-        mint,
-        burn,
+        mint: () => {},
+        burn: () => {},
         capacityUtilised: format(capacityUtilised),
         burnFeeRate: format(burnFeeRate),
         capacity: format(capacity),
