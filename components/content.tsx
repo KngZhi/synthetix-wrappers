@@ -112,13 +112,7 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
 
   const onActionClick = async () => {
     const action = isWrap ? contract.mint : contract.burn
-    action({
-      args: parseEther(srcTokenValue),
-      overrides: {
-        gasPrice: parseUnits('2', 'gwei'),
-        gasLimit: 500e3,
-      },
-    })
+    action(parseEther(srcTokenValue))
   }
 
   const onTokenChange = (idx: number) => {

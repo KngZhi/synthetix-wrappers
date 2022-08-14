@@ -1,4 +1,4 @@
-import { BigNumber, Contract } from 'ethers'
+import { BigNumber, Contract, Signer, providers } from 'ethers'
 import { useConnectorContext } from 'connector/Connector'
 import { isL1State } from '../store/index'
 import { ContractSetup } from 'constants/contracts'
@@ -8,23 +8,19 @@ import { useRecoilValue } from 'recoil'
 interface payloadType {
     contract: ContractSetup,
     functionName: string,
+    signerOrProvider?: Signer | providers.Provider | undefined,
     args?: string[],
 }
 
 export default function useContract({
     contract,
     functionName,
-    args,
+    signerOrProvider,
 }: payloadType) {
-    const isL1 = useRecoilValue(isL1State)
-    const { isWalletConnected, provider, L1DefaultProvider, L2DefaultProvider } = useConnectorContext()
-
     const baseContract = new Contract(
         contract.addressOrName,
         contract.contractInterface,
-        isWalletConnected
-            ? provider
-            : (isL1 ? L1DefaultProvider : L2DefaultProvider),
+        signerOrProvider
     )
 
     return baseContract[functionName]
@@ -36,9 +32,17 @@ export function useContractRead({
     functionName,
     args = []
 }: payloadType) {
+    const { isWalletConnected, provider, L1DefaultProvider, L2DefaultProvider, } = useConnectorContext()
     const [data, setData] = useState<BigNumber>()
+    const isL1 = useRecoilValue(isL1State)
 
-    const func = useContract({ contract, functionName })
+    const func = useContract({
+        contract,
+        functionName,
+        signerOrProvider: isWalletConnected
+            ? provider
+            : (isL1 ? L1DefaultProvider : L2DefaultProvider),
+    })
     useEffect(() => {
         (async () => {
             try {
@@ -51,4 +55,14 @@ export function useContractRead({
         })()
     }, [contract, functionName])
     return data
+}
+
+export function useContractWrite({
+    contract,
+    functionName,
+}: payloadType) {
+    const { signer } = useConnectorContext()
+    const func = useContract({ contract, functionName, signerOrProvider: signer })
+
+    return func
 }

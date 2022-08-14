@@ -1,7 +1,5 @@
 import { BigNumber, } from 'ethers'
-import { useContractWrite, useContractRead, useClient } from 'wagmi'
-import { CallOverrides } from 'ethers'
-import { SupportedChainId, TokenInterface } from '../constants/token'
+import { TokenInterface } from '../constants/token'
 import { useRecoilState } from 'recoil'
 import { networkState } from '../store/index'
 import {
@@ -12,11 +10,9 @@ import {
     ContractSetup,
 } from '../constants/contracts'
 import { WETH, sETH, } from '../constants/token'
-import { formatUnits, Result } from 'ethers/lib/utils'
-import { isL1State } from '../store/index'
-import { useRecoilValue } from 'recoil'
+import { formatUnits, } from 'ethers/lib/utils'
 import { Optimism, Ethereum } from 'constants/chains'
-import useBaseContract, { useContractRead as readContract } from './useBaseContract'
+import { useContractRead as readContract, useContractWrite as useWriteContract } from './useBaseContract'
 
 function getContractSetup(token: TokenInterface, chainId: string): ContractSetup {
     const ETHs = [WETH.key, sETH.key]
@@ -38,10 +34,7 @@ function getContractSetup(token: TokenInterface, chainId: string): ContractSetup
     }
 }
 
-type ContractArgs = {
-    args: BigNumber[] | BigNumber | undefined
-    overrides: CallOverrides
-}
+type argsType = BigNumber[] | BigNumber | undefined
 
 interface BaseContractInterface {
     burnFeeRate: string
@@ -51,8 +44,8 @@ interface BaseContractInterface {
     capacityUtilised: string
     calculateBurnFee?: () => Promise<string>
     calculateMintFee?: () => Promise<string>
-    mint: (args: ContractArgs) => void
-    burn: (args: ContractArgs) => void
+    mint: (args: argsType) => void
+    burn: (args: argsType) => void
 }
 
 enum Read {
@@ -79,13 +72,13 @@ export function useTokenContract(
     const contractSetup = getContractSetup(token, activeNetwork?.id)
     const useRead = (functionName: Read) => readContract({ contract: contractSetup, functionName })
 
-    const useWrite = (functionName: Write) => useContractWrite({
-        ...contractSetup,
-        functionName,
+    const useWrite = (functionName: Write) => useWriteContract({ 
+        contract: contractSetup,
+        functionName: functionName,
     })
 
-    // const { write: mint } = useWrite(Write.MINT)
-    // const { write: burn } = useWrite(Write.BURN)
+    const mint = useWrite(Write.MINT)
+    const burn = useWrite(Write.BURN)
     const burnFeeRate = useRead(Read.BURN_FEE_RATE)
     const capacity = useRead(Read.CAPACITY)
     const mintFeeRate = useRead(Read.MINT_FEE_RATE)
@@ -95,8 +88,8 @@ export function useTokenContract(
     
 
     return {
-        mint: () => {},
-        burn: () => {},
+        mint,
+        burn,
         capacityUtilised: format(capacityUtilised),
         burnFeeRate: format(burnFeeRate),
         capacity: format(capacity),
