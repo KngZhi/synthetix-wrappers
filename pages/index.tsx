@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import styled from 'styled-components'
@@ -12,9 +11,6 @@ import SynthetixLogo from '../public/images/logos/synthetix.svg'
 
 import Content from '../components/content'
 import Footer from '../components/Footer'
-
-import { onboard } from '../connector/config'
-import { useSetRecoilState } from 'recoil'
 
 const HomePage: NextPage = () => {
   const {

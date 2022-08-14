@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState, ChangeEventHandler } from 'react'
 import { useRecoilValue } from 'recoil'
 import styled, { css } from 'styled-components'
 import Image from 'next/image'
-import { parseEther, parseUnits } from 'ethers/lib/utils'
+import { parseEther } from 'ethers/lib/utils'
 import { useBoolean } from 'usehooks-ts'
 
 import { Tooltip } from '@nextui-org/react'

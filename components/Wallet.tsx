@@ -1,11 +1,8 @@
 import styled from 'styled-components'
-import { useConnect } from 'wagmi'
-import { Modal, Text } from '@nextui-org/react'
 import { useBoolean } from 'usehooks-ts'
 
 import {
   Button as BaseButton,
-  WalletSelectorButton,
   AddrButton,
 } from './Button'
 
@@ -13,20 +10,10 @@ import {
   networkState,
 } from '../store/index'
 
-import styles from './Modal/Modal.module.css'
-import Image, { StaticImageData } from 'next/image'
-import MetaMask from '../public/images/wallets/metamask.svg'
-import WalletConnect from '../public/images/wallets/WalletConnect.svg'
-
 import { truncateAddress } from '../utils/string'
 import Profile from './Modal/Profile'
 import { useRecoilState } from 'recoil'
 import { useConnectorContext } from 'connector/Connector'
-
-const picTable: Record<string, StaticImageData> = {
-  MetaMask: MetaMask,
-  WalletConnect: WalletConnect,
-}
 
 type WalletButtonProps = {
   visible: boolean
@@ -47,8 +34,6 @@ export default function WalletButton({
     setTrue: showProfile,
   } = useBoolean(false)
   const [activeNetwork] = useRecoilState(networkState)
-
-  const { connect, connectors } = useConnect()
 
   const addr = truncateAddress(walletAddress || '')
   function handleChangeWallet() {
@@ -78,63 +63,11 @@ export default function WalletButton({
           open={profileVisible}
           address={walletAddress || ''}
           shortAddr={addr}
-          chainId={activeNetwork?.id}
+          chainId={Number(activeNetwork?.id)}
           disconnect={handleDisconnect}
           onClose={hideProfile}
           changeWallet={handleChangeWallet}
         />
-        <Modal
-          css={{
-            background:
-              'linear-gradient(121.5deg, #101215 55.37%, #22272B 106.67%);',
-            color: '#fff',
-            boxShadow: '0px 14px 14px rgba(0, 0, 0, 0.25)',
-          }}
-          className={styles.wallet_modal}
-          width="370px"
-          closeButton
-          open={visible}
-          onClose={hideWallet}
-        >
-          <Modal.Header
-            css={{ flexDirection: 'column', alignContent: 'center' }}
-          >
-            <div>
-              <Text b id="modal-title" color="#fff" size={18}>
-                Connect To Wallet
-              </Text>
-            </div>
-            <div>
-              <Text color="#828295">
-                Please select a wallet to connect to this dapp
-              </Text>
-            </div>
-          </Modal.Header>
-          <Modal.Body>
-            {connectors.map((connector) => (
-              <WalletSelectorButton
-                key={connector.id}
-                onClick={() => {
-                  connect({ connector })
-                  hideWallet()
-                }}
-              >
-                <Image src={picTable[connector.name]} alt={connector.name} />
-                <span>
-                  {connector.name}
-                  {!connector.ready && ' (unsupported)'}
-                </span>
-              </WalletSelectorButton>
-            ))}
-          </Modal.Body>
-          <Modal.Footer
-            css={{
-              justifyContent: 'center',
-              paddingTop: '$0',
-              paddingBottom: '13px',
-            }}
-          ></Modal.Footer>
-        </Modal>
       </>
     </>
   )

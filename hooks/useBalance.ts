@@ -1,4 +1,4 @@
-import { erc20ABI } from 'wagmi'
+import erc20ABI from 'abis/erc20.json'
 
 import { useState, useEffect } from 'React'
 import { Contract } from 'ethers'
