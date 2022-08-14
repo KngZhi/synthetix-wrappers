@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState, ChangeEventHandler } from 'react'
 import { useRecoilValue } from 'recoil'
 import styled, { css } from 'styled-components'
 import Image from 'next/image'
-import { useBalance } from 'wagmi'
 import { parseEther, parseUnits } from 'ethers/lib/utils'
 import { useBoolean } from 'usehooks-ts'
 
@@ -20,9 +19,7 @@ import { TokenSelector, Token } from './Token'
 
 import DownArrowSmall from '../public/images/utils/down-arrow-small.svg'
 import BlueInfo from '../public/images/utils/blue-info.svg'
-import {
-  isL1State,
-} from '../store/index'
+import { isL1State } from '../store/index'
 
 import {
   L1_Wrap,
@@ -34,6 +31,7 @@ import {
 } from '../constants/token'
 
 import { useTokenContract } from '../hooks/useContracts'
+import useBalance from 'hooks/useBalance'
 import { useConnectorContext } from 'connector/Connector'
 import { formatCurrency as currency } from 'utils/string'
 
@@ -99,20 +97,8 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
     setMaxCapacity(contract.maxTokenAmount)
     setCapacityUtilised(contract.capacityUtilised)
   }, [contract, isWrap])
-
-  const { data: srcBalance } = useBalance({
-    addressOrName: '',
-    watch: true,
-    token: srcToken.address,
-  })
-
-  const { data: targetBalance } = useBalance({
-    addressOrName: '',
-    token: targetToken.address,
-  })
-
-  const srcBalanceValue: string = srcBalance?.formatted || '0'
-  const targetBalanceValue: string = targetBalance?.formatted || '0'
+  const srcBalanceValue = useBalance(srcToken)
+  const targetBalanceValue = useBalance(targetToken)
 
   /* Capacity */
   const capacityPercentage: number =

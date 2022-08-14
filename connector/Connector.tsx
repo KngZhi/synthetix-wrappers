@@ -21,7 +21,7 @@ import { AppState, OnboardAPI } from '@web3-onboard/core'
 
 type ConnectorContextType = {
   network: Network | null
-  provider: ethers.providers.Web3Provider | null
+  provider: ethers.providers.Web3Provider | undefined
   signer: ethers.Signer | null
   synthetixjs: SynthetixJS | null
   isAppReady: boolean

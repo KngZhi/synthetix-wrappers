@@ -1,6 +1,5 @@
 import { atom, selector } from 'recoil'
-import { chain } from 'wagmi'
-import { SupportedChains, Optimism, Chain } from 'constants/chains'
+import { Optimism, Chain } from 'constants/chains'
 
 export const walletAddressState = atom<string | undefined>({
   key: 'walletAddress',
@@ -29,6 +28,5 @@ export const networkState = atom<Chain>({
 
 export const isL1State = selector<boolean>({
   key: 'isL1',
-  get: ({ get }) =>
-    [chain.kovan.name, chain.mainnet.name].includes(get(networkState)?.name),
+  get: ({ get }) => get(networkState).id === '0x1'
 })

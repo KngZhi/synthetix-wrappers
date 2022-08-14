@@ -12,6 +12,13 @@ export const LUSD_ADDRESS = '0x5f98805a4e8be255a32880fdec7f6728c6568ba0'
 export const sUSD_ADDRESS = '0x57ab1ec28d129707052df4df418d58a2d46d5f51'
 export const WETH_ADDRESS = '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2'
 
+const OVM_ADDRESS = {
+	'WETH': '0x4200000000000000000000000000000000000006',
+	'LUSD': '0xc40f949f8a4e094d1b49a23ea9241d289b7b2819',
+	'sUSD': '0x8c6f28f2F1A3C87F0f938b96d27520d9751ec8d9',
+	'sETH': '0xE405de8F52ba7559f9df3C368500B6E6ae6Cee49',
+}
+
 export enum SupportedChainId {
 	MAINNET = 1,
 	KOVAN = 42,
@@ -26,6 +33,7 @@ export enum Tokens {
 	LUSD = 'LUSD',
 	ETH = 'ETH',
 	sUSD = 'sUSD',
+	WETH = 'WETH',
 }
 
 export type TokenKey = 'seth' | 'lusd' | 'eth' | 'susd'
@@ -37,6 +45,7 @@ export interface TokenInterface {
 	src: StaticImageData;
 	decimals: number;
 	precision: number;
+	ovmAddress: TokenAddress
 }
 
 export const LUSD: TokenInterface = {
@@ -46,6 +55,7 @@ export const LUSD: TokenInterface = {
 	src: LUSDLogo,
 	decimals: 18,
 	precision: 2,
+	ovmAddress: OVM_ADDRESS[Tokens.LUSD]
 }
 
 export const sETH: TokenInterface = {
@@ -55,6 +65,7 @@ export const sETH: TokenInterface = {
 	src: sETHLogo,
 	decimals: 18,
 	precision: 4,
+	ovmAddress: OVM_ADDRESS[Tokens.sETH]
 }
 
 export const WETH: TokenInterface = {
@@ -64,6 +75,7 @@ export const WETH: TokenInterface = {
 	src: WETHLogo,
 	decimals: 18,
 	precision: 4,
+	ovmAddress: OVM_ADDRESS[Tokens.WETH]
 }
 
 export const sUSD: TokenInterface = {
@@ -73,6 +85,7 @@ export const sUSD: TokenInterface = {
 	src: sUSDLogo,
 	decimals: 18,
 	precision: 2,
+	ovmAddress: OVM_ADDRESS[Tokens.sUSD]
 }
 
 export type PairToken = [TokenInterface, TokenInterface]
