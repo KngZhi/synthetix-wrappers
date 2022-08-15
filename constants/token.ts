@@ -101,11 +101,11 @@ export const L1_Unwrap: PairToken[] = [
 ]
 
 export const L2_WRAP: PairToken[] = [
+	[WETH, sETH],
 	[LUSD, sUSD],
-	[WETH, sETH]
 ]
 
 export const L2_Unwrap: PairToken[] = [
-	[sUSD, LUSD],
 	[sETH, WETH],
+	[sUSD, LUSD],
 ]
