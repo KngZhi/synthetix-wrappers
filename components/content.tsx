@@ -96,7 +96,7 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
     setMaxWrappable(contract.capacity)
     setMaxCapacity(contract.maxTokenAmount)
     setCapacityUtilised(contract.capacityUtilised)
-  }, [contract, isWrap])
+  }, [contract, isWrap, isL1])
   const srcBalanceValue = useBalance(srcToken)
   const targetBalanceValue = useBalance(targetToken)
 

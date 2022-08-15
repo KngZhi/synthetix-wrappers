@@ -53,7 +53,7 @@ export function useContractRead({
                 console.log(error)
             }
         })()
-    }, [contract, functionName])
+    }, [contract, functionName, provider, isL1])
     return data
 }
 
