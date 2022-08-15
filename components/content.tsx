@@ -93,7 +93,7 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
 
   useEffect(() => {
     setFeeRate(isWrap ? contract.mintFeeRate : contract.burnFeeRate)
-    setMaxWrappable(contract.capacity)
+    setMaxWrappable(isWrap ? contract.capacity: contract.capacityUtilised)
     setMaxCapacity(contract.maxTokenAmount)
     setCapacityUtilised(contract.capacityUtilised)
   }, [contract, isWrap, isL1])
@@ -222,7 +222,12 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
           </BlackContainerRow>
           <BlackContainerRow>
             <span>
-              Max wrappable: {currency(maxWrappable, srcToken.precision)}Ξ
+                {
+                  isWrap 
+                  ? 'Max Wrappable: '
+                  : 'Max Burnable: '
+                }
+              {currency(maxWrappable, srcToken.precision)}Ξ
             </span>
           </BlackContainerRow>
         </BlackContainer>
