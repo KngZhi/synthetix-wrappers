@@ -12,7 +12,7 @@ function useBalance(token: TokenInterface) {
     const isL1 = useRecoilValue(isL1State)
     const [balance, setBalance] = useState('0')
 
-    const { isWalletConnected, walletAddress, provider } = useConnectorContext()
+    const { isWalletConnected, walletAddress, L1DefaultProvider, L2DefaultProvider } = useConnectorContext()
     
     useEffect(() => {
         (async () => {
@@ -21,12 +21,13 @@ function useBalance(token: TokenInterface) {
                 return
             }
             const address = isL1 ? token.address : token.ovmAddress
+            const provider = isL1 ? L1DefaultProvider : L2DefaultProvider
             const contract = new Contract(address, erc20ABI, provider)
             const balance = await contract.balanceOf(walletAddress)
             
             setBalance(formatUnits(balance.toString(), token.decimals))
         })()
-    }, [token, isWalletConnected, isL1, provider, walletAddress])
+    }, [token, isWalletConnected, isL1, walletAddress])
 
     return balance
 }

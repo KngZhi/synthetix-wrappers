@@ -39,9 +39,7 @@ export function useContractRead({
     const func = useContract({
         contract,
         functionName,
-        signerOrProvider: isWalletConnected
-            ? provider
-            : (isL1 ? L1DefaultProvider : L2DefaultProvider),
+        signerOrProvider: isL1 ? L1DefaultProvider : L2DefaultProvider,
     })
     useEffect(() => {
         (async () => {
