@@ -1,6 +1,6 @@
 import erc20ABI from 'abis/erc20.json'
 
-import { useState, useEffect } from 'React'
+import { useState, useEffect } from 'react'
 import { Contract } from 'ethers'
 import { formatUnits } from 'ethers/lib/utils'
 import { useConnectorContext } from 'connector/Connector'
