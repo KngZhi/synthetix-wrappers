@@ -13,9 +13,13 @@ function useBalance(token: TokenInterface) {
     const [balance, setBalance] = useState('0')
 
     const { isWalletConnected, walletAddress, provider } = useConnectorContext()
+    
     useEffect(() => {
         (async () => {
-            if (!isWalletConnected) return '0'
+            if (!isWalletConnected) {
+                setBalance(formatUnits(0, token.decimals))
+                return
+            }
             const address = isL1 ? token.address : token.ovmAddress
             const contract = new Contract(address, erc20ABI, provider)
             const balance = await contract.balanceOf(walletAddress)
