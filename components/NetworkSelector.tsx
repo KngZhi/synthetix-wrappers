@@ -53,15 +53,17 @@ export const NetworkSelector: FC<NetworkSelectorProps> = ({
   containerCls,
 }) => {
   const [activeNetwork, setActiveNetwork] = useRecoilState(networkState)
-  const { isWalletConnected } = useConnectorContext()
+  
+  const { isWalletConnected, network } = useConnectorContext()
   const [ { connectedChain }, setChain ] = useSetChain()
 
+      // console.log(activeNetwork, network, connectedChain)
   useEffect(() => {
-    if (connectedChain) {
-      const chain = SupportedChains.find(chain => chain.id === connectedChain.id) as Chain
+    if (network) {
+      const chain = SupportedChains.find(chain => Number(chain.id) === network.id) as Chain
       setActiveNetwork(chain)
     }
-  }, [connectedChain, setActiveNetwork])
+  }, [network, setActiveNetwork])
   
   const onSwitchChain = async (chain: Chain) => {
     if (isWalletConnected) {
@@ -87,10 +89,10 @@ export const NetworkSelector: FC<NetworkSelectorProps> = ({
         <NetWorkButton>
           <Image
             src={NETWORK_ICON[activeNetwork?.id]}
-            alt={activeNetwork.label}
+            alt={activeNetwork?.label}
             priority={true}
           />
-          <span className="ml-1.25">{activeNetwork.label}</span>
+          <span className="ml-1.25">{activeNetwork?.label}</span>
           <Image src={DownArrow} alt="down-arrow" priority={true} />
         </NetWorkButton>
       }
@@ -100,7 +102,7 @@ export const NetworkSelector: FC<NetworkSelectorProps> = ({
             <NetworkButton
               src={NETWORK_ICON[chain.id]}
               onClick={() => onSwitchChain(chain)}
-              isActive={chain.id === activeNetwork.id}
+              isActive={chain.id === activeNetwork?.id}
               key={chain.id}
               name={chain.label}
             />
