@@ -252,7 +252,7 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
             />
           </BlackContainerRow>
           <StyledBlackContainerRow>
-            <span>Fee rate: {parseFloat(feeRate) * 100}%</span>
+            <span>Fee rate: {parseFloat(feeRate)}%</span>
             <Tooltip
               color="invert"
               content={<TooltipContent />}
