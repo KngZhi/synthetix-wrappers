@@ -55,6 +55,7 @@ const DropdownList = styled.div<{ active: boolean; offset: number }>`
   position: absolute;
   visibility: hidden;
   opacity: 0;
+  z-index: 10;
   top: ${(props) => props.offset}px;
   ${(props) =>
     props.active &&
