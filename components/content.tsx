@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, ChangeEventHandler } from 'react'
+import { useEffect, useState, ChangeEventHandler } from 'react'
 import { useRecoilValue } from 'recoil'
 import styled, { css } from 'styled-components'
 import Image from 'next/image'
@@ -22,12 +22,9 @@ import BlueInfo from '../public/images/utils/blue-info.svg'
 import { isL1State } from '../store/index'
 
 import {
-  L1_Wrap,
-  L1_Unwrap,
-  L2_WRAP,
-  L2_Unwrap,
+  WrapList,
+  UnwrapList,
   TokenInterface,
-  PairToken,
 } from '../constants/token'
 
 import { useTokenContract } from '../hooks/useContracts'
@@ -39,16 +36,8 @@ type WrapperProps = {
   onTVLClick: () => void
 }
 
-type Tokens = TokenInterface[]
-
-function getTokenPairs(isWrap: boolean, isL1: boolean): [Tokens, Tokens] {
-  let tokenPairs: PairToken[]
-  if (isWrap) {
-    tokenPairs = isL1 ? L1_Wrap : L2_WRAP
-  } else {
-    tokenPairs = isL1 ? L1_Unwrap : L2_Unwrap
-  }
-
+function getTokenPairs(isWrap: boolean) {
+  const tokenPairs = isWrap ? WrapList : UnwrapList
   const getTokens = (idx: number) => tokenPairs.map((pair) => pair[idx])
 
   return [getTokens(0), getTokens(1)]
@@ -57,6 +46,7 @@ function getTokenPairs(isWrap: boolean, isL1: boolean): [Tokens, Tokens] {
 const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
   const { value: isWrap, setValue: setIsWrap } = useBoolean(true)
   const [srcTokenIdx, setSrcTokenIdx] = useState<number>(0)
+  const [targetTokenIdx, setTargetTokenIdx] = useState<number>(0)
   const [feeRate, setFeeRate] = useState<string>('0')
   const [maxWrappable, setMaxWrappable] = useState<string>('0')
   const [maxCapacity, setMaxCapacity] = useState<string>('0')
@@ -67,33 +57,28 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
   const { walletAddress, connectWallet } = useConnectorContext()
   const isL1 = useRecoilValue(isL1State)
 
-  const tokenPairs = getTokenPairs(isWrap, isL1)
+  const tokenPairs = getTokenPairs(isWrap)
 
-  const srcTokens = useMemo(() => {
-    return tokenPairs[0]
-  }, [tokenPairs])
-
-  const targetTokens = useMemo(() => {
-    return tokenPairs[1]
-  }, [tokenPairs])
+  const srcTokens = tokenPairs[0] as TokenInterface[]
+  const targetTokens = tokenPairs[1][srcTokenIdx] as TokenInterface[]
 
   const [srcToken, setSrcToken] = useState<TokenInterface>(
     srcTokens[srcTokenIdx]
   )
   const [targetToken, setTargetToken] = useState<TokenInterface>(
-    targetTokens[srcTokenIdx]
+    targetTokens[targetTokenIdx]
   )
 
   useEffect(() => {
     setSrcToken(srcTokens[srcTokenIdx])
-    setTargetToken(targetTokens[srcTokenIdx])
-  }, [srcTokenIdx, srcTokens, targetTokens])
+    setTargetToken(targetTokens[targetTokenIdx])
+  }, [srcTokenIdx, srcTokens, targetTokens, targetTokenIdx])
 
   const contract = useTokenContract(isWrap ? srcToken : targetToken)
 
   useEffect(() => {
     setFeeRate(isWrap ? contract.mintFeeRate : contract.burnFeeRate)
-    setMaxWrappable(isWrap ? contract.capacity: contract.capacityUtilised)
+    setMaxWrappable(isWrap ? contract.capacity : contract.capacityUtilised)
     setMaxCapacity(contract.maxTokenAmount)
     setCapacityUtilised(contract.capacityUtilised)
   }, [contract, isWrap, isL1])
@@ -115,9 +100,14 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
     action(parseEther(srcTokenValue))
   }
 
-  const onTokenChange = (idx: number) => {
+  const onSrcTokenChange = (idx: number) => {
     setSrcTokenIdx(idx)
     resetSrcTokenValue()
+  }
+
+  const onTargetTokenChange = (idx: number) => {
+    setTargetTokenIdx(idx)
+    setTargetTokenValue('')
   }
 
   const onInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -138,6 +128,7 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
 
   const onWrapClick = (val: boolean) => {
     setSrcTokenIdx(0)
+    setTargetTokenIdx(0)
     resetSrcTokenValue()
     setIsWrap(val)
   }
@@ -153,10 +144,6 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
             <span>Unwrap</span>
           </SelectorButton>
         </SelectorContainer>
-        {/* <TVLButton className="align-right" onClick={onTVLClick}>
-          <span>TVL</span>
-          <Image src={LinkArrow} alt="link-arrow" priority={true} />
-        </TVLButton> */}
       </ContainerRow>
       <WrapperContainerColumn>
         <WrapperContainerRow>
@@ -203,7 +190,7 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
                   <DropdownListContainer>
                     {srcTokens.map((token, idx) => (
                       <Token
-                        onClick={() => onTokenChange(idx)}
+                        onClick={() => onSrcTokenChange(idx)}
                         key={token.key}
                         active={token.key === srcToken.key}
                         token={token}
@@ -222,11 +209,7 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
           </BlackContainerRow>
           <BlackContainerRow>
             <span>
-                {
-                  isWrap 
-                  ? 'Max Wrappable: '
-                  : 'Max Burnable: '
-                }
+              {isWrap ? 'Max Wrappable: ' : 'Max Burnable: '}
               {currency(maxWrappable, srcToken.precision)}Ξ
             </span>
           </BlackContainerRow>
@@ -244,7 +227,41 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
             </span>
           </BlackContainerRow>
           <BlackContainerRow>
-            <Token token={targetToken} />
+            {Array.isArray(targetTokens) && targetTokens.length === 1 ? (
+              <Token token={targetToken} />
+            ) : (
+              <DefaultDropdownMenu
+                className="coin_drop"
+                offset={40}
+                trigger={
+                  <TokenSelector>
+                    <Token
+                      token={targetToken}
+                      children={
+                        <Image
+                          src={DownArrowSmall}
+                          alt="down-arrow"
+                          priority={true}
+                        />
+                      }
+                    />
+                  </TokenSelector>
+                }
+                dropList={
+                  <DropdownListContainer>
+                    {targetTokens.map((token, idx) => (
+                      <Token
+                        onClick={() => onTargetTokenChange(idx)}
+                        key={token.key}
+                        active={token.key === targetToken.key}
+                        token={token}
+                        fontSize={14}
+                      />
+                    ))}
+                  </DropdownListContainer>
+                }
+              />
+            )}
             <NumericInput
               disabled={true}
               placeholder="0.0"
@@ -301,18 +318,6 @@ const ContainerRow = styled.div`
   justify-content: center;
   align-items: center;
 `
-
-// const TVLButton = styled(Button)`
-//   width: 100%;
-//   width: 68px;
-//   height: 32px;
-//   margin-left: 84px;
-
-//   background: linear-gradient(121.5deg, #101215 55.37%, #22272b 106.67%);
-//   border: 1px solid #000000;
-//   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.9);
-//   border-radius: 40px;
-// `
 
 const SelectorContainer = styled.div`
   display: flex;
