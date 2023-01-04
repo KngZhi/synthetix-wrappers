@@ -118,7 +118,7 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
     const calcTargetTokenValue = (inputTokenValue: string): string => {
       const srcToken = parseFloat(inputTokenValue)
       if (!srcToken || srcToken === 0) return ''
-      const valueRemain = 1 - parseFloat(feeRate) / 100
+      const valueRemain = 1 - parseFloat(feeRate)
       // remove tailing zero
       return String(+(srcToken * valueRemain).toFixed(6))
     }
@@ -269,7 +269,7 @@ const Wrapper = ({ onTVLClick }: WrapperProps): JSX.Element => {
             />
           </BlackContainerRow>
           <StyledBlackContainerRow>
-            <span>Fee rate: {parseFloat(feeRate)}%</span>
+            <span>Fee rate: {parseFloat(feeRate) * 100}%</span>
             <Tooltip
               color="invert"
               content={<TooltipContent />}
